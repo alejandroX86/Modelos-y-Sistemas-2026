@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Cuestionario · Modelos y Sistemas · Analista Funcional</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Inter', system-ui, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #eef2f9 0%, #d9e3f0 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quiz-wrapper {
+            max-width: 950px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 2.5rem;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .school-header {
+            background: #0b2f4e;
+            color: white;
+            padding: 1.2rem 2rem;
+            text-align: center;
+        }
+
+        .school-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .school-header p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+            margin-top: 0.3rem;
+        }
+
+        .prof {
+            background: #1e4a76;
+            padding: 0.3rem 1rem;
+            display: inline-block;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            margin-top: 0.6rem;
+        }
+
+        .name-start-panel {
+            padding: 2rem 2rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e2edf7;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-top: 0.8rem;
+        }
+
+        .input-field {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .input-field label {
+            font-weight: 600;
+            color: #0b2f4e;
+            display: block;
+            margin-bottom: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .input-field input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #cbdde9;
+            border-radius: 2rem;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .input-field input:focus {
+            border-color: #2d7ee7;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(45,126,231,0.2);
+        }
+
+        .btn-start {
+            background: #0b2f4e;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 3rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-start:hover {
+            background: #1f5680;
+            transform: scale(0.97);
+        }
+
+        .quiz-area {
+            display: none;
+            padding: 1.8rem 2rem 2rem;
+            background: #fff;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #e4edf5;
+            padding-bottom: 0.8rem;
+        }
+
+        .question-counter {
+            font-weight: 700;
+            background: #eaf3ff;
+            padding: 0.3rem 1rem;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #1a5d9c;
+        }
+
+        .timer-box {
+            background: #1e2f3c;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            color: white;
+            font-weight: 600;
+            font-family: monospace;
+            font-size: 1.3rem;
+        }
+
+        .puntaje-actual {
+            font-weight: 500;
+            background: #f0f4fa;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-size: 0.85rem;
+        }
+
+        .question-text {
+            font-size: 1.45rem;
+            font-weight: 600;
+            margin: 1.2rem 0 1.8rem;
+            color: #0c2b44;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            background: #f9fcff;
+            border: 1.5px solid #cde0ef;
+            border-radius: 1.5rem;
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .option:hover:not(.disabled-opt) {
+            background: #e7f0fa;
+            border-color: #2d7ee7;
+            transform: translateX(5px);
+        }
+
+        .option.disabled-opt {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .opt-radio {
+            width: 22px;
+            height: 22px;
+            accent-color: #2d7ee7;
+            pointer-events: none;
+        }
+
+        .opt-text {
+            font-size: 1rem;
+            color: #1a3e5c;
+        }
+
+        .feedback {
+            background: #eef3fc;
+            border-radius: 1.5rem;
+            padding: 1rem 1.4rem;
+            margin: 1rem 0 1.2rem;
+            border-left: 6px solid #2d7ee7;
+            font-size: 0.95rem;
+        }
+
+        .feedback .correct-badge {
+            color: #1e7a44;
+            font-weight: bold;
+        }
+
+        .feedback .wrong-badge {
+            color: #b13e3e;
+            font-weight: bold;
+        }
+
+        .next-info {
+            font-size: 0.8rem;
+            text-align: center;
+            color: #5f7f9e;
+            margin-top: 0.5rem;
+        }
+
+        .result-panel {
+            background: #f2f8ff;
+            border-radius: 2rem;
+            padding: 1.8rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .download-btn {
+            background: #1d6f2c;
+            margin-top: 1rem;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 2rem;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        footer {
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 1rem;
+            background: #f8fafd;
+            border-top: 1px solid #e0ecf5;
+            color: #5b7a9a;
+        }
+
+        @media (max-width: 580px) {
+            .quiz-area, .name-start-panel { padding: 1.5rem; }
+            .question-text { font-size: 1.2rem; }
+            .timer-box { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="quiz-wrapper">
+    <div class="school-header">
+        <h2>📘 Modelos y Sistemas · Ingeniería de Software I</h2>
+        <p>E.E.S.T. N°1 Muñiz · Tecnicatura en Informática · 7° 4°</p>
+        <div class="prof">👨‍🏫 Prof. Omar Bazar</div>
+    </div>
+
+    <div id="startPanel" class="name-start-panel">
+        <div style="text-align: center; margin-bottom: 1rem;">
+            <span style="background: #eaf1fb; padding: 0.4rem 1.2rem; border-radius: 30px;">🎓 Cuestionario · 50 puntos</span>
+        </div>
+        <div class="input-group">
+            <div class="input-field">
+                <label>📌 Nombre y Apellido</label>
+                <input type="text" id="studentName" placeholder="Ej: Lucía Gómez" autocomplete="off">
+            </div>
+            <button class="btn-start" id="startQuizBtn">▶ COMENZAR EXAMEN</button>
+        </div>
+        <p style="font-size: 0.8rem; margin-top: 1rem; color: #4a6f8f;">⏱️ Cada pregunta: <strong>1:30 min</strong>. Una vez que elijas una respuesta, <strong>quedará bloqueada</strong> y avanzarás <strong>solo cuando se termine el tiempo</strong>.</p>
+    </div>
+
+    <div id="quizArea" class="quiz-area">
+        <div class="quiz-header">
+            <span class="question-counter" id="qCounter">Pregunta 1 / 25</span>
+            <span class="timer-box" id="timerDisplay">01:30</span>
+            <span class="puntaje-actual" id="scoreDisplay">🏆 Puntaje: 0 / 50</span>
+        </div>
+        <div id="questionText" class="question-text"></div>
+        <div id="optionsContainer" class="options-list"></div>
+        <div id="feedbackArea" class="feedback" style="display: none;"></div>
+        <div class="next-info">✅ Elegí una opción → se bloqueará. El temporizador seguirá hasta 0 y luego pasará a la siguiente.</div>
+    </div>
+
+    <footer>📁 Fundamentos · Sistemas de Información · Proceso de Software · Roles IT · Metodologías Ágiles</footer>
+</div>
+
+<script>
+    // ===================== 25 PREGUNTAS (2 puntos c/u) =====================
+    const QUESTIONS = [
+        { text: "¿Cuál es la definición más completa de 'sistema' según el material de la cátedra?", options: ["Conjunto de hardware y software que procesa datos", "Elementos aislados que no interactúan con el entorno", "Conjunto de elementos interrelacionados que actúan coordinadamente para alcanzar un objetivo, recibiendo entradas y produciendo salidas", "Únicamente un proceso de transformación de materia"], correct: 2, explanation: "Un sistema es un conjunto de elementos interrelacionados que trabajan en conjunto para un objetivo común, con entradas, procesos, salidas, retroalimentación y entorno (Clase 1B, página 3)." },
+        { text: "¿Cuál de los siguientes NO es uno de los 5 elementos constitutivos de todo sistema (según la clase 1B)?", options: ["Entrada (Input)", "Retroalimentación (Feedback)", "Almacenamiento (Storage)", "Salida (Output)"], correct: 2, explanation: "Los cinco elementos constitutivos son: Entrada, Proceso, Salida, Retroalimentación y Entorno. Almacenamiento no está en la lista fundamental." },
+        { text: "Según la clasificación por interacción con el entorno, un sistema que intercambia materia, energía e información, adaptándose y evolucionando, se denomina:", options: ["Sistema cerrado", "Sistema determinista", "Sistema probabilista", "Sistema abierto"], correct: 3, explanation: "Sistema abierto: intercambia con el entorno, se adapta. Ejemplos: empresa, app web. (Clase 1B, página 4)" },
+        { text: "¿Cuál es la diferencia fundamental entre DATO e INFORMACIÓN?", options: ["El dato es cuantitativo y la información cualitativa", "El dato es un hecho crudo sin contexto; la información es dato procesado con significado y utilidad para decisiones", "Son sinónimos en ingeniería de software", "El dato siempre proviene de bases de datos, la información de documentos"], correct: 1, explanation: "Dato: hecho crudo. Información: dato procesado + contexto + significado, permite tomar decisiones. (Clase 1B, página 5)" },
+        { text: "¿Cuáles son los 4 componentes de un Sistema de Información (SI) según la clase 1B?", options: ["Hardware, Redes, Usuarios, Datos", "Personas, Procesos, Datos, Tecnología", "Entrada, Proceso, Salida, Retroalimentación", "MIS, TPS, DSS, EIS"], correct: 1, explanation: "Los componentes clave: Personas, Procesos, Datos y Tecnología. Son la base de todo sistema de información (página 6)." },
+        { text: "En una organización modelada como sistema, ¿qué subsistema se encarga del control de recursos financieros, contabilidad y recursos humanos?", options: ["Subsistema de Producción", "Subsistema de Información", "Subsistema Administrativo", "Subsistema Comercial"], correct: 2, explanation: "Subsistema Administrativo: gestiona finanzas, contabilidad, RRHH. Ej: liquidación de sueldos (Clase 1B, página 7)." },
+        { text: "Según la definición de software (Pressman), el software como producto profesional incluye:", options: ["Solo programas ejecutables", "Programas + datos + documentación", "Solo código fuente y bases de datos", "Documentación técnica nada más"], correct: 1, explanation: "El software se compone de programas (instrucciones), estructuras de datos y documentación. (Clase 2, página 3)." },
+        { text: "Atributo de calidad del software que mide la facilidad para realizar modificaciones o adaptaciones:", options: ["Confiabilidad", "Eficiencia", "Mantenibilidad", "Portabilidad"], correct: 2, explanation: "Mantenibilidad: capacidad de realizar cambios fácilmente. Es uno de los atributos clave (Clase 2, página 4)." },
+        { text: "Dentro del proceso del software, la actividad que define QUÉ debe hacer el sistema, los requisitos y el alcance se llama:", options: ["Desarrollo", "Validación", "Evolución", "Especificación"], correct: 3, explanation: "Especificación: definición de qué debe hacer el sistema. Liderada por el Analista Funcional (Clase 2, página 5)." },
+        { text: "Modelo de proceso clásico, secuencial, recomendado cuando los requisitos son estables y se conocen desde el inicio:", options: ["Ágil (Scrum)", "Espiral", "Cascada (Waterfall)", "Incremental"], correct: 2, explanation: "Cascada: fases secuenciales. Ideal para requisitos fijos, licitaciones o sistemas estables (Clase 2, página 6)." },
+        { text: "¿A qué perfil profesional orienta principalmente la materia Modelos y Sistemas como salida laboral?", options: ["Desarrollador Full Stack", "Administrador de bases de datos", "Analista Funcional Junior", "Tester QA"], correct: 2, explanation: "La materia forma Analistas Funcionales Junior, capaces de documentar requisitos, UML y trabajar en equipos ágiles (Presentación, página 2 y 10)." },
+        { text: "¿Cuál es la principal responsabilidad del Product Owner (PO) en Scrum / equipo ágil?", options: ["Escribir todo el código del sistema", "Gestionar y priorizar el Product Backlog, maximizando el valor del producto", "Asegurar la calidad con pruebas automáticas", "Liderar técnicamente al equipo de desarrollo"], correct: 1, explanation: "El Product Owner prioriza el backlog, define criterios de aceptación y representa al cliente (Presentación, página 7)." },
+        { text: "¿Por qué la cátedra utiliza GitHub para alojar todos los materiales?", options: ["Solo por moda", "Es una herramienta estándar de la industria para repositorios, fomenta la colaboración y simula entorno laboral real", "Porque no hay otra plataforma", "Para que los estudiantes solo guarden código"], correct: 1, explanation: "GitHub es la herramienta de referencia en IT; el uso desde la materia da ventaja competitiva y organiza el material como en la industria (Presentación, página 2)." },
+        { text: "¿Qué función cumple el Analista Funcional en un equipo de desarrollo?", options: ["Escribir código de alto rendimiento", "Administrar servidores", "Actuar como puente entre el cliente y el equipo técnico, documentar requisitos y modelar sistemas", "Diseñar la interfaz gráfica"], correct: 2, explanation: "El Analista Funcional captura, documenta y valida requisitos, modela con UML, y comunica necesidades del negocio al equipo (Presentación, roles)." },
+        { text: "Un sistema es 'determinista' cuando:", options: ["Su salida cambia según el clima", "Dado un conjunto de entradas, siempre produce la misma salida", "No tiene retroalimentación", "Es probabilista por naturaleza"], correct: 1, explanation: "Sistemas deterministas: misma entrada = misma salida (ej. calculadora, algoritmo). Clase 1B, página 4." },
+        { text: "¿Qué significan las siglas TPS en el contexto de los Sistemas de Información?", options: ["Total Processing System", "Transaction Processing System", "Technical Program Suite", "Time Protocol Standard"], correct: 1, explanation: "TPS: Transaction Processing System. Registra operaciones cotidianas (nivel operativo), ej: caja de supermercado (Clase 1B, página 6)." },
+        { text: "¿Cuál de los siguientes es un ejemplo de sistema probabilista?", options: ["Un semáforo programado", "Sistema de clima / bolsa de valores", "Una calculadora científica", "Un horno microondas con temporizador"], correct: 1, explanation: "Probabilista: la salida no es exactamente predecible; hay aleatoriedad. Ej: clima, comportamiento humano, mercados (Clase 1B, página 4)." },
+        { text: "En el caso de la veterinaria del TP Clase 2 (turnos online), ¿en qué actividad del proceso se definen los requisitos como 'clientes sacan turno, veterinario agenda'?", options: ["Desarrollo", "Validación", "Especificación", "Evolución"], correct: 2, explanation: "Especificación: se definen necesidades del sistema, actores y funcionalidades (TP Clase2, página 5)." },
+        { text: "¿Cuál de las siguientes NO es una propiedad de la buena información según la clase 1B?", options: ["Exacta", "Subjetiva", "Oportuna", "Verificable"], correct: 1, explanation: "Propiedades: exacta, completa, oportuna, relevante, confiable, verificable, accesible. Subjetiva no es una propiedad deseada (página 5)." },
+        { text: "El EIS (Executive Information System) está orientado a:", options: ["Personal operativo para registrar ventas", "Mandos medios para reportes tácticos", "Alta dirección, mostrando KPIs y visión global", "Clientes externos"], correct: 2, explanation: "EIS (Executive Information System): panel de KPIs para la alta dirección (Clase 1B, página 6)." },
+        { text: "¿Cuál es el modelo de proceso que utiliza iteraciones cortas (sprints), colaboración continua con el cliente y acepta cambios de requisitos?", options: ["Modelo Cascada", "Modelo en Espiral", "Ágil (Scrum / Kanban)", "Modelo Incremental tradicional"], correct: 2, explanation: "Ágil: Scrum con Sprints de 2 semanas, bienvenido el cambio, estándar actual (Clase 2, página 6)." },
+        { text: "En el Proceso Unificado (UP), ¿qué fase se centra en definir el alcance, identificar actores y casos de uso principales?", options: ["Elaboración", "Construcción", "Transición", "Inicio (Inception)"], correct: 3, explanation: "Inicio: alcance, viabilidad, actores y casos de uso principales. Es la primera fase (Presentación, página 8)." },
+        { text: "¿Por qué la documentación es considerada un componente crítico del software?", options: ["Porque ocupa espacio en disco", "Porque permite el mantenimiento, transferencia de conocimiento y continuidad del proyecto", "Solo para cumplir normas ISO", "Porque los clientes la exigen legalmente"], correct: 1, explanation: "La documentación asegura que el software pueda mantenerse, evolucionar y ser entendido por otros profesionales. Es esencial en el producto (Clase 2, página 3)." },
+        { text: "El enfoque pedagógico de la materia se basa en 'ABP' que significa:", options: ["Aprendizaje Basado en Pruebas", "Aprendizaje Basado en Proyectos, simulando un entorno real de desarrollo", "Análisis de Buenas Prácticas", "Alta Batería de Problemas"], correct: 1, explanation: "Aprendizaje Basado en Proyectos: los estudiantes desarrollan un proyecto integrador con roles reales (Presentación, TP1)." },
+        { text: "¿Cuál es el entregable principal que produce el Analista Funcional en la actividad de especificación?", options: ["Código fuente optimizado", "Diagramas de red", "Casos de uso, requisitos funcionales y no funcionales, documentación de historias de usuario", "Plan de pruebas automatizadas"], correct: 2, explanation: "El Analista Funcional documenta casos de uso, especificación de requisitos, user stories y criterios de aceptación (Clase 2, roles, y síntesis)." }
+    ];
+
+    // Estado global
+    let currentIndex = 0;
+    let totalScore = 0;
+    let studentName = "";
+    let quizActive = false;
+    let timerInterval = null;
+    let questionAnswered = false;      // si ya se seleccionó una opción en la pregunta actual
+    let nextAfterTimerScheduled = false; // para evitar doble avance al expirar tiempo
+
+    const totalQuestions = QUESTIONS.length;
+    const pointsPerQuestion = 2;
+
+    // DOM elements
+    const startPanel = document.getElementById('startPanel');
+    const quizArea = document.getElementById('quizArea');
+    const startBtn = document.getElementById('startQuizBtn');
+    const studentNameInput = document.getElementById('studentName');
+    const qCounterSpan = document.getElementById('qCounter');
+    const timerDisplaySpan = document.getElementById('timerDisplay');
+    const scoreDisplaySpan = document.getElementById('scoreDisplay');
+    const questionTextDiv = document.getElementById('questionText');
+    const optionsContainer = document.getElementById('optionsContainer');
+    const feedbackArea = document.getElementById('feedbackArea');
+
+    function stopTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    function updateScoreUI() {
+        scoreDisplaySpan.innerText = `🏆 Puntaje: ${totalScore} / 50`;
+    }
+
+    // Avanza a la siguiente pregunta o finaliza
+    function advanceToNext() {
+        if (!quizActive) return;
+        if (nextAfterTimerScheduled) return; // ya se está ejecutando
+        nextAfterTimerScheduled = true;
+        stopTimer();
+        if (currentIndex + 1 < totalQuestions) {
+            currentIndex++;
+            loadQuestion(currentIndex);
+        } else {
+            finishQuiz();
+        }
+        nextAfterTimerScheduled = false;
+    }
+
+    // Cuando el tiempo se agota (sin respuesta o con respuesta ya bloqueada)
+    function onTimeExpired() {
+        if (!quizActive) return;
+        // Si ya está programado el avance, no hacer nada
+        if (nextAfterTimerScheduled) return;
+        // Si el estudiante ya había respondido, simplemente avanzamos
+        if (questionAnswered) {
+            advanceToNext();
+            return;
+        }
+        // No respondió a tiempo: marcamos como incorrecto, mostramos feedback y avanzamos
+        questionAnswered = true;
+        stopTimer();
+        const q = QUESTIONS[currentIndex];
+        const optionDivs = document.querySelectorAll('.option');
+        optionDivs.forEach(opt => opt.classList.add('disabled-opt'));
+        // Resaltar la correcta
+        optionDivs.forEach((optEl, idx) => {
+            if (idx === q.correct) {
+                optEl.style.borderLeft = "6px solid #1e8f5e";
+                optEl.style.backgroundColor = "#e0f7ea";
+            }
+        });
+        feedbackArea.innerHTML = `
+            <div class="wrong-badge">⏰ TIEMPO AGOTADO · Sin respuesta seleccionada</div>
+            <div style="margin-top: 8px;"><strong>Explicación:</strong> ${q.explanation}</div>
+            <div style="margin-top: 6px;">La respuesta correcta era: ${q.options[q.correct]}</div>
+            <div>⏩ Avanzando a la siguiente pregunta...</div>
+        `;
+        feedbackArea.style.display = 'block';
+        // Programar avance después de 2 segundos
+        setTimeout(() => {
+            if (quizActive) advanceToNext();
+        }, 2000);
+    }
+
+    // Lógica cuando el usuario selecciona una opción
+    function selectAnswer(selectedIdx, optionElements, correctIndex, explanationText) {
+        if (!quizActive) return;
+        if (questionAnswered) return;  // ya respondió, no puede cambiar
+        questionAnswered = true;
+
+        const isCorrect = (selectedIdx === correctIndex);
+        if (isCorrect) {
+            totalScore += pointsPerQuestion;
+            updateScoreUI();
+        }
+
+        // Bloquear visualmente todas las opciones y marcar correcta/incorrecta
+        optionElements.forEach((optEl, idx) => {
+            optEl.classList.add('disabled-opt');
+            if (idx === correctIndex) {
+                optEl.style.borderLeft = "6px solid #1e8f5e";
+                optEl.style.backgroundColor = "#e0f7ea";
+            }
+            if (idx === selectedIdx && !isCorrect) {
+                optEl.style.borderLeft = "6px solid #d9534f";
+                optEl.style.backgroundColor = "#ffe8e6";
+            }
+        });
+
+        const correctIcon = isCorrect ? "✅ CORRECTO" : "❌ INCORRECTO";
+        feedbackArea.innerHTML = `
+            <div class="${isCorrect ? 'correct-badge' : 'wrong-badge'}">
+                ${correctIcon} · Respuesta ${isCorrect ? 'acertada' : 'errónea'}
+            </div>
+            <div style="margin-top: 8px;"><strong>Explicación:</strong> ${explanationText}</div>
+            <div style="margin-top: 6px; background: #f0e68c; padding: 6px; border-radius: 12px;">⏳ Respuesta bloqueada. Esperando que finalice el tiempo (${timerDisplaySpan.innerText}) para avanzar...</div>
+        `;
+        feedbackArea.style.display = 'block';
+        // No avanzamos aquí; el temporizador seguirá corriendo y al llegar a 0 llamará a onTimeExpired, que detectará questionAnswered=true y avanzará.
+    }
+
+    function loadQuestion(index) {
+        // Resetear estado de la pregunta
+        questionAnswered = false;
+        feedbackArea.style.display = 'none';
+        feedbackArea.innerHTML = '';
+        nextAfterTimerScheduled = false;
+        stopTimer();
+
+        const q = QUESTIONS[index];
+        questionTextDiv.innerText = `${index+1}. ${q.text}`;
+        qCounterSpan.innerText = `Pregunta ${index+1} / ${totalQuestions}`;
+
+        // Generar opciones
+        optionsContainer.innerHTML = '';
+        const optionDivs = [];
+        q.options.forEach((opt, idx) => {
+            const optDiv = document.createElement('div');
+            optDiv.className = 'option';
+            const radio = document.createElement('input');
+            radio.type = 'radio';
+            radio.name = 'quizOption';
+            radio.value = idx;
+            radio.classList.add('opt-radio');
+            const textSpan = document.createElement('span');
+            textSpan.className = 'opt-text';
+            textSpan.innerText = `${String.fromCharCode(65+idx)}. ${opt}`;
+            optDiv.appendChild(radio);
+            optDiv.appendChild(textSpan);
+            optDiv.addEventListener('click', (e) => {
+                if (questionAnswered || !quizActive) return;
+                radio.checked = true;
+                selectAnswer(idx, optionDivs, q.correct, q.explanation);
+            });
+            optionsContainer.appendChild(optDiv);
+            optionDivs.push(optDiv);
+        });
+
+        // Iniciar temporizador de 90 segundos
+        let timeLeft = 90;
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerDisplaySpan.innerText = `${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+        }
+        updateTimerDisplay();
+
+        timerInterval = setInterval(() => {
+            if (!quizActive) return;
+            if (timeLeft <= 1) {
+                // Tiempo terminado
+                clearInterval(timerInterval);
+                timerInterval = null;
+                onTimeExpired();
+            } else {
+                timeLeft--;
+                updateTimerDisplay();
+                // Si ya respondió, el timer sigue bajando pero no afecta
+            }
+        }, 1000);
+    }
+
+    function finishQuiz() {
+        quizActive = false;
+        stopTimer();
+        const finalMarkup = `
+            <div class="result-panel">
+                <h3>📋 Cuestionario completado</h3>
+                <p style="font-size:1.2rem; margin:0.8rem 0;"><strong>${studentName}</strong>, tu puntaje final es:</p>
+                <p style="font-size:2.5rem; font-weight:800; color:#0b2f4e;">${totalScore} / 50 puntos</p>
+                <button id="downloadTxtBtn" class="download-btn">📥 DESCARGAR RESULTADO (.txt)</button>
+                <button id="restartQuizBtn" style="margin-top:0.8rem; background:#3a6b92; border:none; padding:0.6rem 1.2rem; border-radius:2rem; color:white; cursor:pointer;">🔄 Reiniciar cuestionario</button>
+            </div>
+        `;
+        quizArea.innerHTML = quizArea.innerHTML.split('<div class="result-panel">')[0] + finalMarkup;
+        const downloadBtn = document.getElementById('downloadTxtBtn');
+        if (downloadBtn) downloadBtn.addEventListener('click', generateTxtFile);
+        const restartBtn = document.getElementById('restartQuizBtn');
+        if (restartBtn) restartBtn.addEventListener('click', () => location.reload());
+    }
+
+    function generateTxtFile() {
+        const fecha = new Date().toLocaleString();
+        const contenido = `
+╔══════════════════════════════════════════════════╗
+║   CERTIFICADO DE EVALUACIÓN - MODELOS Y SISTEMAS ║
+╚══════════════════════════════════════════════════╝
+Estudiante: ${studentName}
+Escuela: E.E.S.T. N°1 Muñiz
+Profesor: Omar Bazar
+Fecha: ${fecha}
+
+▶ Resultado del Cuestionario Interactivo ◀
+Total de preguntas: ${totalQuestions}
+Puntaje máximo: 50 puntos
+Puntaje obtenido: ${totalScore} puntos
+Calificación: ${(totalScore/50*10).toFixed(1)} / 10
+
+Observaciones: Cada pregunta tuvo tiempo de 1:30 min.
+Una vez seleccionada una respuesta, quedó bloqueada hasta finalizar el tiempo.
+
+--- Fin del reporte ---
+        `;
+        const blob = new Blob([contenido], { type: "text/plain" });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `Resultado_${studentName.replace(/\s/g, '_')}_MyS.txt`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    function startQuiz() {
+        const nameRaw = studentNameInput.value.trim();
+        if (nameRaw === "") {
+            alert("Por favor, ingresá tu nombre y apellido para comenzar.");
+            return;
+        }
+        studentName = nameRaw;
+        quizActive = true;
+        currentIndex = 0;
+        totalScore = 0;
+        updateScoreUI();
+        startPanel.style.display = 'none';
+        quizArea.style.display = 'block';
+        loadQuestion(0);
+    }
+
+    startBtn.addEventListener('click', startQuiz);
+</script>
+</body>
+</html>
