@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>TP con Temporizador - Sistemas | Escuela Técnica Nº1 Muniz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #eef2f5;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            padding: 1.5rem;
+            color: #1e2f3e;
+        }
+        .tp-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 2rem;
+        }
+        .school-header {
+            background: #0f5c6e;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .school-header h3 {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .school-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        h1 {
+            font-size: 2rem;
+            color: #0f5c6e;
+            border-left: 5px solid #0f5c6e;
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .subtitulo {
+            color: #2c6e8f;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #cfe3eb;
+            padding-bottom: 0.75rem;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+        /* Columna izquierda: cuestionario */
+        .quiz-box {
+            background: #fafcff;
+            border-radius: 24px;
+            padding: 1.5rem;
+            border: 1px solid #d4e2ec;
+        }
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #cfe3eb;
+        }
+        .pregunta-num {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #0f5c6e;
+        }
+        .timer {
+            font-family: monospace;
+            font-size: 2rem;
+            font-weight: bold;
+            background: #1e2a36;
+            color: #ffd966;
+            padding: 0.3rem 1rem;
+            border-radius: 60px;
+            letter-spacing: 2px;
+        }
+        .pregunta-texto {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            background: #eef2fa;
+            padding: 1rem;
+            border-radius: 20px;
+        }
+        .respuesta-area {
+            margin: 1.5rem 0;
+        }
+        .opciones label {
+            display: block;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.7rem;
+            border-radius: 20px;
+            border: 1px solid #cbdbe0;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .acciones {
+            display: flex;
+            gap: 1rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+        button {
+            background: #0f5c6e;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:disabled {
+            background: #9ab3bd;
+            cursor: not-allowed;
+        }
+        button:hover:not(:disabled) {
+            background: #0a4150;
+            transform: scale(1.02);
+        }
+        .feedback {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border-radius: 20px;
+            background: #f0f0f0;
+        }
+        .correcto {
+            background: #d4edda;
+            color: #155724;
+        }
+        .incorrecto {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .progress {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        /* columna derecha: temas orales */
+        .orales-box {
+            background: #fef9ef;
+            border-radius: 24px;
+            padding: 1rem;
+            border: 1px solid #f0e2c5;
+        }
+        .orales-box h2 {
+            background: #d9cba3;
+            padding: 0.5rem;
+            border-radius: 20px;
+            text-align: center;
+            color: #4a3b1c;
+        }
+        .tema-oral {
+            background: #fff7e8;
+            margin-bottom: 0.8rem;
+            padding: 0.7rem 1rem;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            border-left: 6px solid #c2a145;
+        }
+        .tema-num {
+            font-weight: bold;
+            background: #c2a145;
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+        }
+        .check-expo {
+            margin-left: auto;
+        }
+        .resultado-final {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: #e0f2fe;
+            border-radius: 24px;
+            text-align: center;
+            font-weight: bold;
+        }
+        @media (max-width: 800px) {
+            .grid-2col {
+                grid-template-columns: 1fr;
+            }
+            .timer {
+                font-size: 1.5rem;
+            }
+        }
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5f7f8c;
+            border-top: 1px solid #d0dfe6;
+            padding-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="tp-container">
+    <div class="school-header">
+        <div>
+            <h3>Escuela Técnica Nº 1 de Muñiz</h3>
+            <h2>Modelos y Sistemas - 7° 4°</h2>
+        </div>
+        <div>
+            <h3>Profesor: Omar Bazar</h3>
+        </div>
+    </div>
+    <h1>📚 Trabajo Práctico N°1 – Unidad 1 (con temporizador)</h1>
+    <div class="subtitulo">Concepto de sistema · Elementos · Relaciones · Totalidad · Tipos · E-P-S</div>
+    <div class="grid-2col">
+        <!-- COLUMNA IZQUIERDA: CUESTIONARIO SECUENCIAL -->
+        <div class="quiz-box">
+            <div class="quiz-header">
+                <span class="pregunta-num" id="preguntaNum">Pregunta 1 / 20</span>
+                <span class="timer" id="timerDisplay">02:00</span>
+            </div>
+            <div id="preguntaTexto" class="pregunta-texto"></div>
+            <div id="respuestaDinamica" class="respuesta-area"></div>
+            <div class="acciones">
+                <button id="btnVerificar">✓ Verificar respuesta</button>
+                <button id="btnSiguiente" disabled>⏩ Siguiente (esperar timer)</button>
+            </div>
+            <div id="feedbackMsg" class="feedback"></div>
+            <div class="progress" id="progressMsg"></div>
+        </div>
+
+        <!-- COLUMNA DERECHA: TEMAS ORALES -->
+        <div class="orales-box">
+            <h2>🎤 20 temas – exposición oral</h2>
+            <p style="margin-bottom:1rem; font-size:0.9rem;">Marquen los que ya prepararon para exponer.</p>
+            <div id="temasOralesContainer"></div>
+            <button id="resetChecks" style="background:#a6792e; margin-top:1rem;">⟳ Reiniciar checks</button>
+        </div>
+    </div>
+    <div id="resultadoFinal" class="resultado-final" style="display:none;"></div>
+    <footer>
+        TP con temporizador de 2 min por pregunta. No se puede avanzar hasta que termine el tiempo. Al finalizar, porcentaje de respuestas correctas (preguntas objetivas).
+    </footer>
+</div>
+
+<script>
+    // ---------- DEFINICIÓN DE LAS 20 PREGUNTAS (mismo contenido que antes) ----------
+    const preguntas = [
+        { id:1, texto:"Un sistema se define como un conjunto de elementos __________ entre sí para lograr un objetivo.", tipo:"completar", correcta:"relacionados", alternativas:["relacionados","interconectados"] },
+        { id:2, texto:"¿Cuál de los siguientes NO es un elemento de un sistema?", tipo:"multiple", opciones:["Entradas","Relaciones","Aislamiento total","Límite"], correcta:"Aislamiento total" },
+        { id:3, texto:"'La totalidad implica que una modificación en un componente puede afectar a todo el sistema'.", tipo:"vf", correcta:"Verdadero" },
+        { id:4, texto:"Mencione dos tipos de relaciones en un sistema técnico (ej: mecánico, eléctrico).", tipo:"abierta", correctaReferencia:"flujo de materia, energía o información" },
+        { id:5, texto:"El modelo Entrada – Proceso – Salida (E-P-S) es aplicable solo a sistemas informáticos.", tipo:"vf", correcta:"Falso" },
+        { id:6, texto:"Complete: La __________ es la frontera que separa el sistema del entorno.", tipo:"completar", correcta:"frontera", alternativas:["frontera","límite"] },
+        { id:7, texto:"Diferencia clave entre sistema abierto y sistema cerrado.", tipo:"abierta", correctaReferencia:"El abierto intercambia materia/energía/información con el entorno; el cerrado no." },
+        { id:8, texto:"Identifique cuál de estas opciones describe una 'relación informacional':", tipo:"multiple", opciones:["Transmisión de calor","Cable de datos entre CPU y periférico","Eje de transmisión","Flujo de aceite"], correcta:"Cable de datos entre CPU y periférico" },
+        { id:9, texto:"La propiedad de 'organización' se refiere a:", tipo:"multiple", opciones:["Elementos aislados","Disposición estructurada de elementos y relaciones","Falta de límites","Entradas redundantes"], correcta:"Disposición estructurada de elementos y relaciones" },
+        { id:10, texto:"En una bicicleta, ¿qué relación existe entre el pedal y la rueda trasera?", tipo:"abierta", correctaReferencia:"transmisión mecánica mediante cadena y piñón" },
+        { id:11, texto:"'Un conjunto de piedras apiladas al azar forma un sistema'.", tipo:"vf", correcta:"Falso" },
+        { id:12, texto:"Complete: Los ___________ son sistemas de menor escala dentro de un sistema mayor.", tipo:"completar", correcta:"subsistemas", alternativas:["subsistemas","subsistemas"] },
+        { id:13, texto:"¿Cuál es un ejemplo de sistema cerrado ideal?", tipo:"multiple", opciones:["Universo aislado teórico","Una planta","El sistema circulatorio","Internet"], correcta:"Universo aislado teórico" },
+        { id:14, texto:"¿Qué estudia principalmente la Teoría General de los Sistemas?", tipo:"abierta", correctaReferencia:"principios aplicables a sistemas en general, sin importar su naturaleza" },
+        { id:15, texto:"Ejemplifique una relación energética en un celular.", tipo:"abierta", correctaReferencia:"flujo de corriente desde la batería a la pantalla o procesador" },
+        { id:16, texto:"¿Qué sucede con la totalidad si se elimina una relación crítica en un sistema de riego automático?", tipo:"abierta", correctaReferencia:"El sistema deja de funcionar o se degrada" },
+        { id:17, texto:"Seleccione el concepto que mejor se relaciona con 'el todo es más que la suma de las partes':", tipo:"multiple", opciones:["Reduccionismo","Totalidad sistémica","Aislacionismo","Causalidad lineal"], correcta:"Totalidad sistémica" },
+        { id:18, texto:"'El entorno de un sistema no influye en su comportamiento si el sistema es abierto'.", tipo:"vf", correcta:"Falso" },
+        { id:19, texto:"Complete: Las ___________ son las propiedades o características de cada elemento de un sistema.", tipo:"completar", correcta:"atributos", alternativas:["atributos","propiedades"] },
+        { id:20, texto:"Diseñe un ejemplo sencillo de sistema con realimentación negativa (estabilizadora). Describa elementos y relación.", tipo:"abierta", correctaReferencia:"Ej: termostato – sensor, actuador, comparador" }
+    ];
+
+    // Temas orales (20)
+    const temasOrales = [
+        "Definición de sistema según Bertalanffy y elementos básicos.",
+        "Diferencias entre sistema abierto y sistema cerrado, con ejemplos técnicos.",
+        "El concepto de 'totalidad' y su importancia en el mantenimiento industrial.",
+        "Relaciones materiales, energéticas e informacionales: ejemplos concretos.",
+        "Modelo Entrada-Proceso-Salida aplicado a un sistema de gestión escolar.",
+        "¿Qué son los subsistemas? Relación con la organización jerárquica.",
+        "Importancia del límite del sistema: cómo definir el entorno en un análisis.",
+        "Ejemplo de sistema simple vs sistema complejo en la vida cotidiana.",
+        "Propiedades emergentes: cómo surgen de las relaciones entre componentes.",
+        "Retroalimentación (feedback) como tipo especial de relación.",
+        "Análisis de un sistema mecánico: elementos y relaciones (motor, bomba, etc.).",
+        "Análisis de un sistema informático simple (impresora, red básica).",
+        "Relaciones jerárquicas en una organización escolar como sistema.",
+        "Diagrama de bloques de un sistema de alumbrado público automático.",
+        "El rol de la información como conector entre elementos de un sistema de control.",
+        "Errores comunes al identificar elementos y relaciones en un sistema técnico.",
+        "Aplicación de la TGS en la resolución de problemas de ingeniería.",
+        "Sistemas naturales vs sistemas artificiales: semejanzas en elementos y relaciones.",
+        "Casos donde un conjunto de componentes NO forma un sistema (agregados).",
+        "Proyecto integrador: cómo aplicar el concepto de sistema a un proyecto de la especialidad."
+    ];
+
+    // ---------- Variables de estado ----------
+    let indiceActual = 0;          // 0-index
+    let respuestasUsuario = new Array(20).fill(null);  // guarda el valor seleccionado/escrito
+    let respuestasCorrectasObj = new Array(20).fill(false); // solo para preguntas objetivas
+    let tiempoRestante = 120;      // segundos
+    let timerInterval = null;
+    let tiempoTerminado = false;    // para saber si ya se acabó el tiempo de la pregunta actual
+    let esperandoSiguiente = false;
+
+    // Elementos DOM
+    const preguntaNumSpan = document.getElementById("preguntaNum");
+    const timerDisplay = document.getElementById("timerDisplay");
+    const preguntaTextoDiv = document.getElementById("preguntaTexto");
+    const respuestaDinamica = document.getElementById("respuestaDinamica");
+    const btnVerificar = document.getElementById("btnVerificar");
+    const btnSiguiente = document.getElementById("btnSiguiente");
+    const feedbackMsg = document.getElementById("feedbackMsg");
+    const progressMsg = document.getElementById("progressMsg");
+    const resultadoFinalDiv = document.getElementById("resultadoFinal");
+
+    // ---------- Funciones auxiliares ----------
+    function detenerTimer() {
+        if (timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+    }
+
+    function formatearTiempo(seg) {
+        let minutos = Math.floor(seg / 60);
+        let segundos = seg % 60;
+        return `${minutos.toString().padStart(2,'0')}:${segundos.toString().padStart(2,'0')}`;
+    }
+
+    function actualizarTimerUI() {
+        timerDisplay.textContent = formatearTiempo(tiempoRestante);
+        if (tiempoRestante <= 0) {
+            detenerTimer();
+            if (!tiempoTerminado) {
+                tiempoTerminado = true;
+                // Habilitar botón siguiente
+                btnSiguiente.disabled = false;
+                feedbackMsg.innerHTML = "⏰ Tiempo agotado. Puedes avanzar a la siguiente pregunta.";
+                feedbackMsg.classList.add("incorrecto");
+                // Guardar la respuesta actual (si hay algo) automáticamente? No, se guardará al hacer clic en Siguiente.
+                // Pero mostramos que ya se puede continuar.
+            }
+        }
+    }
+
+    function iniciarTimer() {
+        detenerTimer();
+        tiempoRestante = 120;
+        tiempoTerminado = false;
+        btnSiguiente.disabled = true;
+        actualizarTimerUI();
+        timerInterval = setInterval(() => {
+            if (tiempoRestante > 0) {
+                tiempoRestante--;
+                actualizarTimerUI();
+            } else {
+                detenerTimer();
+                if (!tiempoTerminado) {
+                    tiempoTerminado = true;
+                    btnSiguiente.disabled = false;
+                    feedbackMsg.innerHTML = "⏰ Tiempo agotado. Puedes avanzar a la siguiente pregunta.";
+                    feedbackMsg.classList.add("incorrecto");
+                }
+            }
+        }, 1000);
+    }
+
+    // Obtener valor actual de la respuesta según tipo de pregunta
+    function obtenerRespuestaActual(pregunta) {
+        if (pregunta.tipo === "multiple" || pregunta.tipo === "vf") {
+            let selected = document.querySelector('input[name="respuestaRadio"]:checked');
+            return selected ? selected.value : null;
+        } else if (pregunta.tipo === "completar") {
+            let input = document.getElementById("respuestaInput");
+            return input ? input.value.trim() : "";
+        } else if (pregunta.tipo === "abierta") {
+            let textarea = document.getElementById("respuestaTextarea");
+            return textarea ? textarea.value.trim() : "";
+        }
+        return null;
+    }
+
+    // Verificar si la respuesta actual es correcta (solo objetivas)
+    function verificarCorrectitud(pregunta, respuesta) {
+        if (!respuesta) return false;
+        if (pregunta.tipo === "multiple" || pregunta.tipo === "vf") {
+            return respuesta === pregunta.correcta;
+        } else if (pregunta.tipo === "completar") {
+            let respNorm = respuesta.toLowerCase();
+            let correctaNorm = pregunta.correcta.toLowerCase();
+            if (respNorm === correctaNorm) return true;
+            if (pregunta.alternativas) {
+                return pregunta.alternativas.some(alt => alt.toLowerCase() === respNorm);
+            }
+            return false;
+        }
+        return false; // las abiertas no se evalúan automáticamente como correctas
+    }
+
+    // Mostrar feedback de verificación
+    function mostrarVerificacion() {
+        const pregunta = preguntas[indiceActual];
+        const respuesta = obtenerRespuestaActual(pregunta);
+        if (!respuesta && pregunta.tipo !== "abierta") {
+            feedbackMsg.innerHTML = "❌ Selecciona o completa una respuesta antes de verificar.";
+            feedbackMsg.classList.add("incorrecto");
+            return;
+        }
+        if (pregunta.tipo === "abierta") {
+            feedbackMsg.innerHTML = `📝 Respuesta abierta registrada. Referencia: ${pregunta.correctaReferencia || "Revisar con docente."}`;
+            feedbackMsg.classList.add("correcto");
+            return;
+        }
+        let esCorrecto = verificarCorrectitud(pregunta, respuesta);
+        if (esCorrecto) {
+            feedbackMsg.innerHTML = "✅ ¡Correcto! Bien.";
+            feedbackMsg.classList.add("correcto");
+        } else {
+            feedbackMsg.innerHTML = `❌ Incorrecto. La respuesta correcta es: ${pregunta.correcta}`;
+            feedbackMsg.classList.add("incorrecto");
+        }
+    }
+
+    // Guardar la respuesta actual en el array y (si es objetiva) si es correcta
+    function guardarRespuestaActual() {
+        const pregunta = preguntas[indiceActual];
+        const respuesta = obtenerRespuestaActual(pregunta);
+        respuestasUsuario[indiceActual] = respuesta || "";  // guardar incluso vacío
+        if (pregunta.tipo !== "abierta") {
+            let ok = verificarCorrectitud(pregunta, respuesta);
+            respuestasCorrectasObj[indiceActual] = ok;
+        } else {
+            respuestasCorrectasObj[indiceActual] = false; // las abiertas no cuentan en porcentaje automático
+        }
+    }
+
+    // Cargar la pregunta actual en el DOM
+    function cargarPregunta() {
+        const pregunta = preguntas[indiceActual];
+        preguntaNumSpan.textContent = `Pregunta ${indiceActual+1} / 20`;
+        preguntaTextoDiv.textContent = pregunta.texto;
+        
+        // Generar HTML de respuesta según tipo
+        let html = "";
+        if (pregunta.tipo === "multiple") {
+            html = `<div class="opciones">`;
+            pregunta.opciones.forEach(op => {
+                let checked = (respuestasUsuario[indiceActual] === op) ? 'checked' : '';
+                html += `<label><input type="radio" name="respuestaRadio" value="${op}" ${checked}> ${op}</label>`;
+            });
+            html += `</div>`;
+        } else if (pregunta.tipo === "vf") {
+            html = `<div class="opciones">
+                        <label><input type="radio" name="respuestaRadio" value="Verdadero" ${respuestasUsuario[indiceActual] === "Verdadero" ? 'checked' : ''}> Verdadero</label>
+                        <label><input type="radio" name="respuestaRadio" value="Falso" ${respuestasUsuario[indiceActual] === "Falso" ? 'checked' : ''}> Falso</label>
+                    </div>`;
+        } else if (pregunta.tipo === "completar") {
+            let valorPrevio = (typeof respuestasUsuario[indiceActual] === 'string') ? respuestasUsuario[indiceActual] : '';
+            html = `<input type="text" id="respuestaInput" placeholder="Escribe tu respuesta..." value="${valorPrevio.replace(/"/g, '&quot;')}" style="width:100%;">`;
+        } else if (pregunta.tipo === "abierta") {
+            let valorPrevio = (typeof respuestasUsuario[indiceActual] === 'string') ? respuestasUsuario[indiceActual] : '';
+            html = `<textarea id="respuestaTextarea" rows="3" placeholder="Desarrolla tu respuesta...">${valorPrevio}</textarea>`;
+        }
+        respuestaDinamica.innerHTML = html;
+        
+        // Limpiar feedback
+        feedbackMsg.innerHTML = "";
+        feedbackMsg.classList.remove("correcto", "incorrecto");
+        
+        // Actualizar progreso
+        let respondidas = respuestasUsuario.filter(r => r !== null && r !== "").length;
+        progressMsg.innerHTML = `Progreso: ${respondidas} de 20 preguntas respondidas.`;
+        
+        // Iniciar timer nuevo
+        iniciarTimer();
+    }
+
+    // Avanzar a la siguiente pregunta
+    function siguientePregunta() {
+        if (!tiempoTerminado) {
+            feedbackMsg.innerHTML = "⏳ Debes esperar a que termine el temporizador (2 minutos) para avanzar.";
+            feedbackMsg.classList.add("incorrecto");
+            return;
+        }
+        // Guardar la respuesta actual (lo que tenga en ese momento)
+        guardarRespuestaActual();
+        
+        // Avanzar si no es la última
+        if (indiceActual + 1 < preguntas.length) {
+            indiceActual++;
+            cargarPregunta();
+        } else {
+            // Finalizó todo el TP
+            detenerTimer();
+            calcularYMostrarResultadoFinal();
+        }
+    }
+
+    function calcularYMostrarResultadoFinal() {
+        // Guardar la última respuesta
+        guardarRespuestaActual();
+        
+        // Contar correctas en preguntas objetivas (tipo multiple, vf, completar)
+        let totalObjetivas = 0;
+        let correctasObjetivas = 0;
+        for (let i = 0; i < preguntas.length; i++) {
+            if (preguntas[i].tipo !== "abierta") {
+                totalObjetivas++;
+                if (respuestasCorrectasObj[i]) correctasObjetivas++;
+            }
+        }
+        let porcentaje = totalObjetivas > 0 ? (correctasObjetivas / totalObjetivas * 100).toFixed(1) : 0;
+        
+        // Mostrar resumen final
+        let htmlResumen = `<h3>📊 Resultado final</h3>`;
+        htmlResumen += `<p>Porcentaje de respuestas correctas (preguntas objetivas): <strong>${porcentaje}%</strong> (${correctasObjetivas} de ${totalObjetivas})</p>`;
+        htmlResumen += `<p>Respuestas guardadas para revisión del docente. Las preguntas abiertas serán evaluadas aparte.</p>`;
+        htmlResumen += `<details><summary>Ver detalles de respuestas</summary><ul>`;
+        for (let i = 0; i < preguntas.length; i++) {
+            let p = preguntas[i];
+            let respUser = respuestasUsuario[i] || "(sin responder)";
+            let estado = "";
+            if (p.tipo !== "abierta") {
+                estado = respuestasCorrectasObj[i] ? "✅ Correcta" : "❌ Incorrecta";
+            } else {
+                estado = "📝 Abierta (a corregir)";
+            }
+            htmlResumen += `<li><strong>Pregunta ${i+1}:</strong> ${respUser.substring(0, 80)}... <em>${estado}</em></li>`;
+        }
+        htmlResumen += `</ul></details>`;
+        resultadoFinalDiv.innerHTML = htmlResumen;
+        resultadoFinalDiv.style.display = "block";
+        
+        // Deshabilitar botones
+        btnSiguiente.disabled = true;
+        btnVerificar.disabled = true;
+        preguntaTextoDiv.style.opacity = "0.5";
+        respuestaDinamica.style.opacity = "0.5";
+        feedbackMsg.innerHTML = "TP finalizado. Revisa tu porcentaje.";
+    }
+
+    // ---------- Inicialización y eventos ----------
+    function iniciarTP() {
+        indiceActual = 0;
+        respuestasUsuario = new Array(20).fill(null);
+        respuestasCorrectasObj = new Array(20).fill(false);
+        cargarPregunta();
+        btnVerificar.addEventListener("click", mostrarVerificacion);
+        btnSiguiente.addEventListener("click", siguientePregunta);
+    }
+
+    // Temas orales (funcionalidad de checkboxes)
+    function renderTemasOrales() {
+        const container = document.getElementById("temasOralesContainer");
+        container.innerHTML = "";
+        temasOrales.forEach((tema, idx) => {
+            const div = document.createElement("div");
+            div.classList.add("tema-oral");
+            div.innerHTML = `
+                <span class="tema-num">${idx+1}</span>
+                <span class="tema-texto">${tema}</span>
+                <div class="check-expo">
+                    <label><input type="checkbox" class="check-tema" data-tema="${idx}"> Listo para exponer</label>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+        const saved = localStorage.getItem("temasOralesChecks");
+        if (saved) {
+            const checks = JSON.parse(saved);
+            document.querySelectorAll('.check-tema').forEach((cb, i) => { if (checks[i]) cb.checked = true; });
+        }
+        document.querySelectorAll('.check-tema').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const estados = Array.from(document.querySelectorAll('.check-tema')).map(c => c.checked);
+                localStorage.setItem("temasOralesChecks", JSON.stringify(estados));
+            });
+        });
+    }
+    function resetChecks() {
+        localStorage.removeItem("temasOralesChecks");
+        document.querySelectorAll('.check-tema').forEach(cb => cb.checked = false);
+        alert("Checks de exposición reiniciados.");
+    }
+    document.getElementById("resetChecks").addEventListener("click", resetChecks);
+    renderTemasOrales();
+    
+    // Iniciar el TP
+    iniciarTP();
+</script>
+</body>
+</html>

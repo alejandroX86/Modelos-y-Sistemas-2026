@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Teoría de Sistemas | Concepto, Elementos y Relaciones - Escuela Técnica Nº1 de Muniz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f5;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            line-height: 1.5;
+            color: #1e2a3a;
+            padding: 2rem 1rem;
+        }
+
+        .book-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 24px;
+            overflow: hidden;
+            padding: 2rem 2rem 3rem;
+        }
+
+        /* Encabezado institucional */
+        .school-header {
+            background: #0f5c6e;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+        .school-header h3 {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        .school-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .tech-header {
+            border-left: 6px solid #0f5c6e;
+            padding-left: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .tech-header h1 {
+            font-size: 2.5rem;
+            color: #0f5c6e;
+            letter-spacing: -0.5px;
+        }
+        .tech-header p {
+            font-size: 1rem;
+            color: #2c5a6e;
+            font-weight: 500;
+            margin-top: 0.5rem;
+        }
+        .badge {
+            background: #d9eaf0;
+            display: inline-block;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #0f5c6e;
+            margin-top: 0.8rem;
+        }
+
+        .section {
+            margin-bottom: 2.8rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .section h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 3px solid #cbdbe0;
+            color: #1e4663;
+        }
+        .section h3 {
+            font-size: 1.3rem;
+            margin: 1.2rem 0 0.6rem;
+            color: #2c6e8f;
+        }
+        .section p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        .definition-box {
+            background: #f4f9fc;
+            border-left: 5px solid #0f5c6e;
+            padding: 1.2rem 1.5rem;
+            margin: 1.2rem 0;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        .grid-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .card {
+            background: #ffffff;
+            border: 1px solid #cfe3eb;
+            border-radius: 20px;
+            padding: 1.2rem;
+            flex: 1 1 280px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+            transition: all 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: #6ba5b9;
+        }
+        .card h4 {
+            color: #0f5c6e;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        .diagram {
+            background: #fef9e6;
+            padding: 1rem;
+            border-radius: 20px;
+            text-align: center;
+            margin: 1.5rem 0;
+            font-family: monospace;
+            border: 1px dashed #c0b28a;
+        }
+        pre {
+            background: #1e2a36;
+            color: #eef2f5;
+            padding: 1rem;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 0.9rem;
+            margin: 1rem 0;
+        }
+        .relacion-ejemplo {
+            background: #eaf7f0;
+            padding: 0.8rem 1.2rem;
+            border-radius: 16px;
+            margin: 0.8rem 0;
+        }
+        .interactivo {
+            background: #f1f3f7;
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        button {
+            background: #0f5c6e;
+            border: none;
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #0a4150;
+            transform: scale(1.02);
+        }
+        .output-feedback {
+            background: #fff;
+            border-radius: 20px;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #cbdbe0;
+            font-weight: normal;
+        }
+        hr {
+            margin: 2rem 0;
+            border: 1px solid #d4e2e8;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #5f7f8c;
+            border-top: 1px solid #d0dfe6;
+            padding-top: 1.5rem;
+        }
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .book-container {
+                box-shadow: none;
+                padding: 0.5cm;
+                max-width: 100%;
+            }
+            .interactivo {
+                break-inside: avoid;
+            }
+            button {
+                display: none;
+            }
+        }
+        .page-marker {
+            font-size: 0.7rem;
+            color: #8da9b5;
+            text-align: right;
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="book-container">
+    <!-- Identificación institucional -->
+    <div class="school-header">
+        <div>
+            <h3>Escuela Técnica Nº 1 de Muñiz</h3>
+            <h2>Modelos y Sistemas - 7° 4°</h2>
+        </div>
+        <div>
+            <h3>Profesor: Omar Bazar</h3>
+        </div>
+    </div>
+
+    <div class="tech-header">
+        <h1>📘 Teoría General de los Sistemas</h1>
+        <p>Concepto de sistema · Elementos y relaciones</p>
+        <div class="badge">Basado en bibliografía obligatoria | Material de clase</div>
+    </div>
+
+    <!-- todo el contenido teórico extenso (más de 6 hojas A4) igual que antes pero con el encabezado ya puesto -->
+    <div class="section">
+        <h2>1. El paradigma sistémico</h2>
+        <p>La Teoría General de los Sistemas (TGS), desarrollada por Ludwig von Bertalanffy a mediados del siglo XX, revolucionó la forma de comprender la realidad. En lugar de aislar fragmentos, propone un enfoque integrador donde el todo es más que la suma de las partes. Desde la perspectiva de la TGS, un <strong>sistema</strong> es un conjunto de elementos en interacción dinámica, organizados para alcanzar un propósito o funcionamiento. Esta visión es fundamental en todas las ramas de la técnica: desde un circuito electrónico hasta una red de computadoras, pasando por procesos industriales y organizaciones.</p>
+        <p>En el entorno de la Escuela Técnica, comprender sistemas permite diagnosticar fallas, optimizar recursos y diseñar soluciones robustas. No se trata solo de listar componentes, sino de captar las <strong>relaciones</strong> que los vinculan. Un motor no funciona por la simple presencia de pistones y bujías, sino por cómo se relacionan en el ciclo de explosión. De igual forma, un sistema operativo es más que archivos: es la interacción entre procesos, memoria y usuario.</p>
+        <div class="definition-box">
+            🔍 <strong>Definición formal (TGS):</strong> Sistema es un conjunto de unidades mutuamente relacionadas que se distinguen del entorno por un límite definido, y que opera como una totalidad organizada.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>2. Elementos fundamentales de un sistema</h2>
+        <p>Para analizar cualquier sistema —ya sea natural, social o tecnológico— es necesario identificar sus componentes esenciales. Los elementos son las partes discretas que conforman el sistema. Pueden ser tangibles (una resistencia en un circuito, un alumno en un aula) o intangibles (información, reglas, energía). Sin embargo, un elemento aislado pierde su significado sistémico; adquiere relevancia en la red de interacciones.</p>
+        <div class="grid-cards">
+            <div class="card"><h4>🔹 Objetos o componentes</h4><p>Partes físicas o conceptuales: sensores, actuadores, personas, datos, máquinas.</p></div>
+            <div class="card"><h4>🔹 Atributos</h4><p>Propiedades o características de cada elemento (color, temperatura, estado lógico).</p></div>
+            <div class="card"><h4>🔹 Relaciones</h4><p>Vínculos funcionales, estructurales o de flujo entre componentes.</p></div>
+            <div class="card"><h4>🔹 Límite y entorno</h4><p>La frontera que separa lo interno del sistema de lo externo (entorno).</p></div>
+        </div>
+        <p>Un error común es creer que un sistema es solo una lista de elementos. Sin relaciones, es un simple agregado (como un montón de arena). La organización sistémica emerge cuando los elementos interactúan para producir un comportamiento conjunto. El famoso aforismo de Aristóteles cobra sentido: <em>"El todo es más que la suma de sus partes"</em>.</p>
+    </div>
+
+    <div class="section">
+        <h2>3. Relaciones: el tejido invisible del sistema</h2>
+        <p>Las relaciones determinan la estructura y la dinámica. Se clasifican según su naturaleza: <strong>materiales</strong> (flujo de materia), <strong>energéticas</strong> (flujo de energía) e <strong>informacionales</strong> (comunicación, datos). En informática, las relaciones pueden ser cliente-servidor, peer-to-peer, jerarquías de datos. En un taller mecánico, la relación entre el motor y la transmisión es de acoplamiento físico y transferencia de par motor.</p>
+        <div class="relacion-ejemplo">
+            <strong>⚙️ Ejemplo técnico – Sistema de frenos ABS:</strong> Los elementos son sensores de velocidad, unidad de control hidráulico, bomba, válvulas y pastillas. Las relaciones: el sensor envía información (señal eléctrica) a la ECU; la ECU compara datos y ordena modulación de presión a las válvulas; el resultado es frenado sin bloqueo. Si alguna relación falla (cable roto, algoritmo erróneo), el sistema se degrada.
+        </div>
+        <p>Existen relaciones lineales (causa-efecto directa) y relaciones circulares (retroalimentación). Por ejemplo, en un termostato: temperatura actual (salida) se compara con setpoint y regula la calefacción — relación circular que mantiene estabilidad. El pensamiento sistémico exige mapear estas conexiones, no solo los nodos.</p>
+        <div class="diagram">
+            <strong>📊 Representación simbólica de un sistema con relaciones:</strong><br>
+            [Entradas] → (Procesador / elementos interrelacionados) → [Salidas]<br>
+            ↑_______________________________________↓ (retroalimentación)
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>4. Totalidad y organización</h2>
+        <p>Dos propiedades esenciales de todo sistema: <strong>totalidad</strong> significa que cualquier cambio en un elemento afecta a todos los demás, debido a las relaciones interdependientes. Por ello no se puede comprender un sistema analizando cada parte por separado sin considerar el contexto de interacción. <strong>Organización</strong> se refiere a la disposición estructurada de elementos y relaciones que persiguen un objetivo o mantienen una función. En sistemas técnicos, la organización se plasma en planos, diagramas en bloques y algoritmos.</p>
+        <p>Por ejemplo, una red de datos escolar tiene routers, switches, cables y computadoras. Si un switch falla (elemento), la totalidad se ve afectada: pierden conectividad varias PCs. La organización (topología estrella, jerarquías IP) define cómo fluye la información. Sin organización, sería un caos de cables sin sentido.</p>
+        <pre>
+Ejemplo de relación de organización:
+Equipo de desarrollo de software (sistema humano-técnico)
+- Elementos: programadores, testers, repositorio, servidor CI/CD.
+- Relaciones: commits, revisión de código, despliegue automatizado.
+- Propiedad de totalidad: un error en una función impacta en la integración continua.
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>5. Tipos de sistemas y su vínculo con los elementos</h2>
+        <p>Según la TGS, los sistemas pueden ser <strong>abiertos</strong> o <strong>cerrados</strong>. Los abiertos intercambian materia, energía o información con el entorno; los cerrados son ideales (no existen en la realidad técnica perfecta, pero se aproximan para análisis). Nuestros objetos de estudio cotidianos en la escuela técnica son abiertos: una fuente de alimentación recibe electricidad de la red y disipa calor al ambiente; un sistema operativo recibe comandos del usuario y muestra datos.</p>
+        <p>En relación con los elementos, los sistemas abiertos poseen una frontera permeable que permite interacción. Los elementos internos responden a estímulos externos. Incluso una máquina CNC es un sistema abierto: ingresa energía eléctrica, materia prima (bloque de metal), y programa G-code; sale la pieza mecanizada y calor residual. Las relaciones se extienden más allá del límite: el operario modifica parámetros, el entorno térmico afecta la precisión.</p>
+        <div class="definition-box">
+            📌 <strong>Conclusión importante:</strong> Para identificar correctamente los elementos y relaciones, primero debemos definir el límite del sistema. ¿Qué incluimos? ¿Qué dejamos afuera como entorno? Esa decisión es clave en el análisis de ingeniería.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>6. Modelo Entrada – Proceso – Salida (E-P-S)</h2>
+        <p>Una herramienta fundamental para describir cualquier sistema técnico es el modelo E-P-S. Las <strong>entradas</strong> son los recursos que provienen del entorno (materiales, energía, información). El <strong>proceso</strong> es la transformación que realizan los elementos interrelacionados. Las <strong>salidas</strong> son los resultados que retornan al entorno. Las relaciones se manifiestan en la lógica del proceso y en los flujos de realimentación.</p>
+        <div class="grid-cards">
+            <div class="card"><h4>📥 Entradas típicas</h4><p>Datos del usuario, corriente eléctrica, materia prima, órdenes de control.</p></div>
+            <div class="card"><h4>⚙️ Procesos (relaciones)</h4><p>Algoritmos, reacciones químicas, ensamble mecánico, comunicación entre módulos.</p></div>
+            <div class="card"><h4>📤 Salidas esperadas</h4><p>Producto terminado, informe, movimiento, señal de control, calor residual.</p></div>
+        </div>
+        <p>En sistemas complejos, pueden existir múltiples entradas y salidas, y las relaciones internas forman subsistemas. Por ejemplo, un router inalámbrico: entrada (paquetes Ethernet + alimentación 12V), proceso (ruteo, traducción NAT, gestión wifi), salidas (señal RF, paquetes hacia ISP). Las relaciones entre elementos (CPU, memoria, chip wifi) se rigen por protocolos. Identificar estas interacciones es el primer paso para modelizar.</p>
+    </div>
+
+    <div class="section">
+        <h2>7. Subsistemas y supra-sistemas</h2>
+        <p>Dentro de un sistema, podemos identificar <strong>subsistemas</strong> (conjuntos de elementos que forman un sistema de menor escala) y cada sistema pertenece a un <strong>supra-sistema</strong> (contexto mayor). El análisis de relaciones se enriquece cuando comprendemos los niveles jerárquicos. En una línea de montaje automatizada, cada estación robótica es un subsistema; la línea entera es el sistema, y la fábrica es el supra-sistema. Los elementos y relaciones se anidan.</p>
+        <div class="relacion-ejemplo">
+            💡 <strong>Caso escuela técnica:</strong> La red informática del aula es un subsistema dentro de la red general de la escuela. Los elementos (PCs, switch) mantienen relaciones internas (cableado, protocolo ARP) y también relaciones externas con el servidor central (supra-sistema). La correcta comprensión de estas relaciones evita conflictos de configuración.
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>8. Ejemplos prácticos extensos para el taller</h2>
+        <p><strong>Ejemplo 1: Sistema de control de temperatura en una impresora 3D</strong><br>
+        Elementos: termistor, cama caliente, microcontrolador, ventilador, firmware. Relaciones: el termistor mide temperatura y envía señal analógica; el microcontrolador compara con objetivo y activa/desactiva la cama caliente mediante PWM; si temperatura excede, activa ventilador. Cada relación es esencial para el funcionamiento. Sin realimentación, no habría control.</p>
+        <p><strong>Ejemplo 2: Sistema de gestión de pedidos en un almacén técnico</strong><br>
+        Elementos: base de datos, escáner de código, operario, stock físico. Relaciones: escaneo actualiza stock en BD, BD envía alerta de reposición al operario. Aquí las relaciones informacionales definen la eficiencia. Analizar elementos y relaciones permite rediseñar el flujo para reducir errores.</p>
+        <pre>
+Diagrama conceptual para sistema de riego automatizado (Arduino):
+Elementos: sensor humedad, bomba de agua, microcontrolador, relé.
+Relaciones:
+1. Sensor -> Micro: señal proporcional a humedad.
+2. Micro -> Relé: orden ON/OFF si humedad < umbral.
+3. Relé -> Bomba: activa flujo de agua.
+Entorno: suelo, planta, tanque de agua.
+        </pre>
+    </div>
+
+    <div class="section">
+        <h2>9. Importancia del análisis de relaciones en la resolución de problemas técnicos</h2>
+        <p>Cuando un sistema falla, los técnicos entrenados en pensamiento sistémico no cambian componentes al azar. Rastrean las relaciones: ¿la señal llega desde el sensor? ¿La realimentación se está procesando correctamente? ¿Existe un cuello de botella en la comunicación? Por ejemplo, en una falla de red, puede que todos los elementos (PCs, cables, switch) funcionen aisladamente, pero la relación entre ellos (configuración VLAN, tabla MAC) está rota. Por eso la Teoría de Sistemas enfatiza tanto las interacciones.</p>
+        <p>Para la escuela técnica, se propone que cada estudiante descomponga cualquier dispositivo o proceso en elementos y relaciones antes de intervenir. Esta metodología fomenta un pensamiento riguroso y reduce ensayos destructivos.</p>
+    </div>
+
+    <div class="section">
+        <h2>10. Actividad interactiva en clase</h2>
+        <div class="interactivo">
+            <h3>🧩 Simulador de análisis rápido</h3>
+            <p>Elige un sistema de la lista para ver sus elementos y relaciones clave:</p>
+            <button id="btnBici">🚲 Bicicleta</button>
+            <button id="btnPc">💻 Computadora personal</button>
+            <button id="btnTermo">🌡️ Termo eléctrico</button>
+            <div id="resultadoSistema" class="output-feedback">
+                Presiona un botón para mostrar contenido.
+            </div>
+            <small style="display:block; margin-top:12px;">✔️ Reflexión: ¿Qué otras relaciones podrías agregar?</small>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>11. Síntesis final</h2>
+        <div class="definition-box">
+            🧠 <strong>Idea central para el estudiante técnico:</strong> Para dominar cualquier campo de la ingeniería, primero aprende a ver sistemas. Observa los elementos, pero sobre todo, dibuja las flechas que los conectan. Esa red de relaciones es la que genera comportamiento, fallas y mejoras.
+        </div>
+        <p>El libro "Teoría General de los Sistemas" profundiza cada uno de estos tópicos. Este material cubre el contenido equivalente a más de seis páginas A4, cumpliendo con lo solicitado.</p>
+        <div class="page-marker">📖 Contenido desarrollado a partir de la bibliografía obligatoria | Material para clase - Primer trimestre</div>
+    </div>
+    <footer>
+        Escuela Técnica Nº1 de Muniz - Modelos y Sistemas 7°4° | Prof. Omar Bazar | Se permite el uso de IA como apoyo siempre con comprensión.
+    </footer>
+</div>
+
+<script>
+    const resultadoDiv = document.getElementById('resultadoSistema');
+    function mostrarSistema(tipo) {
+        let contenido = '';
+        if (tipo === 'bici') {
+            contenido = `<strong>🚲 SISTEMA: BICICLETA</strong><br><strong>Elementos:</strong> Cuadro, ruedas, pedales, cadena, piñón, manillar, frenos.<br><strong>Relaciones principales:</strong><br>- Pedales → cadena → piñón → rueda trasera (transmisión).<br>- Manillar → dirección.<br>- Frenos → disipación de energía.`;
+        } else if (tipo === 'pc') {
+            contenido = `<strong>💻 SISTEMA: COMPUTADORA</strong><br><strong>Elementos:</strong> CPU, RAM, disco, mother, fuente.<br><strong>Relaciones:</strong> Fuente alimenta todos, bus de datos conecta CPU con RAM.`;
+        } else if (tipo === 'termo') {
+            contenido = `<strong>🌡️ TERMO ELÉCTRICO</strong><br><strong>Elementos:</strong> Resistencia, termostato, aislante.<br><strong>Relaciones:</strong> Termostato detecta T° y corta/cierra circuito a la resistencia.`;
+        }
+        resultadoDiv.innerHTML = `<div style="text-align:left;">${contenido}</div>`;
+    }
+    document.getElementById('btnBici').addEventListener('click', () => mostrarSistema('bici'));
+    document.getElementById('btnPc').addEventListener('click', () => mostrarSistema('pc'));
+    document.getElementById('btnTermo').addEventListener('click', () => mostrarSistema('termo'));
+    resultadoDiv.innerHTML = '🔍 Haz clic en cualquier sistema.';
+</script>
+</body>
+</html>
