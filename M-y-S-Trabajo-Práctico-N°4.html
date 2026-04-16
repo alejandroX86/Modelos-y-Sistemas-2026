@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación TGS | Bertalanffy - E.E.S.T. N°1</title>
+    <style>
+        :root {
+            --bg-book: #fdfbf7;
+            --bg-ui: #f8f9fa;
+            --text-main: #2c3e50;
+            --text-muted: #5f6c7b;
+            --primary: #2c5282;
+            --accent: #059669;
+            --warning: #dc2626;
+            --border: #e2e8f0;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+            --radius: 10px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-ui);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* HEADER INSTITUCIONAL */
+        .inst-header {
+            background: linear-gradient(135deg, var(--primary), #1e40af);
+            color: white;
+            padding: 1.2rem 1rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .inst-header h1 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+        .inst-header p { font-size: 0.9rem; opacity: 0.95; }
+
+        /* PANTALLA 1: LIBRO TEÓRICO */
+        #theory-screen {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 850px;
+            margin: 1.5rem auto;
+            width: 90%;
+        }
+        .book-container {
+            background: var(--bg-book);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 2.5rem 2rem;
+            box-shadow: var(--shadow);
+            max-height: 65vh;
+            overflow-y: auto;
+            margin-bottom: 1.5rem;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            font-size: 1.05rem;
+            color: #1a202c;
+        }
+        .book-container h2 {
+            color: var(--primary);
+            margin: 2rem 0 1rem;
+            font-size: 1.4rem;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        .book-container h2:first-child { margin-top: 0; }
+        .book-container p { margin-bottom: 1.2rem; text-align: justify; }
+        .book-container strong { color: #1e3a5f; }
+        .book-container em { color: #4a5568; }
+        .book-container ul { margin: 1rem 0 1.2rem 1.5rem; }
+        .book-container li { margin-bottom: 0.5rem; }
+
+        #start-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 0 auto;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(44, 82, 130, 0.3);
+        }
+        #start-btn:hover { background: #1e40af; transform: translateY(-2px); }
+
+        /* PANTALLA 2: EXAMEN */
+        #exam-screen {
+            flex: 1;
+            max-width: 800px;
+            margin: 1.5rem auto;
+            width: 90%;
+        }
+        .exam-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .exam-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .q-counter { font-weight: 600; color: var(--primary); }
+        #timer-display {
+            background: #fee2e2;
+            color: var(--warning);
+            padding: 0.4rem 0.9rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        #timer-display.active { background: #dcfce7; color: var(--accent); }
+        #timer-display.ready { background: #dbeafe; color: #1d4ed8; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        .q-text { font-size: 1.1rem; margin-bottom: 1rem; font-weight: 500; }
+        textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+            background: #f8fafc;
+            transition: border-color 0.2s;
+        }
+        textarea:disabled { background: #f1f5f9; cursor: not-allowed; opacity: 0.7; }
+        textarea:focus { outline: none; border-color: var(--primary); background: white; }
+        .status-msg { font-size: 0.9rem; color: var(--text-muted); margin: 0.5rem 0 1rem; min-height: 1.4em; }
+
+        #next-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        #next-btn:disabled { background: #cbd5e1; cursor: not-allowed; transform: none; }
+        #next-btn:not(:disabled):hover { background: #1e40af; }
+
+        /* PANTALLA 3: EXPORTACIÓN */
+        #export-screen {
+            flex: 1;
+            max-width: 600px;
+            margin: 2rem auto;
+            width: 90%;
+            text-align: center;
+        }
+        .export-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+        .export-card h2 { color: var(--accent); margin-bottom: 1rem; }
+        #student-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 1rem 0;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        #export-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+        }
+        #export-btn:hover { background: #047857; transform: translateY(-1px); }
+        #export-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+
+        @media (max-width: 768px) {
+            .book-container { padding: 1.5rem; font-size: 1rem; }
+            .exam-card { padding: 1rem; }
+            .exam-meta { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER INSTITUCIONAL -->
+    <header class="inst-header">
+        <h1>Cátedra Modelos y Sistemas | Prof. Omar A. Bazar</h1>
+        <p>E.E.S.T. N°1 de Muñiz • 7° 4° • Compendio: Teoría General de Sistemas</p>
+    </header>
+
+    <!-- PANTALLA 1: MATERIAL TEÓRICO (FORMATO LIBRO) -->
+    <div id="theory-screen">
+        <div class="book-container">
+            <h2>I. Fundamentación Histórica y Epistemológica</h2>
+            <p>Ludwig von Bertalanffy, biólogo austríaco, formuló en la década de 1940 una crítica mordaz al reduccionismo imperante en la ciencia clásica. La física de aquel entonces intentaba explicar la complejidad de la vida mediante la sumatoria de átomos y moléculas, ignorando sistemáticamente las propiedades organizativas que surgen exclusivamente de la interacción dinámica entre sus partes. Bertalanffy sostuvo que la ciencia no podía seguir fragmentando la realidad sin perder de vista el objeto de estudio en su totalidad. Así nació la Teoría General de los Sistemas (TGS): un marco transdisciplinario que prioriza las relaciones sobre los elementos aislados, y la organización sobre la materia estática.</p>
+
+            <h2>II. La Entropía y la Segunda Ley de la Termodinámica</h2>
+            <p>Un sistema cerrado está condenado por la termodinámica al equilibrio máximo, lo que en términos biológicos significa la muerte, y en términos informáticos, el colapso del flujo de datos y el caos informativo. La entropía es la medida del desorden inherente a todo sistema que no intercambia energía con su entorno. Bertalanffy postula que los sistemas vivos, y por extensión los sistemas de información robustos, operan mediante la importación constante de energía, materia o información desde el ambiente. Este proceso genera lo que Erwin Schrödinger denominó <em>Neguentropía</em>: la capacidad de mantener o incrementar el orden interno a costa de degradar el entorno. Sin este intercambio, cualquier arquitectura de software, por más eficiente que sea, tenderá inevitablemente a la obsolescencia y la fragmentación.</p>
+
+            <h2>III. La Jerarquía de la Complejidad</h2>
+            <p>Según Kenneth Boulding, colaborador directo de Bertalanffy, los sistemas se organizan en niveles de complejidad creciente. Desde los marcos de referencia estáticos (como una base de datos relacional sin consultas ni triggers) hasta los sistemas dinámicos, cibernéticos, biológicos, humanos, sociales y trascendentales. Cada nivel superior integra y trasciende las leyes del nivel inferior, añadiendo nuevas propiedades emergentes. Para un alumno de 7° año de una escuela técnica, comprender esta jerarquía es vital: no se puede tratar a un ecosistema de microservicios distribuidos como una simple calculadora lineal. La complejidad exige modelos de diseño que respeten la autonomía de los subsistemas y la integridad del suprasistema.</p>
+
+            <h2>IV. Isomorfismos y Modelado Técnico</h2>
+            <p>El isomorfismo constituye la columna vertebral de esta disciplina. Se define como la existencia de correspondencias estructurales y funcionales entre campos de conocimiento aparentemente diversos. Cuando modelamos un sistema de control de stock o un pipeline de datos, estamos aplicando inconscientemente leyes de flujo que Bertalanffy observó originalmente en sistemas hidrodinámicos y metabólicos. El código fuente no es más que una representación abstracta de estas interacciones isomórficas. Identificar patrones recurrentes entre dominios permite transferir soluciones probadas de la biología o la física a la ingeniería de software, optimizando el diseño de arquitecturas y anticipando puntos de fallo.</p>
+
+            <h2>V. Cibernética y Retroalimentación</h2>
+            <p>La introducción del <em>feedback</em> revolucionó la TGS. Un sistema sin retroalimentación es, por definición, un sistema ciego a su propio estado. En programación, el feedback se materializa en estructuras de control, monitores de rendimiento y algoritmos de ajuste que comparan continuamente el estado real con el estado deseado. Bertalanffy argumenta que la autorregulación es el mecanismo fundamental que permite a un sistema abierto mantener su <em>estado estable</em> (<em>steady state</em>) frente a las perturbaciones inevitables del entorno. Sin ciclos de corrección, validación y aprendizaje, la arquitectura colapsa bajo su propia rigidez. La cibernética, por tanto, no es solo control: es la capacidad de un sistema para adaptarse, aprender y persistir en el tiempo.</p>
+            
+            <p style="text-align:center; margin-top:2rem; font-style:italic; color:#4a5568;">Fin del material de estudio. Prepárese para la evaluación crítica.</p>
+        </div>
+        <button id="start-btn">📖 LEÍ EL MATERIAL. INICIAR EVALUACIÓN</button>
+    </div>
+
+    <!-- PANTALLA 2: EXAMEN CON TEMPORIZADOR -->
+    <div id="exam-screen" class="hidden">
+        <div class="exam-card fade-in">
+            <div class="exam-meta">
+                <span class="q-counter" id="q-counter">Pregunta 1 de 20</span>
+                <span id="timer-display">90s ⏳ Reflexión...</span>
+            </div>
+            <h2 class="q-text" id="question-text"></h2>
+            <textarea id="answer-input" placeholder="El área de escritura se habilitará al finalizar el tiempo de reflexión..." disabled></textarea>
+            <p class="status-msg" id="status-msg">⏳ Lea detenidamente. El temporizador garantiza un análisis profundo antes de responder.</p>
+            <button id="next-btn" disabled>Continuar a la siguiente pregunta</button>
+        </div>
+    </div>
+
+    <!-- PANTALLA 3: EXPORTACIÓN FINAL -->
+    <div id="export-screen" class="hidden">
+        <div class="export-card fade-in">
+            <h2>✅ Evaluación Completada</h2>
+            <p>Ingrese sus datos para generar el archivo oficial de entrega:</p>
+            <input type="text" id="student-input" placeholder="Apellido y Nombre completo...">
+            <button id="export-btn">📥 GENERAR ARCHIVO DE ENTREGA (.TXT)</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            'use strict';
+
+            // === 20 PREGUNTAS DERIVADAS DIRECTAMENTE DEL COMpendio ===
+            const questions = [
+                "Explique la crítica epistemológica de Bertalanffy al reduccionismo clásico y cómo afecta el diseño de software moderno.",
+                "¿Por qué la sumatoria de elementos aislados es insuficiente para explicar el comportamiento de un sistema complejo?",
+                "Defina entropía según la Segunda Ley de la Termodinámica y proporcione un ejemplo de su manifestación en sistemas informáticos.",
+                "¿Qué destino le aguarda a un sistema cerrado según los principios termodinámicos y cómo se traduce esto en ingeniería de software?",
+                "Explique el concepto de Neguentropía propuesto por Schrödinger y cómo se aplica a la importación de datos o energía en un sistema.",
+                "¿Por qué los sistemas robustos deben intercambiar información con su entorno para evitar el caos informativo?",
+                "Describa la Jerarquía de Complejidad de Boulding y ubique tres niveles aplicables a componentes de software actuales.",
+                "¿Por qué es peligroso tratar una arquitectura distribuida como una 'calculadora lineal' desde la perspectiva de la TGS?",
+                "Defina isomorfismo estructural y dé un ejemplo claro de correspondencia entre un sistema biológico y una arquitectura técnica.",
+                "¿Cómo el modelado de un sistema de control de stock refleja leyes de flujo observadas originalmente en sistemas hidrodinámicos?",
+                "Explique por qué el código fuente puede considerarse una representación abstracta de interacciones isomórficas.",
+                "¿Qué papel juega la identificación de patrones recurrentes entre dominios en la optimización de arquitecturas?",
+                "Analice por qué la introducción del feedback revolucionó la Teoría General de los Sistemas.",
+                "¿Qué significa que un sistema sin retroalimentación sea un sistema 'ciego'? Aplíquelo a un servicio web sin métricas.",
+                "Describa cómo las estructuras de control en programación comparan el estado real con el estado deseado.",
+                "Explique la autorregulación como mecanismo fundamental para el mantenimiento del estado estable frente a perturbaciones.",
+                "¿Qué es el 'steady state' en sistemas abiertos y cómo lo mantiene un balanceador de carga o un auto-escalador?",
+                "Diferencie claramente un sistema cerrado de un sistema abierto utilizando ejemplos de infraestructura tecnológica.",
+                "¿Cómo la cibernética trasciende el concepto de 'control' para convertirse en capacidad de adaptación y persistencia?",
+                "Sintetice cómo la Teoría General de Sistemas transforma la mentalidad del desarrollador: de programador lineal a arquitecto de sistemas adaptativos."
+            ];
+
+            // === ESTADO DE LA APLICACIÓN ===
+            let currentQ = 0;
+            const answers = new Array(20).fill("");
+            let timer = 90;
+            let timerInterval = null;
+
+            // Referencias DOM
+            const theoryScreen = document.getElementById('theory-screen');
+            const examScreen = document.getElementById('exam-screen');
+            const exportScreen = document.getElementById('export-screen');
+            const startBtn = document.getElementById('start-btn');
+            const qCounter = document.getElementById('q-counter');
+            const timerDisplay = document.getElementById('timer-display');
+            const qText = document.getElementById('question-text');
+            const answerInput = document.getElementById('answer-input');
+            const statusMsg = document.getElementById('status-msg');
+            const nextBtn = document.getElementById('next-btn');
+            const studentInput = document.getElementById('student-input');
+            const exportBtn = document.getElementById('export-btn');
+
+            // === INICIAR EVALUACIÓN ===
+            startBtn.addEventListener('click', () => {
+                theoryScreen.classList.add('hidden');
+                examScreen.classList.remove('hidden');
+                loadQuestion();
+            });
+
+            // === CARGAR PREGUNTA Y TEMPORIZADOR ===
+            function loadQuestion() {
+                if (currentQ >= 20) {
+                    examScreen.classList.add('hidden');
+                    exportScreen.classList.remove('hidden');
+                    return;
+                }
+
+                qCounter.textContent = `Pregunta ${currentQ + 1} de 20`;
+                qText.textContent = questions[currentQ];
+                answerInput.value = answers[currentQ] || "";
+                answerInput.disabled = true;
+                nextBtn.disabled = true;
+                statusMsg.textContent = "⏳ Lea detenidamente. El temporizador garantiza un análisis profundo antes de responder.";
+                
+                timer = 90;
+                timerDisplay.textContent = "90s ⏳ Reflexión...";
+                timerDisplay.className = "";
+                
+                clearInterval(timerInterval);
+                timerInterval = setInterval(() => {
+                    timer--;
+                    const icon = timer > 10 ? '⏳' : '⏱️';
+                    timerDisplay.textContent = `${timer}s ${icon} Reflexión...`;
+                    timerDisplay.className = "active";
+                    
+                    if (timer <= 10) {
+                        timerDisplay.style.background = "#fee2e2";
+                        timerDisplay.style.color = "#dc2626";
+                    } else {
+                        timerDisplay.style.background = "";
+                        timerDisplay.style.color = "";
+                    }
+                    
+                    if (timer <= 0) {
+                        clearInterval(timerInterval);
+                        timerDisplay.textContent = "✅ Tiempo completado. Puede responder.";
+                        timerDisplay.className = "ready";
+                        answerInput.disabled = false;
+                        nextBtn.disabled = false;
+                        answerInput.focus();
+                        statusMsg.textContent = "📝 Área habilitada. Escriba su respuesta fundamentada y presione Continuar.";
+                    }
+                }, 1000);
+            }
+
+            nextBtn.addEventListener('click', () => {
+                answers[currentQ] = answerInput.value.trim();
+                currentQ++;
+                loadQuestion();
+            });
+
+            // === EXPORTACIÓN A .TXT ===
+            exportBtn.addEventListener('click', () => {
+                const name = studentInput.value.trim() || "Estudiante_No_Especificado";
+                const dateStr = new Date().toLocaleString('es-AR');
+                
+                let content = "══════════════════════════════════════════════════════════════════\n";
+                content += "ENTREGA OFICIAL - TEORÍA GENERAL DE SISTEMAS (BERTALANFFY)\n";
+                content += "══════════════════════════════════════════════════════════════════\n\n";
+                content += `Institución: E.E.S.T. N°1 de Muñiz | Curso: 7° 4°\n`;
+                content += `Cátedra: Modelos y Sistemas | Docente: Prof. Omar Alejandro Bazar\n`;
+                content += `Fecha de generación: ${dateStr}\n`;
+                content += `Estudiante: ${name}\n`;
+                content += `Consignas respondidas: 20/20\n\n`;
+                content += "──────────────────────────────────────────────────────────────────\n";
+                content += "DESARROLLO DE RESPUESTAS\n";
+                content += "──────────────────────────────────────────────────────────────────\n\n";
+
+                questions.forEach((q, i) => {
+                    content += `▶ CONSIGNA ${i + 1}:\n${q}\n\n`;
+                    content += `RESPUESTA DEL ESTUDIANTE:\n${answers[i] || "[SIN RESPUESTA]"}\n`;
+                    content += "─".repeat(65) + "\n\n";
+                });
+
+                content += "══════════════════════════════════════════════════════════════════\n";
+                content += "FIN DEL ARCHIVO DE ENTREGA\n";
+                content += "══════════════════════════════════════════════════════════════════\n";
+                content += "Nota: Documento generado automáticamente por el sistema de evaluación TGS.\n";
+                content += "Referencia: Bertalanffy, L. v. (1968). General System Theory. Braziller.\n";
+
+                const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `Entrega_TGS_${name.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                exportBtn.textContent = "✅ Archivo descargado exitosamente. Puede cerrarlo.";
+                exportBtn.disabled = true;
+            });
+
+        })();
+    </script>
+</body>
+</html>

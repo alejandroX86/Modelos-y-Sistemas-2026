@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Proyectos 7° 4° - EEST N1</title>
+    <style>
+        :root {
+            --primary: #1a2a3a;
+            --accent: #2980b9;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --danger: #c0392b;
+            --gold: #f39c12;
+            --bg: #e9ecef;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #2c3e50);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .po-title {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .autor-cita {
+            font-style: italic;
+            color: var(--gold);
+            font-size: 1rem;
+            margin-top: 10px;
+            display: block;
+        }
+
+        .config-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+        }
+
+        .card-equipo {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-left: 10px solid var(--accent);
+        }
+
+        .header-eq {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .score-display {
+            background: var(--primary);
+            padding: 10px 15px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 90px;
+        }
+
+        .score-val { color: var(--gold); font-size: 1.6rem; font-weight: bold; display: block; }
+        .score-lab { color: #888; font-size: 0.65rem; text-transform: uppercase; }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin: 20px 0 10px 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after { content: ""; flex: 1; height: 1px; background: #eee; }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            border: 1px solid #edf0f2;
+        }
+
+        .task-name { font-size: 0.85rem; flex-grow: 1; }
+        .task-input { border: none; background: transparent; font-size: 0.85rem; width: 100%; outline: none; }
+
+        .sem-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+            border: 2px solid #fff;
+        }
+
+        .btn-control {
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+
+        .asistencia-grid { display: grid; grid-template-columns: 1fr; gap: 4px; }
+        .asistencia-item { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+        .role-text { color: #777; font-size: 0.75rem; font-weight: 600; }
+
+        .github-input {
+            width: 100%;
+            border: 2px solid #e1e4e8;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #0366d6;
+            background-color: #f6f8fa;
+            box-sizing: border-box;
+        }
+
+        .btn-save {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 20px 40px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            font-size: 1.1rem;
+            z-index: 999;
+        }
+
+        textarea { width: 100%; border: 1px solid #ddd; border-radius: 8px; padding: 10px; margin-top: 10px; resize: none; font-family: inherit; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>E.E.S.T. N°1 Muñiz - Modelos y Sistemas</h1>
+    <div class="po-title">
+        Software de Control de los Product Owner
+    </div>
+    <span class="autor-cita">Basado en la Teoría General de los Sistemas de <strong>Ludwig von Bertalanffy</strong></span>
+    <p style="margin-top:10px; font-size: 0.9rem; opacity: 0.8;">Contenido Prescriptivo - Prof. Omar A. Bazar | 7° 4°</p>
+</header>
+
+<div class="config-bar">
+    <div><strong>PO Responsable:</strong> <input type="text" id="po-name" placeholder="Nombre del PO"></div>
+    <div><strong>Fecha de Clase:</strong> <input type="date" id="current-date"></div>
+</div>
+
+<div class="container" id="panel"></div>
+
+<button class="btn-save" onclick="generarTxt()">📥 Descargar Reporte (.txt)</button>
+
+<script>
+    const roles = ["Líder Técnico", "Analista Funcional", "Prog. Senior", "Prog. Semi-Senior", "Prog. Junior", "QA / Tester"];
+    const consignasTGS = [
+        "Límites y Fronteras (TGS)",
+        "Entrada/Proceso/Salida",
+        "Módulos y Subsistemas",
+        "Control de Entropía (Doc)",
+        "Feedback y Validaciones",
+        "Diagramas UML",
+        "Defensa Oral",
+        "Relevamientos",
+        "Sistemas"
+    ];
+
+    document.getElementById('current-date').valueAsDate = new Date();
+
+    function render() {
+        const panel = document.getElementById('panel');
+        for(let i=1; i<=6; i++) {
+            const card = document.createElement('div');
+            card.className = 'card-equipo';
+            card.innerHTML = `
+                <div class="header-eq">
+                    <h2>Equipo ${i}</h2>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="display:flex; flex-direction:column; gap:4px;">
+                            <button class="btn-control" style="background:var(--success)" onclick="modPts(${i},5)">+</button>
+                            <button class="btn-control" style="background:var(--danger)" onclick="modPts(${i},-5)">-</button>
+                        </div>
+                        <div class="score-display">
+                            <span class="score-lab">Puntos</span>
+                            <span class="score-val" id="pts-${i}">100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-title">Asistencia (Marcar solo si está PRESENTE)</div>
+                <div class="asistencia-grid">
+                    ${roles.map((r, idx) => `
+                        <div class="asistencia-item">
+                            <input type="checkbox" checked class="check-asis-${i}" data-rol="${r}" data-est="Estudiante ${idx+1}"> 
+                            <span>Est. ${idx+1}</span> <span class="role-text">- ${r}</span>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">Consignas Curriculares</div>
+                <div id="tasks-fixed-${i}">
+                    ${consignasTGS.map((c, idx) => `
+                        <div class="task-row">
+                            <input type="checkbox"> <span class="task-name">${c}</span>
+                            <div class="sem-circle sem-fixed-${i}" data-name="${c}" style="background:#ccc" onclick="cycle(this)"></div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">Tareas de Proyecto (6)</div>
+                <div id="tasks-var-${i}">
+                    ${[1,2,3,4,5,6].map(t => `
+                        <div class="task-row">
+                            <input type="text" class="task-input" placeholder="Tarea ${t}..." id="input-task-${i}-${t}">
+                            <div class="sem-circle sem-var-${i}" data-id="${t}" style="background:#ccc" onclick="cycle(this)"></div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">Repositorio GitHub del Equipo</div>
+                <input type="text" class="github-input" id="git-${i}" placeholder="https://github.com/usuario/proyecto-equipo-${i}">
+
+                <div class="section-title">Observaciones</div>
+                <textarea id="obs-${i}" rows="2" placeholder="Notas del PO sobre el desempeño actual..."></textarea>
+            `;
+            panel.appendChild(card);
+        }
+    }
+
+    function cycle(el) {
+        const colors = {
+            'rgb(204, 204, 204)': '#27ae60', 
+            'rgb(39, 174, 96)': '#f1c40f',   
+            'rgb(241, 196, 15)': '#c0392b',  
+            'rgb(192, 57, 43)': '#27ae60'    
+        };
+        const curr = window.getComputedStyle(el).backgroundColor;
+        el.style.backgroundColor = colors[curr] || '#27ae60';
+    }
+
+    function modPts(id, v) {
+        const el = document.getElementById(`pts-${id}`);
+        let p = parseInt(el.innerText) + v;
+        el.innerText = p;
+        el.style.color = p < 70 ? 'var(--danger)' : 'var(--gold)';
+    }
+
+    function getColorName(rgb) {
+        if (rgb.includes('39, 174, 96')) return "VERDE (Excelente)";
+        if (rgb.includes('241, 196, 15')) return "AMARILLO (En Proceso)";
+        if (rgb.includes('192, 57, 43')) return "ROJO (Pendiente/Bloqueado)";
+        return "GRIS (Sin Evaluar)";
+    }
+
+    function generarTxt() {
+        try {
+            const po = document.getElementById('po-name').value || "No especificado";
+            const fec = document.getElementById('current-date').value;
+            
+            let out = `EEST N1 MUÑIZ - REPORTE DE GESTIÓN PROFESIONAL\r\n`;
+            out += `PROFESOR: OMAR ALEJANDRO BAZAR | CURSO: 7° 4°\r\n`;
+            out += `SOFTWARE DE CONTROL DE LOS PRODUCT OWNER\r\n`;
+            out += `MARCO TEÓRICO: Ludwig von Bertalanffy (TGS)\r\n`;
+            out += `FECHA: ${fec} | PRODUCT OWNER: ${po}\r\n`;
+            out += `====================================================\r\n\r\n`;
+
+            for(let i=1; i<=6; i++) {
+                const puntos = document.getElementById(`pts-${i}`).innerText;
+                const obs = document.getElementById(`obs-${i}`).value || "Sin observaciones";
+                const git = document.getElementById(`git-${i}`).value || "No proporcionado";
+                
+                out += `>>> EQUIPO ${i} | PUNTAJE: ${puntos} pts <<<\r\n`;
+                out += `REPO GITHUB: ${git}\r\n`;
+                
+                out += `ASISTENCIA Y NOVEDADES:\r\n`;
+                const asis = document.querySelectorAll(`.check-asis-${i}`);
+                let faltas = 0;
+                asis.forEach(a => {
+                    if (!a.checked) {
+                        out += `  - AUSENTE: ${a.getAttribute('data-est')} | CARGO: ${a.getAttribute('data-rol')}\r\n`;
+                        faltas++;
+                    }
+                });
+                if(faltas === 0) out += `  - Asistencia completa.\r\n`;
+
+                out += `ESTADO DE CONSIGNAS (TGS / RELEVAMIENTO / SISTEMAS):\r\n`;
+                const semsFixed = document.querySelectorAll(`.sem-fixed-${i}`);
+                semsFixed.forEach(s => {
+                    const color = getColorName(window.getComputedStyle(s).backgroundColor);
+                    out += `  [${color}] ${s.getAttribute('data-name')}\r\n`;
+                });
+
+                out += `TAREAS ESPECÍFICAS:\r\n`;
+                for(let t=1; t<=6; t++) {
+                    const tName = document.getElementById(`input-task-${i}-${t}`).value || `Tarea ${t}`;
+                    const tSem = document.querySelector(`.sem-var-${i}[data-id="${t}"]`);
+                    const tColor = getColorName(window.getComputedStyle(tSem).backgroundColor);
+                    out += `  [${tColor}] ${tName}\r\n`;
+                }
+
+                out += `OBSERVACIONES DEL PO: ${obs}\r\n`;
+                out += `----------------------------------------------------\r\n\r\n`;
+            }
+
+            const blob = new Blob([out], {type: 'text/plain;charset=utf-8'});
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Reporte_74_Prof_Bazar_${fec}.txt`;
+            link.click();
+            URL.revokeObjectURL(link.href);
+        } catch (e) {
+            alert("Error: " + e.message);
+        }
+    }
+
+    window.onload = render;
+</script>
+
+</body>
+</html>

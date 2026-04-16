@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Equipos 7° 4° - EEST N1</title>
+    <style>
+        :root {
+            --primary: #1a2a3a;
+            --accent: #2980b9;
+            --success: #27ae60;
+            --warning: #f1c40f;
+            --danger: #c0392b;
+            --gold: #f39c12;
+            --bg: #e9ecef;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #2c3e50);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border-bottom: 5px solid var(--gold);
+        }
+
+        .po-title {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 2px solid var(--gold);
+            text-transform: uppercase;
+        }
+
+        .config-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 25px;
+        }
+
+        .card-equipo {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-left: 10px solid var(--accent);
+        }
+
+        .header-eq {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            margin: 20px 0 10px 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after { content: ""; flex: 1; height: 1px; background: #eee; }
+
+        /* Estilos para la nueva sección de integrantes */
+        .input-persona {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .role-label {
+            width: 150px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
+
+        .name-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+
+        .task-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 10px;
+            background: #fcfcfc;
+            border-radius: 8px;
+            margin-bottom: 6px;
+            border: 1px solid #edf0f2;
+        }
+
+        .sem-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .btn-save {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 20px 40px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+            font-size: 1.1rem;
+            z-index: 999;
+        }
+
+        .github-input, textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            font-family: inherit;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>E.E.S.T. N°1 Muñiz - Modelos y Sistemas</h1>
+    <div class="po-title">Control Nomina de Equipos y Product Owners</div>
+    <p style="margin-top:10px; font-size: 0.9rem; opacity: 0.8;">Profesor Omar Alejandro Bazar | 7° 4°</p>
+</header>
+
+<div class="config-bar">
+    <div><strong>PO General Responsable:</strong> <input type="text" id="po-nombre-general" placeholder="Nombre completo"></div>
+    <div><strong>Fecha:</strong> <input type="date" id="current-date"></div>
+</div>
+
+<div class="container" id="panel"></div>
+
+<button class="btn-save" onclick="generarTxt()">📥 Descargar Reporte Completo</button>
+
+<script>
+    const roles = ["Product Owner", "Líder Técnico", "Analista Funcional", "Prog. Senior", "Prog. Semi-Senior", "Prog. Junior", "QA / Tester"];
+    const consignasTGS = ["Límites y Fronteras", "Entrada/Proceso/Salida", "Módulos y Subsistemas", "Control de Entropía", "Feedback y Validaciones", "Diagramas UML", "Defensa Oral", "Relevamientos", "Sistemas"];
+
+    document.getElementById('current-date').valueAsDate = new Date();
+
+    function render() {
+        const panel = document.getElementById('panel');
+        for(let i=1; i<=6; i++) {
+            const card = document.createElement('div');
+            card.className = 'card-equipo';
+            card.innerHTML = `
+                <div class="header-eq">
+                    <h2>Equipo ${i}</h2>
+                    <div style="background:var(--primary); color:var(--gold); padding:5px 15px; border-radius:10px; font-weight:bold;">
+                        Pts: <span id="pts-${i}">100</span>
+                        <button onclick="modPts(${i},5)" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">+</button>
+                        <button onclick="modPts(${i},-5)" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">-</button>
+                    </div>
+                </div>
+
+                <div class="section-title">Nómina del Equipo (Nombre y Posición)</div>
+                <div id="integrantes-${i}">
+                    ${roles.map((rol, idx) => `
+                        <div class="input-persona">
+                            <input type="checkbox" checked class="asis-check-${i}" data-rol="${rol}">
+                            <div class="role-label">${rol}</div>
+                            <input type="text" class="name-input name-field-${i}" placeholder="Nombre del alumno" data-rol="${rol}">
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div class="section-title">Seguimiento TGS</div>
+                ${consignasTGS.map(c => `
+                    <div class="task-row">
+                        <span style="font-size:0.8rem; flex-grow:1;">${c}</span>
+                        <div class="sem-circle sem-fixed-${i}" data-name="${c}" style="background:#ccc" onclick="cycle(this)"></div>
+                    </div>
+                `).join('')}
+
+                <div class="section-title">Repositorio GitHub</div>
+                <input type="text" class="github-input" id="git-${i}" placeholder="URL del repositorio">
+
+                <div class="section-title">Observaciones Semanales</div>
+                <textarea id="obs-${i}" rows="2"></textarea>
+            `;
+            panel.appendChild(card);
+        }
+    }
+
+    function cycle(el) {
+        const colors = {'rgb(204, 204, 204)': '#27ae60', 'rgb(39, 174, 96)': '#f1c40f', 'rgb(241, 196, 15)': '#c0392b', 'rgb(192, 57, 43)': '#27ae60'};
+        el.style.backgroundColor = colors[window.getComputedStyle(el).backgroundColor] || '#27ae60';
+    }
+
+    function modPts(id, v) {
+        const el = document.getElementById(`pts-${id}`);
+        el.innerText = parseInt(el.innerText) + v;
+    }
+
+    function getColorName(rgb) {
+        if (rgb.includes('39, 174, 96')) return "VERDE";
+        if (rgb.includes('241, 196, 15')) return "AMARILLO";
+        if (rgb.includes('192, 57, 43')) return "ROJO";
+        return "GRIS";
+    }
+
+    function generarTxt() {
+        const poGen = document.getElementById('po-nombre-general').value || "No especificado";
+        const fec = document.getElementById('current-date').value;
+        
+        let txt = `REPORTE DE EQUIPOS - MODELOS Y SISTEMAS - EEST N1\r\n`;
+        txt += `PROFESOR: OMAR ALEJANDRO BAZAR | FECHA: ${fec}\r\n`;
+        txt += `PO GENERAL: ${poGen}\r\n`;
+        txt += `====================================================\r\n\r\n`;
+
+        for(let i=1; i<=6; i++) {
+            txt += `>>> EQUIPO ${i} | PUNTAJE: ${document.getElementById(`pts-${i}`).innerText}\r\n`;
+            
+            // Nombres e Integrantes
+            txt += `NOMINA Y ASISTENCIA:\r\n`;
+            const checks = document.querySelectorAll(`.asis-check-${i}`);
+            const names = document.querySelectorAll(`.name-field-${i}`);
+            
+            checks.forEach((c, idx) => {
+                const nombre = names[idx].value || "SIN NOMBRE";
+                const rol = c.getAttribute('data-rol');
+                const estado = c.checked ? "PRESENTE" : "AUSENTE";
+                txt += `  - [${estado}] ${rol}: ${nombre}\r\n`;
+            });
+
+            txt += `REPOSITORIO: ${document.getElementById(`git-${i}`).value || 'No cargado'}\r\n`;
+            
+            // Semáforos
+            txt += `ESTADO DE TAREAS:\r\n`;
+            document.querySelectorAll(`.sem-fixed-${i}`).forEach(s => {
+                txt += `  [${getColorName(window.getComputedStyle(s).backgroundColor)}] ${s.getAttribute('data-name')}\r\n`;
+            });
+
+            txt += `OBSERVACIONES: ${document.getElementById(`obs-${i}`).value || 'Sin notas'}\r\n`;
+            txt += `----------------------------------------------------\r\n\r\n`;
+        }
+
+        const blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `Nomina_74_Bazar_${fec}.txt`;
+        link.click();
+    }
+
+    window.onload = render;
+</script>
+
+</body>
+</html>
