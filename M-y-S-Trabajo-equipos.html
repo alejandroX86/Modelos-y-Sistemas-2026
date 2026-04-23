@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TP N°1: Gestión de Sistemas - Prof. Bazar</title>
+    <style>
+        :root {
+            --primary: #1a2a3a;
+            --accent: #2980b9;
+            --success: #27ae60;
+            --danger: #c0392b;
+            --gold: #f39c12;
+            --bg: #e9ecef;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #2c3e50);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border-bottom: 5px solid var(--gold);
+            margin-bottom: 25px;
+        }
+
+        .timer-box {
+            background: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px solid var(--gold);
+        }
+
+        #timer-display {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: var(--danger);
+            font-family: 'Courier New', monospace;
+        }
+
+        .config-bar {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .card-rol {
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            border-left: 10px solid var(--accent);
+        }
+
+        .rol-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f1f1;
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            gap: 20px;
+        }
+
+        .rol-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--primary);
+            text-transform: uppercase;
+            min-width: 200px;
+        }
+
+        .input-nombre {
+            flex-grow: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .consigna-box {
+            background: #fdfaf3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            border: 1px solid #faebcc;
+        }
+
+        /* Estilo de Hoja Rayada para marcar los 20 renglones */
+        textarea {
+            width: 100%;
+            height: 480px; /* Altura ajustada para visualizar los renglones */
+            padding: 0 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
+            line-height: 24px; /* Altura de cada renglón */
+            resize: none;
+            box-sizing: border-box;
+            background-attachment: local;
+            background-image: linear-gradient(white 23px, #e1e4e8 24px);
+            background-size: 100% 24px;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 25px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-save:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .status-msg {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: bold;
+            color: var(--danger);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>E.E.S.T. N°1 Muñiz - Modelos y Sistemas</h1>
+        <div style="font-size: 1.3rem; margin-top: 10px; color: var(--gold);">
+            Trabajo Práctico N°1: Pensamiento Sistémico (TGS)
+        </div>
+        <p>Profesor: Omar Alejandro Bazar | Curso: 7° 4°</p>
+    </header>
+
+    <div class="timer-box">
+        <div style="font-weight: bold; color: #7f8c8d;">TIEMPO DE INVESTIGACIÓN REQUERIDO</div>
+        <div id="timer-display">60:00</div>
+        <div id="lock-msg" style="font-size: 0.9rem; margin-top: 5px;">⚠️ El guardado se habilitará al cumplir la hora de clase.</div>
+    </div>
+
+    <div class="config-bar">
+        <div><strong>Equipo N°:</strong> <select id="num-equipo">
+            <option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option>
+        </select></div>
+        <div><strong>GitHub URL:</strong> <input type="text" id="repo-url" placeholder="Enlace al repositorio del equipo" style="width: 400px; padding: 8px; border-radius: 5px; border: 1px solid #ddd;"></div>
+    </div>
+
+    <div id="workspace"></div>
+
+    <button id="btn-descargar" class="btn-save" disabled onclick="exportarTXT()">
+        📥 Descargar Reporte Consolidado (.txt)
+    </button>
+    <div id="btn-status" class="status-msg">Habilitación de descarga: Bloqueado por cronómetro pedagógico.</div>
+</div>
+
+<script>
+    const rolesData = [
+        { r: "Líder Técnico", c: "Analice cómo el Pensamiento Sistémico ayuda al líder a coordinar los subsistemas humanos y técnicos para evitar la entropía del proyecto." },
+        { r: "Analista Funcional", c: "Defina el 'Concepto de Sistema' para el proyecto actual. Detalle Entradas, Procesos, Salidas y establezca los Límites (Fronteras)." },
+        { r: "Programador Senior", c: "Relacione la modularidad y el encapsulamiento con la jerarquía de sistemas de Bertalanffy. Explique el rol de las interfaces." },
+        { r: "Programador Junior", c: "Investigue el impacto de la entropía en el código fuente. ¿Cómo la documentación y los estándares generan neguentropía (orden)?" },
+        { r: "QA / Tester", c: "Desarrolle los conceptos de Feedback (Retroalimentación) y Homeostasis aplicados al control de calidad y estabilidad del software." }
+    ];
+
+    let timeLeft = 60 * 60; // 60 minutos en segundos
+
+    function renderWorkspace() {
+        const ws = document.getElementById('workspace');
+        rolesData.forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = 'card-rol';
+            card.innerHTML = `
+                <div class="rol-header">
+                    <span class="rol-title">${item.r}</span>
+                    <input type="text" id="nombre-${i}" class="input-nombre" placeholder="Nombre completo del integrante..." required>
+                </div>
+                <div class="consigna-box"><strong>Consigna:</strong> ${item.c}</div>
+                <textarea id="texto-${i}" placeholder="Desarrolle aquí (Mínimo 20 renglones marcados)..."></textarea>
+            `;
+            ws.appendChild(card);
+        });
+    }
+
+    function iniciarReloj() {
+        const display = document.getElementById('timer-display');
+        const btn = document.getElementById('btn-descargar');
+        const status = document.getElementById('btn-status');
+        
+        const crono = setInterval(() => {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            display.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(crono);
+                btn.disabled = false;
+                display.style.color = "var(--success)";
+                status.innerText = "✅ Tiempo cumplido. Reporte listo para descarga.";
+                status.style.color = "var(--success)";
+                document.getElementById('lock-msg').innerText = "✔️ Sistema desbloqueado.";
+            } else {
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    function exportarTXT() {
+        const numEq = document.getElementById('num-equipo').value;
+        const repo = document.getElementById('repo-url').value || "No especificado";
+        const fecha = new Date().toLocaleString();
+
+        let txt = `====================================================\r\n`;
+        txt += `   E.E.S.T. N°1 MUÑIZ - MODELOS Y SISTEMAS\r\n`;
+        txt += `   PROFESOR: OMAR ALEJANDRO BAZAR | CURSO: 7° 4°\r\n`;
+        txt += `====================================================\r\n`;
+        txt += `REPORTE DE TRABAJO PRÁCTICO N°1: TGS\r\n`;
+        txt += `FECHA: ${fecha} | EQUIPO N°: ${numEq}\r\n`;
+        txt += `REPOSITORIO: ${repo}\r\n`;
+        txt += `====================================================\r\n\r\n`;
+
+        rolesData.forEach((item, i) => {
+            const nombre = document.getElementById(`nombre-${i}`).value || "ESTUDIANTE NO IDENTIFICADO";
+            const contenido = document.getElementById(`texto-${i}`).value;
+            
+            txt += `CARGO: ${item.r.toUpperCase()}\r\n`;
+            txt += `INTEGRANTE: ${nombre}\r\n`;
+            txt += `----------------------------------------------------\r\n`;
+            txt += `${contenido}\r\n`;
+            txt += `----------------------------------------------------\r\n\r\n`;
+        });
+
+        txt += `FIN DEL REPORTE - FIRMA DOCENTE: PROF. BAZAR\r\n`;
+
+        const blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `TP1_74_Equipo_${numEq}_Bazar.txt`;
+        link.click();
+    }
+
+    window.onload = () => {
+        renderWorkspace();
+        iniciarReloj();
+    };
+</script>
+
+</body>
+</html>

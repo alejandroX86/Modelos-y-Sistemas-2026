@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teoría General de los Sistemas - Material Ampliado | E.E.S.T. N°1</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --accent: #10b981;
+      --warning: #f59e0b;
+      --border: #e2e8f0;
+      --radius: 8px;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      padding: 0;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 2rem 1rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+    header h1 { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    header p { opacity: 0.9; font-size: 1.1rem; }
+
+    .controls {
+      position: sticky; top: 0; z-index: 100;
+      background: var(--surface);
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .timer-box, .progress-box { font-weight: 600; font-size: 1.1rem; }
+    #timer { color: var(--warning); font-family: monospace; font-size: 1.4rem; }
+    progress { width: 150px; height: 8px; }
+
+    nav { background: var(--surface); padding: 1rem; margin: 1rem auto; max-width: 1200px; border-radius: var(--radius); box-shadow: var(--shadow); }
+    nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    nav a {
+      display: inline-block; padding: 0.5rem 1rem; background: #f1f5f9; color: var(--primary);
+      text-decoration: none; border-radius: 20px; font-weight: 500; transition: all 0.2s;
+    }
+    nav a:hover { background: var(--primary); color: white; }
+
+    main { max-width: 900px; margin: 0 auto; padding: 0 1rem 4rem; }
+
+    section {
+      background: var(--surface);
+      margin-bottom: 2rem;
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border-left: 5px solid var(--primary);
+    }
+    section h2 { color: var(--primary-dark); margin-bottom: 1rem; border-bottom: 2px solid var(--border); padding-bottom: 0.5rem; }
+    section h3 { color: #334155; margin: 1.5rem 0 0.8rem; font-size: 1.3rem; }
+    section p { margin-bottom: 1rem; text-align: justify; }
+    .highlight { background: #e0f2fe; padding: 0.15rem 0.3rem; border-radius: 4px; font-weight: 600; color: #0369a1; }
+    .role-tag { display: inline-block; background: #dbeafe; color: #1e40af; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; margin: 0.2rem 0.5rem 0.2rem 0; border: 1px solid #bfdbfe; }
+    .practical-box {
+      background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius);
+      padding: 1.5rem; margin-top: 1.5rem;
+    }
+    .practical-box h4 { color: #166534; margin-bottom: 0.5rem; }
+    .practical-box ul { margin-left: 1.5rem; }
+    .practical-box li { margin-bottom: 0.5rem; }
+
+    .collapse-btn {
+      display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;
+      background: #f8fafc; border: 1px solid var(--border); padding: 0.5rem 1rem;
+      border-radius: 6px; margin-bottom: 1rem; font-weight: 500;
+    }
+    .collapse-btn::after { content: '▼'; transition: transform 0.2s; }
+    .collapse-btn.open::after { transform: rotate(180deg); }
+    .collapsible { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+    .collapsible.show { max-height: 5000px; }
+
+    footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.9rem; border-top: 1px solid var(--border); }
+
+    @media (max-width: 768px) {
+      header h1 { font-size: 1.6rem; }
+      section { padding: 1.5rem; }
+      .controls { flex-direction: column; gap: 0.5rem; align-items: stretch; }
+    }
+    @media print {
+      .controls, nav, .collapse-btn, footer { display: none; }
+      section { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Tratado sobre la Teoría General de los Sistemas</h1>
+  <p>Basado en la obra de Ludwig von Bertalanffy | Material Ampliado para 7° 4° - E.E.S.T. N°1</p>
+</header>
+
+<div class="controls">
+  <div class="timer-box">⏳ Tiempo de análisis: <span id="timer">60:00</span></div>
+  <div class="progress-box">Progreso de lectura: <progress id="progressBar" value="0" max="100"></progress> <span id="progressText">0%</span></div>
+</div>
+
+<nav>
+  <ul>
+    <li><a href="#cap1">Cap. I: Nuevo Paradigma</a></li>
+    <li><a href="#cap2">Cap. II: Ontología</a></li>
+    <li><a href="#cap3">Cap. III: Isomorfismo</a></li>
+    <li><a href="#cap4">Cap. IV: Termodinámica</a></li>
+    <li><a href="#cap5">Cap. V: Equifinalidad</a></li>
+    <li><a href="#cap6">Cap. VI: Cibernética</a></li>
+    <li><a href="#cap7">Cap. VII: Jerarquía</a></li>
+    <li><a href="#conclusion">Conclusión</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section id="cap1">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo I: El Nuevo Paradigma de la Ciencia</button>
+    <div class="collapsible show">
+      <h2>El Nuevo Paradigma de la Ciencia</h2>
+      <p>La <span class="highlight">Teoría General de los Sistemas (TGS)</span> representa una de las innovaciones intelectuales más profundas y transformadoras del siglo XX. Ludwig von Bertalanffy, biólogo y filósofo de la ciencia austríaco, postuló a mediados de la década de 1930 que el pensamiento científico tradicional, cimentado en el método analítico y en el enfoque reduccionista heredado de Descartes y Newton, había comenzado a mostrar límites estructurales en disciplinas donde la complejidad, la interdependencia y la dinámica no lineal son la norma absoluta.</p>
+      
+      <h3>1.1. Límites del Reduccionismo Clásico</h3>
+      <p>El reduccionismo operaba bajo una premisa aparentemente lógica: descomponer el todo en sus partes más elementales para comprenderlo. Se asumía que entendiendo el átomo se comprendería la molécula; entendiendo la célula se descifraría el organismo; entendiendo el transistor se dominaría la computadora. Esta estrategia fue exitosa en ciencias físicas básicas, pero fracasó estrepitosamente al aplicarse a sistemas vivos, organizaciones sociales, ecosistemas y, por extensión, a los sistemas de información modernos. Bertalanffy advirtió que <strong>las propiedades de un sistema complejo no son simplemente la suma aritmética de las propiedades de sus componentes aislados</strong>. Al fragmentar un sistema, se destruyen las relaciones, los flujos y las sinergias que le otorgan su identidad funcional.</p>
+
+      <h3>1.2. El Holismo Sistémico</h3>
+      <p>Surge así la noción de <span class="highlight">Holismo</span>: <em>"El todo es más que la suma de sus partes"</em>. Esta afirmación no es mística, sino metodológica. Implica que al separar los elementos de un sistema, se pierden las interacciones dinámicas, las restricciones estructurales y los patrones emergentes que solo existen a nivel macro. En el ámbito de la tecnología y los sistemas de información, esto significa que el software no puede entenderse únicamente como líneas de código o archivos binarios, sino como un <strong>ente funcional vivo</strong> que interactúa con el hardware, el sistema operativo, la red, el usuario final, las políticas de seguridad y el contexto organizacional.</p>
+
+      <h3>1.3. Cambio de Mentalidad Científica</h3>
+      <p>Este cambio paradigmático exige pasar de una mentalidad de <em>mecanismo</em> a una de <em>organismo</em>. Ya no se busca solo "cómo funciona cada pieza", sino "cómo se coordinan las piezas para mantener un propósito". Para los estudiantes de sistemas, esto implica desarrollar una <strong>visión arquitectónica</strong> antes que una visión puramente sintáctica. El código es solo la materialización de una lógica relacional.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Líder Técnico</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Explique con sus palabras por qué el método analítico clásico falla al estudiar sistemas complejos de software.</li>
+          <li>Desarrolle el concepto de Holismo aplicándolo a un entorno de desarrollo moderno (ej: equipos ágiles, DevOps, microservicios).</li>
+          <li>Analice cómo la pérdida de interacciones al "aislar" un módulo afecta la mantenibilidad y escalabilidad del sistema.</li>
+          <li>Proponga un ejemplo concreto donde el todo (la aplicación funcionando en producción) muestre propiedades que ninguna parte aislada (base de datos, frontend, API) posee por sí sola.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap2">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo II: Definición y Ontología de los Sistemas</button>
+    <div class="collapsible show">
+      <h2>Definición y Ontología de los Sistemas</h2>
+      <p>Bertalanffy define un sistema como un <strong>complejo de elementos en interacción</strong>. Esta definición, aparentemente simple, encierra una riqueza ontológica fundamental. Un sistema no es una colección arbitraria de objetos, sino una entidad organizada donde las relaciones entre los componentes son tan importantes como los componentes mismos. La interacción no es aleatoria; posee estructura, direccionalidad, reglas de acoplamiento y una orientación funcional hacia un propósito o estado operativo.</p>
+
+      <h3>2.1. Clasificación según Relación con el Entorno</h3>
+      <p>Los sistemas se clasifican primordialmente según su grado de intercambio con el medio circundante:</p>
+      <ul>
+        <li><strong>Sistemas Aislados:</strong> No intercambian ni materia, ni energía, ni información. Son una abstracción teórica (ej: universo en su totalidad, idealizaciones en termodinámica).</li>
+        <li><strong>Sistemas Cerrados:</strong> Intercambian energía pero no materia. Ejemplo clásico: una reacción química en un recipiente herméticamente sellado y aislado térmicamente. En software, un algoritmo puro sin I/O se aproxima a este modelo, pero es raro en la práctica.</li>
+        <li><strong>Sistemas Abiertos:</strong> Mantienen un intercambio constante de materia, energía e información con su ambiente. Son los más relevantes para la ingeniería y la biología.</li>
+      </ul>
+
+      <h3>2.2. El Modelo EPS y la Permeabilidad</h3>
+      <p>Todo sistema abierto se analiza mediante el modelo <span class="highlight">Entrada-Proceso-Salida (EPS)</span>. Las <em>entradas</em> (inputs) pueden ser datos, solicitudes HTTP, señales de sensores o energía eléctrica. El <em>proceso</em> transforma estas entradas mediante reglas lógicas, algoritmos o reacciones químicas. Las <em>salidas</em> (outputs) son el resultado devuelto al ambiente. Los <strong>límites del sistema</strong> definen qué queda dentro y qué queda fuera, mientras que la <strong>permeabilidad</strong> determina qué tipo de flujos pueden cruzar dichos límites. En arquitectura de software, un firewall, un API Gateway o un middleware actúan como filtros de permeabilidad selectiva.</p>
+
+      <h3>2.3. Fliessgleichgewicht: Estado Uniforme</h3>
+      <p>La vida, las organizaciones humanas y el software moderno son ejemplos críticos de sistemas abiertos. Un sistema abierto no es estático; existe en un flujo permanente. Bertalanffy introduce el término alemán <span class="highlight">Fliessgleichgewicht</span> o <strong>Estado Uniforme (Steady State)</strong>: un equilibrio dinámico donde el sistema parece permanecer igual macroscópicamente, a pesar de que sus componentes internos se renuevan, degradan y reemplazan constantemente. Un servidor web en producción mantiene su servicio "estable", pero internamente los procesos nacen y mueren, la memoria se asigna y libera, los logs se rotan y las conexiones se abren/cierran continuamente.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Analista Funcional</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Defina formalmente un sistema según Bertalanffy y desglose cada componente ontológico (elemento, relación, límite, ambiente).</li>
+          <li>Desarrolle el modelo EPS aplicándolo a un sistema de gestión escolar o inventario. Identifique claramente entradas, procesos y salidas.</li>
+          <li>Explique la diferencia entre límite y permeabilidad con ejemplos de ciberseguridad y redes.</li>
+          <li>Analice el concepto de Fliessgleichgewicht en un entorno de computación en la nube. ¿Cómo se mantiene la "estabilidad aparente" con constantes cambios internos?</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap3">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo III: Isomorfismo y Leyes Universales</button>
+    <div class="collapsible show">
+      <h2>Isomorfismo y Leyes Universales</h2>
+      <p>Uno de los mayores aportes metodológicos de Bertalanffy es la identificación de <span class="highlight">Isomorfismos</span>. El isomorfismo se refiere a la existencia de leyes estructurales, patrones matemáticos o dinámicas relacionales que son similares o idénticas en campos de la realidad completamente diferentes. No se trata de que los fenómenos sean iguales en esencia, sino de que sus <strong>modelos formales</strong> comparten la misma topología lógica.</p>
+
+      <h3>3.1. Diferencia entre Isomorfismo y Homomorfismo</h3>
+      <p>Mientras el isomorfismo implica una correspondencia estructural exacta (biyección funcional), el homomorfismo permite mapeos parciales o aproximados. En ingeniería de sistemas, buscamos isomorfismos para reutilizar soluciones probadas en otros dominios. Por ejemplo, las ecuaciones diferenciales que rigen el crecimiento logístico de una población biológica (modelo de Verhulst) son isomórficas a las que describen la adopción de una nueva tecnología en el mercado, la propagación de un virus informático en una red, o la saturación de un servidor bajo carga creciente.</p>
+
+      <h3>3.2. Transferencia Interdisciplinaria</h3>
+      <p>La TGS busca estas leyes universales para permitir que los descubrimientos en una ciencia puedan aplicarse en otra, fomentando una integración interdisciplinaria genuina. La teoría de colas, nacida en telecomunicaciones, hoy optimiza flujos hospitalarios. La teoría de grafos, fundamental en matemáticas discretas, modela tanto redes sociales como dependencias entre paquetes de software. La <strong>ley de los rendimientos decrecientes</strong> aplica tanto a la fertilización agrícola como al sobre-optimización de código.</p>
+
+      <h3>3.3. Limitaciones y Advertencias</h3>
+      <p>El isomorfismo no es una varita mágica. Aplicar un modelo sin considerar las particularidades del dominio conduce a errores graves (ej: tratar un ecosistema social como un circuito eléctrico lineal). El analista debe identificar <strong>invariantes estructurales</strong> y validar las condiciones de frontera antes de trasladar soluciones. La abstracción correcta es el arte de la ingeniería sistémica.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Prog. Senior</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Defina isomorfismo y homomorfismo con ejemplos concretos tomados de la informática y la biología.</li>
+          <li>Desarrolle un caso donde una ley de un dominio (ej: epidemiología) se aplique exitosamente a otro (ej: propagación de malware o viralidad en redes).</li>
+          <li>Analice los riesgos de aplicar modelos isomórficos sin adaptación contextual.</li>
+          <li>Explique cómo el isomorfismo facilita la comunicación entre módulos y la estandarización de APIs en arquitecturas distribuidas.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap4">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo IV: La Termodinámica de los Sistemas Abiertos</button>
+    <div class="collapsible show">
+      <h2>La Termodinámica de los Sistemas Abiertos</h2>
+      <p>La física clásica dicta que los sistemas cerrados tienden inevitablemente a la <span class="highlight">Entropía máxima</span>, que es el desorden total, la equipartición de energía y la llamada "muerte térmica". La segunda ley de la termodinámica establece que en un sistema aislado, el desorden siempre aumenta o se mantiene, nunca disminuye espontáneamente. Este principio, trasladado a la teoría de la información por Claude Shannon, mide la incertidumbre, la degradación y la pérdida de estructura.</p>
+
+      <h3>4.1. Entropía en Sistemas de Información</h3>
+      <p>En el análisis de sistemas, la entropía se manifiesta como la degradación del orden interno. Un sistema de información sin mantenimiento tiende al caos: código espagueti, documentación obsoleta, dependencias conflictivas, deuda técnica acumulada, vulnerabilidades no parcheadas, y fragmentación de datos. La entropía operativa reduce la predictibilidad, aumenta el costo de cambio y eleva la probabilidad de fallos catastróficos.</p>
+
+      <h3>4.2. Neguentropía: El Combustible del Orden</h3>
+      <p>Sin embargo, los sistemas abiertos desafían esta tendencia mediante la <span class="highlight">Neguentropía</span> (entropía negativa). Al importar energía, información y organización del exterior, el sistema abierto es capaz de producir orden, complejidad y adaptación. La neguentropía, por lo tanto, es el esfuerzo organizacional deliberado que mantiene vivo y estructurado el sistema a pesar de las perturbaciones ambientales. En ingeniería de software, se traduce en: documentación actualizada, refactorización continua, pruebas automatizadas, revisiones de código, arquitectura limpia, capacitación del equipo y monitoreo proactivo.</p>
+
+      <h3>4.3. Métricas de Salud Sistémica</h3>
+      <p>La neguentropía no es gratuita; requiere inversión de recursos. Un sistema que no importa información del entorno (no recibe feedback, no se actualiza, no se mantiene) entrará en colapso entrópico. La relación entre entropía y neguentropía determina la <strong>sostenibilidad técnica</strong> de cualquier proyecto. Los líderes técnicos deben balancear la entrega de valor a corto plazo con la inversión en orden estructural a largo plazo.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Prog. Junior</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Explique el concepto de entropía según la termodinámica y su analogía en sistemas de software.</li>
+          <li>Desarrolle cómo la neguentropía se materializa en prácticas de desarrollo modernas (CI/CD, testing, documentación, code review).</li>
+          <li>Analice la "deuda técnica" como manifestación entrópica y proponga estrategias de mitigación.</li>
+          <li>Justifique por qué un sistema sin mantenimiento inevitablemente colapsa, incluso si su código inicial era perfecto.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap5">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo V: Equifinalidad y Teleología</button>
+    <div class="collapsible show">
+      <h2>Equifinalidad y Teleología</h2>
+      <p>A diferencia de los sistemas físicos simples y deterministas, donde el estado final está estrictamente determinado por las condiciones iniciales y las leyes de movimiento, los sistemas abiertos poseen la propiedad fundamental de la <span class="highlight">Equifinalidad</span>. Este principio establece que un sistema puede alcanzar un mismo estado final partiendo de condiciones iniciales diferentes, atravesando historias distintas y utilizando caminos o estrategias diversas.</p>
+
+      <h3>5.1. Teleología: El Propósito como Eje</h3>
+      <p>La <span class="highlight">Teleología</span> es el estudio de los fines y propósitos en los sistemas. En ingeniería, el objetivo final (la teleología del sistema) no depende de un único camino técnico, sino de la capacidad del sistema para adaptarse, reconfigurarse y seleccionar rutas viables. Esto es revolucionario para el diseño de software: no existe una única "arquitectura correcta", sino múltiples configuraciones capaces de cumplir los mismos requisitos funcionales y de calidad.</p>
+
+      <h3>5.2. Flexibilidad Arquitectónica</h3>
+      <p>Esta flexibilidad es fundamental en la ingeniería de sistemas moderna. El objetivo final (ej: "permitir la compra segura de productos en línea") puede lograrse mediante arquitecturas monolíticas tradicionales, microservicios contenedorizados, serverless functions, o incluso sistemas legados envueltos en APIs. Lo esencial es que se respete la lógica sistémica, los contratos de interfaz y las garantías de consistencia. La equifinalidad permite la <strong>evolución incremental</strong>: un sistema puede migrar de una tecnología a otra sin perder su propósito.</p>
+
+      <h3>5.3. Implicancias en la Gestión de Proyectos</h3>
+      <p>Reconocer la equifinalidad libera a los equipos del dogmatismo tecnológico. Permite enfocarse en <em>qué</em> debe lograr el sistema antes que en <em>cómo</em> debe hacerlo estrictamente. Sin embargo, exige disciplina en la definición de métricas de éxito, SLAs y pruebas de validación. Un sistema teleológicamente bien definido es resistente a los cambios de contexto y adaptable a nuevas restricciones.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Prog. Senior / Arquitecto</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Defina equifinalidad y contrastela con el determinismo de sistemas físicos clásicos.</li>
+          <li>Desarrolle un caso donde el mismo requisito funcional se logre mediante dos arquitecturas tecnológicamente distintas.</li>
+          <li>Explique el concepto de teleología en ingeniería de software y su relación con los objetivos de negocio.</li>
+          <li>Analice cómo la equifinalidad favorece la migración tecnológica, la refactorización y la resiliencia operativa.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap6">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo VI: Cibernética y Autorregulación</button>
+    <div class="collapsible show">
+      <h2>Cibernética y Autorregulación</h2>
+      <p>La regulación y el control de los sistemas complejos se basan fundamentalmente en el <span class="highlight">Feedback o Retroalimentación</span>. Bertalanffy integra los conceptos pioneros de Norbert Wiener y Ross Ashby para explicar cómo los sistemas vivos y artificiales mantienen su <strong>Homeostasis</strong> (equilibrio interno dinámico) frente a perturbaciones externas e internas.</p>
+
+      <h3>6.1. Mecanismos de Retroalimentación</h3>
+      <p>Existen dos tipos fundamentales:</p>
+      <ul>
+        <li><strong>Feedback Negativo:</strong> Actúa como un sensor que detecta desviaciones respecto al objetivo o estado deseado y activa mecanismos correctores para reducir la discrepancia. Es estabilizador. Ejemplos: termostatos, algoritmos de control de congestión en TCP, balanceadores de carga, circuitos de regulación hormonal.</li>
+        <li><strong>Feedback Positivo:</strong> Amplifica las desviaciones, generando crecimiento exponencial, cambio de estado o inestabilidad. Es necesario para transiciones, innovación o aprendizaje, pero peligroso si no está acotado. Ejemplos: viralidad en redes, efectos red, cascadas de fallos en sistemas distribuidos, intereses compuestos.</li>
+      </ul>
+
+      <h3>6.2. Homeostasis en Sistemas Tecnológicos</h3>
+      <p>Sin retroalimentación, un sistema no puede aprender de su ambiente ni corregir sus errores, lo que lleva inevitablemente al colapso funcional. En la nube moderna, la homeostasis se logra mediante <strong>autoscaling</strong>, <strong>circuit breakers</strong>, <strong>health checks</strong> y pipelines de CI/CD que detectan regresiones antes de llegar a producción. Los sistemas observables (logs, métricas, traces) son los órganos sensoriales que alimentan el feedback negativo.</p>
+
+      <h3>6.3. Cibernética de Segundo Orden</h3>
+      <p>La evolución lleva a la <em>cibernética de segundo orden</em>: el sistema no solo se regula, sino que <strong>regula su propia regulación</strong>. Aprende qué métricas monitorear, cuándo escalar, cuándo degradar servicios. Esto es la base de la IA operativa, los sistemas auto-curativos (self-healing) y la ingeniería de confiabilidad de sitios (SRE).</p>
+
+      <div class="practical-box">
+        <span class="role-tag">QA / Tester / SRE</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Explique la cibernética y el papel del feedback en la autorregulación sistémica.</li>
+          <li>Desarrolle la diferencia entre feedback negativo y positivo con ejemplos de software y redes.</li>
+          <li>Analice cómo se implementa la homeostasis en entornos de producción modernos (monitoreo, alertas, autoescalado).</li>
+          <li>Justifique por qué un sistema sin retroalimentación es inherentemente inestable y propenso a fallos catastróficos.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cap7">
+    <button class="collapse-btn" onclick="toggleSection(this)">Capítulo VII: Jerarquía y Complejidad Organizada</button>
+    <div class="collapsible show">
+      <h2>Jerarquía y Complejidad Organizada</h2>
+      <p>Los sistemas no operan en el vacío ni existen como entidades planas. Se estructuran jerárquicamente, formando redes de inclusión y dependencia. Un sistema es, simultáneamente, un <span class="highlight">Subsistema</span> de un sistema mayor (suprasistema o macrosistema) y un contenedor de elementos o subsistemas menores. Esta organización en niveles es una estrategia evolutiva para manejar la complejidad sin colapsar cognitivamente ni computacionalmente.</p>
+
+      <h3>7.1. Propiedades Emergentes</h3>
+      <p>La complejidad organizada implica que cada nivel de la jerarquía posee <strong>propiedades emergentes</strong> que no existen, no pueden predecirse ni reducense al nivel inferior. Un bit no tiene "inteligencia", pero miles de millones organizados en una red neuronal sí la exhiben. Un hilo de ejecución no tiene "alta disponibilidad", pero un cluster de servidores sí la garantiza. La emergencia no es magia; es el resultado de interacciones no lineales y restricciones estructurales bien definidas.</p>
+
+      <h3>7.2. Modularidad, Acoplamiento y Cohesión</h3>
+      <p>Para gestionar la jerarquía, la ingeniería de sistemas emplea principios de diseño:</p>
+      <ul>
+        <li><strong>Alta Cohesión:</strong> Los elementos dentro de un módulo deben estar fuertemente relacionados funcionalmente.</li>
+        <li><strong>Bajo Acoplamiento:</strong> Las dependencias entre módulos deben ser mínimas y explícitas.</li>
+        <li><strong>Interfaces Estables:</strong> Los límites jerárquicos se comunican mediante contratos claros (APIs, protocolos, mensajes).</li>
+      </ul>
+      <p>El Analista de Sistemas debe ser capaz de hacer "zoom" entre estos niveles: desde el bit individual hasta la arquitectura global de la red o la estrategia empresarial, entendiendo cómo cada estrato influye en la estabilidad, seguridad y escalabilidad del conjunto.</p>
+
+      <h3>7.3. System-of-Systems (SoS)</h3>
+      <p>En la era actual, los sistemas suelen integrarse en <strong>System-of-Systems</strong>: conjuntos de sistemas independientes que colaboran para lograr capacidades que ninguno posee individualmente (ej: IoT + Cloud + AI + ERP). La jerarquía ya no es rígida; es heterárquica, adaptativa y orientada a misiones.</p>
+
+      <div class="practical-box">
+        <span class="role-tag">Analista / Líder Técnico</span>
+        <h4>📝 Guía para el Trabajo Práctico (Mínimo 20 renglones)</h4>
+        <ul>
+          <li>Defina la estructura jerárquica de sistemas y explique la relación subsistema/sistema/suprasistema.</li>
+          <li>Desarrolle el concepto de propiedades emergentes con ejemplos de hardware, software y redes.</li>
+          <li>Analice cómo el acoplamiento y la cohesión afectan la mantenibilidad y la escalabilidad jerárquica.</li>
+          <li>Proponga una estrategia para gestionar un System-of-Systems en un entorno de transformación digital.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="conclusion">
+    <button class="collapse-btn" onclick="toggleSection(this)">Conclusión: El Impacto en la Tecnología Moderna</button>
+    <div class="collapsible show">
+      <h2>Conclusión: El Impacto en la Tecnología Moderna</h2>
+      <p>El pensamiento de Ludwig von Bertalanffy no es una reliquia histórica, sino el <strong>cimiento epistemológico de la Industria 4.0</strong> y la era digital. Hoy, cuando hablamos de Internet de las Cosas (IoT), arquitecturas de microservicios, computación en la nube, inteligencia artificial distribuida o DevOps, estamos operando estrictamente bajo los principios de la TGS. Cada contenedor Docker es un sistema abierto; cada pipeline de CI/CD es un mecanismo de feedback negativo; cada API es un límite permeable; cada microservicio es un subsistema con propiedades emergentes en conjunto.</p>
+      
+      <p>El éxito del técnico superior, analista o ingeniero no reside únicamente en dominar lenguajes de programación o frameworks específicos, sino en su capacidad para <strong>dejar de ver "piezas sueltas" y comenzar a visualizar "totalidades dinámicas"</strong>. El mundo tecnológico ya no es una máquina determinista de engranajes aislados; es un organismo sistémico interconectado, adaptativo y teleológicamente orientado.</p>
+
+      <p>Para los estudiantes de 7° 4°, este material no es solo teoría: es un <strong>lente de análisis</strong>. Al enfrentarse al trabajo práctico, deben aplicar cada concepto (Holismo, EPS, Isomorfismo, Entropía/Neguentropía, Equifinalidad, Cibernética, Jerarquía) a casos reales, justificando sus decisiones con rigor sistémico. La ingeniería del futuro pertenece a quienes piensan en relaciones, no en aislamiento.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Material de referencia para el curso de Modelos y Sistemas - 7° 4° | E.E.S.T. N°1 - Prof. Omar Alejandro Bazar</p>
+  <p>Basado en la obra de Ludwig von Bertalanffy: "Fundamentos, desarrollo, aplicaciones"</p>
+</footer>
+
+<script>
+  // Temporizador de 60 minutos
+  let totalSeconds = 60 * 60;
+  const timerEl = document.getElementById('timer');
+  const timerInterval = setInterval(() => {
+    if (totalSeconds <= 0) {
+      clearInterval(timerInterval);
+      timerEl.textContent = "00:00";
+      alert("⏰ Tiempo de análisis completado. Pueden finalizar y descargar el trabajo práctico.");
+      return;
+    }
+    totalSeconds--;
+    const m = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
+    const s = (totalSeconds % 60).toString().padStart(2, '0');
+    timerEl.textContent = `${m}:${s}`;
+  }, 1000);
+
+  // Barra de progreso
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    document.getElementById('progressBar').value = scrolled;
+    document.getElementById('progressText').textContent = Math.round(scrolled) + '%';
+  });
+
+  // Colapsar/Expandir secciones
+  function toggleSection(btn) {
+    btn.classList.toggle('open');
+    const content = btn.nextElementSibling;
+    content.classList.toggle('show');
+  }
+
+  // Navegación suave
+  document.querySelectorAll('nav a').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (!target.querySelector('.collapsible').classList.contains('show')) {
+        target.querySelector('.collapse-btn').click();
+      }
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluación Sistemas 7° 4° - Seguridad PO</title>
+    <style>
+        :root {
+            --primary: #1a2a3a;
+            --accent: #2980b9;
+            --success: #27ae60;
+            --danger: #c0392b;
+            --gold: #f39c12;
+            --bg: #e9ecef;
+            --po-sec: #8e44ad;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg); margin: 0; padding: 20px; color: #2c3e50; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #2c3e50);
+            color: white; padding: 25px; border-radius: 15px; text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2); border-bottom: 5px solid var(--gold); margin-bottom: 20px;
+        }
+
+        /* Panel de Seguridad */
+        .security-panel {
+            background: #fff; padding: 15px; border-radius: 12px; margin-bottom: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 15px;
+            border: 2px solid var(--po-sec); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Panel de Respuestas Correctas (Oculto) */
+        #po-reference-area {
+            display: none; background: #f4ecf7; padding: 20px; border-radius: 12px;
+            margin-bottom: 25px; border: 2px solid var(--po-sec);
+        }
+
+        .timer-box {
+            background: #fff; padding: 15px; border-radius: 12px; text-align: center;
+            margin-bottom: 20px; border: 2px solid var(--gold);
+        }
+
+        #timer-display { font-size: 2.2rem; font-weight: bold; color: var(--danger); font-family: 'Courier New', monospace; }
+
+        .card-rol {
+            background: #fff; border-radius: 15px; padding: 25px; margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-left: 10px solid var(--accent);
+        }
+
+        .rol-header { display: flex; gap: 20px; align-items: center; margin-bottom: 15px; }
+        .rol-title { font-weight: bold; color: var(--primary); text-transform: uppercase; width: 250px; }
+        .input-nombre { flex-grow: 1; padding: 10px; border: 2px solid #ddd; border-radius: 8px; }
+
+        /* Hoja rayada de 20 renglones */
+        textarea {
+            width: 100%; height: 480px; padding: 0 15px; border-radius: 8px; border: 1px solid #ccc;
+            font-family: 'Courier New', monospace; font-size: 1.1rem; line-height: 24px;
+            resize: none; box-sizing: border-box; background-attachment: local;
+            background-image: linear-gradient(white 23px, #e1e4e8 24px); background-size: 100% 24px;
+        }
+
+        .ref-answer-box {
+            background: #fff; border: 1px solid var(--po-sec); padding: 15px; margin-top: 10px;
+            font-size: 0.95rem; line-height: 1.6; white-space: pre-wrap; height: 300px; overflow-y: scroll;
+        }
+
+        .btn-save {
+            width: 100%; padding: 25px; background: var(--success); color: white; border: none;
+            border-radius: 12px; font-weight: bold; font-size: 1.4rem; cursor: pointer; transition: 0.3s;
+        }
+
+        .btn-save:disabled { background: #bdc3c7; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>E.E.S.T. N°1 Muñiz - 7° 4°</h1>
+        <div style="font-size: 1.2rem; color: var(--gold);">Gestión de Sistemas: Módulo de Evaluación para Product Owners</div>
+        <p>Profesor: Omar Alejandro Bazar</p>
+    </header>
+
+    <div class="security-panel">
+        <strong>🔒 CÓDIGO DE SEGURIDAD PO:</strong>
+        <input type="password" id="pass-code" placeholder="Ingrese clave..." style="padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+        <button onclick="checkSecurity()" style="padding: 8px 20px; background: var(--po-sec); color: white; border: none; border-radius: 5px; cursor: pointer;">Desbloquear Referencias</button>
+    </div>
+
+    <div id="po-reference-area">
+        <h3 style="color: var(--po-sec); margin-top: 0;">📢 RESPUESTAS MODELO (BERTALANFFY - TGS)</h3>
+        <p><em>Use estos textos para comparar el nivel de profundidad de los equipos.</em></p>
+        <div id="ref-container"></div>
+    </div>
+
+    <div class="timer-box">
+        <div id="timer-display">60:00</div>
+        <div id="lock-msg">⏳ Período de investigación activa. Bloqueado por 60 min.</div>
+    </div>
+
+    <div id="workspace"></div>
+
+    <button id="btn-descargar" class="btn-save" disabled onclick="exportarTXT()">
+        📥 Finalizar Trabajo y Descargar (.txt)
+    </button>
+</div>
+
+<script>
+    const dataModel = [
+        {
+            rol: "Líder Técnico",
+            consigna: "Pensamiento Sistémico aplicado al liderazgo de proyectos.",
+            correcta: "El pensamiento sistémico, según Ludwig von Bertalanffy, se aleja del enfoque reduccionista tradicional que intenta entender un sistema desarmándolo en sus partes individuales. Para un Líder Técnico, esto significa comprender que un equipo de desarrollo de software no es solo una suma de programadores, sino un conjunto de interacciones dinámicas. \n\nEl líder debe enfocarse en el 'Holismo', donde el todo es mayor que la suma de las partes. Esto implica que la calidad de un software no depende solo de que cada módulo funcione por separado, sino de cómo estos módulos se integran e intercambian información. El pensamiento sistémico permite al líder identificar cuellos de botella no como fallas individuales, sino como problemas de flujo dentro de la estructura. \n\nAdemás, debe considerar la 'Organización Jerárquica', entendiendo que el proyecto es un subsistema dentro de un suprasistema (la empresa o el cliente). La visión sistémica ayuda a prever cómo un cambio en un requerimiento funcional afectará no solo al código, sino también a los tiempos de entrega y a la motivación del equipo, manteniendo la cohesión y el objetivo común (teleología) del sistema organizacional frente a las perturbaciones externas."
+        },
+        {
+            rol: "Analista Funcional",
+            consigna: "Concepto de Sistema y Relevamiento de EPS.",
+            correcta: "Un sistema se define como un conjunto de elementos en interacción dinámica orientados hacia un objetivo común. Para el Analista Funcional, la aplicación práctica de la TGS comienza con la definición de los Límites del Sistema. Estos límites separan al software de su ambiente o entorno, definiendo qué es parte del relevamiento y qué es externo. \n\nEl modelo de Entrada-Proceso-Salida (EPS) es fundamental: las Entradas son los datos brutos, requisitos y recursos que el sistema recibe del ambiente. El Proceso es la transformación de esos datos mediante algoritmos y lógica de negocio. Las Salidas son la información procesada y los resultados esperados por el usuario. \n\nEl analista debe observar la 'Permeabilidad' de estos límites, ya que el software es un Sistema Abierto. Esto significa que debe adaptarse constantemente al feedback de los stakeholders. Si el analista no define correctamente la 'Frontera' del sistema, se corre el riesgo de un alcance desmedido. El análisis sistémico obliga a considerar no solo lo que el sistema hace, sino para qué lo hace, asegurando que cada funcionalidad contribuya a la 'Equifinalidad', es decir, alcanzar el objetivo final del cliente partiendo de diferentes condiciones iniciales o caminos de desarrollo."
+        },
+        {
+            rol: "Programador Senior",
+            consigna: "Sistemas Abiertos, Modularidad y Jerarquía.",
+            correcta: "Desde la perspectiva del Programador Senior, el software es la representación técnica de la complejidad organizada. La TGS enseña que los sistemas complejos están organizados jerárquicamente. En programación, esto se traduce en la arquitectura de subsistemas y módulos. Cada módulo debe comportarse como un subsistema con un propósito definido, minimizando el acoplamiento y maximizando la cohesión. \n\nEl concepto de 'Sistemas Abiertos' es crítico en el desarrollo moderno (APIs, Microservicios). Un sistema abierto mantiene un intercambio constante con su entorno; en nuestro caso, recibe datos, parámetros y señales de otros sistemas y devuelve respuestas. Esta interacción requiere interfaces robustas que actúen como membranas reguladoras. \n\nEl programador Senior debe garantizar la 'Homeostasis' del código, asegurando que el sistema sea capaz de recuperarse ante errores o inputs inesperados, manteniendo un estado de equilibrio dinámico. La modularidad no es solo separar archivos, sino crear una estructura donde cada parte entienda su rol dentro de la jerarquía sistémica. Al aplicar estos conceptos, el código se vuelve más resiliente, escalable y fácil de mantener, respetando las leyes de la organización que Bertalanffy describió para los organismos vivos aplicadas ahora a la ingeniería de software."
+        },
+        {
+            rol: "Programador Junior",
+            consigna: "Entropía y Neguentropía en el Código.",
+            correcta: "En la Teoría General de los Sistemas, la Entropía es la tendencia natural de todo sistema hacia el desorden, el caos y la degradación. En el desarrollo de software, la entropía se manifiesta como 'deuda técnica': código desordenado, falta de comentarios, variables mal nombradas o parches rápidos que rompen la lógica original. Si no se interviene, la entropía positiva terminará por hacer que el sistema colapse, volviéndose inmanejable. \n\nPara combatir esto, el programador debe aplicar la 'Neguentropía' o entropía negativa. La neguentropía es la importación de energía y orden al sistema para contrarrestar el desorden. En nuestra práctica diaria, esto se logra mediante el refactorizado, la documentación técnica clara, el cumplimiento de estándares de codificación y las pruebas unitarias. \n\nCada vez que limpiamos una función o documentamos un proceso, estamos inyectando 'información' (orden) al sistema para que sobreviva en el tiempo. La TGS nos enseña que un sistema que se cierra a la información externa y al mantenimiento se degrada rápidamente. Por lo tanto, el rol del Junior es fundamental para mantener la estructura viva y ordenada, entendiendo que el orden no es un estado estático, sino un proceso continuo de combate contra el caos natural del desarrollo."
+        },
+        {
+            rol: "QA / Tester",
+            consigna: "Feedback, Homeostasis y Control de Sistemas.",
+            correcta: "El rol del QA Tester es, por definición, el mecanismo de Retroalimentación (Feedback) del sistema de desarrollo. En la TGS, el feedback negativo es esencial para la autorregulación. Cuando un tester encuentra un bug, está enviando una señal de retorno al proceso de producción indicando una desviación del objetivo (teleología). Esta señal permite realizar correcciones que devuelven al sistema a su estado de funcionamiento óptimo. \n\nEste proceso es lo que Bertalanffy llama 'Homeostasis' o equilibrio dinámico. El software no es estático; cambia con cada nueva línea de código. El QA asegura que esos cambios no rompan la estabilidad general. Sin un proceso de testing robusto, el sistema carecería de mecanismos de control, perdiendo su capacidad de adaptación y mejora. \n\nAdemás, el QA debe analizar la 'Circularidad' de los procesos: cómo un error en un subsistema puede propagarse y afectar a todo el conjunto. Al validar no solo el error sino la causa raíz, el QA contribuye a la salud del organismo digital. En resumen, el tester no solo busca fallas, sino que actúa como el sensor que permite que el sistema aprenda de sus propios errores, mejorando su organización interna y garantizando que el producto final cumpla con el equilibrio requerido para ser entregado con éxito."
+        }
+    ];
+
+    let timeLeft = 60 * 60;
+
+    function render() {
+        const ws = document.getElementById('workspace');
+        const ref = document.getElementById('ref-container');
+        dataModel.forEach((item, i) => {
+            // Estudiante input
+            const card = document.createElement('div');
+            card.className = 'card-rol';
+            card.innerHTML = `
+                <div class="rol-header">
+                    <span class="rol-title">${item.rol}</span>
+                    <input type="text" id="nombre-${i}" class="input-nombre" placeholder="Nombre y Apellido del alumno...">
+                </div>
+                <div style="background:#fff9e6; padding:10px; border-radius:8px; margin-bottom:10px; border:1px solid #ffeeba; font-size:0.9rem;">
+                    <strong>Consigna:</strong> ${item.consigna}
+                </div>
+                <textarea id="texto-${i}" placeholder="Escriba aquí su desarrollo (mínimo 20 renglones)..."></textarea>
+            `;
+            ws.appendChild(card);
+
+            // PO Reference
+            const refBox = document.createElement('div');
+            refBox.innerHTML = `<h4 style="margin:10px 0 5px 0;">Respuesta Ideal: ${item.rol}</h4><div class="ref-answer-box">${item.correcta}</div>`;
+            ref.appendChild(refBox);
+        });
+    }
+
+    function checkSecurity() {
+        const pass = document.getElementById('pass-code').value;
+        if (pass === "1939") {
+            document.getElementById('po-reference-area').style.display = "block";
+            alert("Acceso concedido, Product Owner. Respuestas de comparación desbloqueadas.");
+        } else {
+            alert("Código incorrecto. Acceso denegado.");
+        }
+    }
+
+    function iniciarCrono() {
+        const display = document.getElementById('timer-display');
+        const btn = document.getElementById('btn-descargar');
+        const lockMsg = document.getElementById('lock-msg');
+        
+        const crono = setInterval(() => {
+            let mins = Math.floor(timeLeft / 60);
+            let secs = timeLeft % 60;
+            display.innerText = `${mins < 10 ? '0' : ''}${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(crono);
+                btn.disabled = false;
+                display.style.color = "var(--success)";
+                lockMsg.innerText = "✅ Período de investigación cumplido. Entrega habilitada.";
+            } else {
+                timeLeft--;
+            }
+        }, 1000);
+    }
+
+    function exportarTXT() {
+        let txt = `====================================================\r\n`;
+        txt += `   E.E.S.T. N°1 MUÑIZ - MODELOS Y SISTEMAS\r\n`;
+        txt += `   PROFESOR: OMAR ALEJANDRO BAZAR | CURSO: 7° 4°\r\n`;
+        txt += `====================================================\r\n`;
+        txt += `REPORTE DE TP N°1: TEORÍA GENERAL DE LOS SISTEMAS\r\n`;
+        txt += `FECHA: ${new Date().toLocaleString()}\r\n`;
+        txt += `====================================================\r\n\r\n`;
+
+        dataModel.forEach((item, i) => {
+            const nombre = document.getElementById(`nombre-${i}`).value || "NO IDENTIFICADO";
+            const contenido = document.getElementById(`texto-${i}`).value;
+            txt += `CARGO: ${item.rol.toUpperCase()}\r\n`;
+            txt += `ALUMNO: ${nombre}\r\n`;
+            txt += `----------------------------------------------------\r\n`;
+            txt += `${contenido}\r\n`;
+            txt += `----------------------------------------------------\r\n\r\n`;
+        });
+
+        const blob = new Blob([txt], {type: 'text/plain;charset=utf-8'});
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `TP1_74_EEST1_Bazar.txt`;
+        link.click();
+    }
+
+    window.onload = () => { render(); iniciarCrono(); };
+</script>
+
+</body>
+</html>
