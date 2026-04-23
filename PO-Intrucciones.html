@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PO Board Prompts | E.E.S.T. N°1 - 7° 4°</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-1: #38bdf8;
+      --accent-2: #a78bfa;
+      --border: #334155;
+      --font-main: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 2rem;
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 1.5rem;
+    }
+
+    header h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+    header p { color: var(--text-muted); font-size: 1.05rem; font-weight: 500; }
+
+    .board-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .po-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .po-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .po-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      border-bottom: 1px dashed var(--border);
+      padding-bottom: 0.75rem;
+    }
+
+    .po-header h2 { font-size: 1.25rem; color: var(--accent-1); }
+    .po-card:nth-child(2) .po-header h2 { color: var(--accent-2); }
+
+    .po-content {
+      font-size: 1.05rem;
+      text-align: justify;
+      margin-bottom: 1.2rem;
+      white-space: normal;
+    }
+
+    .btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+
+    .btn:hover { background: var(--border); }
+    .btn:active { transform: scale(0.98); }
+
+    .timer-badge {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #dc2626;
+      color: white;
+      padding: 0.5rem 0.8rem;
+      border-radius: 99px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      display: none;
+      z-index: 100;
+    }
+
+    /* Modo Pizarrón: Optimizado para proyección y lectura a distancia */
+    .board-mode .po-card {
+      transform: none;
+      box-shadow: none;
+      background: #000;
+      border: 3px solid #475569;
+      padding: 2rem;
+    }
+    .board-mode .po-content { font-size: 1.6rem; line-height: 1.4; color: #fff; }
+    .board-mode .btn { display: none; }
+    .board-mode header { display: none; }
+    .board-mode .board-container { grid-template-columns: 1fr 1fr; max-width: 95%; gap: 2rem; }
+
+    @media (max-width: 768px) {
+      .board-container { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: white; color: black; }
+      .po-card { background: white; border: 2px solid #000; box-shadow: none; transform: none; }
+      .btn, .timer-badge, header { display: none !important; }
+      .po-content { color: #000; font-size: 12pt; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="timer-badge" id="timerBadge">⏳ 60:00</div>
+
+  <header>
+    <h1>📋 Instrucciones para Product Owners</h1>
+    <p>Los Product Owners son los coordinadores de los equipos de Modelos y Sistemas 7°4° Profesor Omar A Bazar</p>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem; color: var(--text-muted);">Transcriba el texto correspondiente en el pizarrón físico. Cada equipo trabajará bajo la directiva de su PO asignado.</p>
+  </header>
+
+  <main class="board-container">
+    <!-- PO 1: Equipos 1, 2, 3 -->
+    <article class="po-card" id="card-po1">
+      <div class="po-header">
+        <h2>🔷 PO Coordinador: Equipos 1, 2 y 3</h2>
+        <button class="btn" onclick="copyText('po1-text')">📋 Copiar Texto</button>
+      </div>
+      <div class="po-content" id="po1-text">
+Equipo, abandonen el reduccionismo y apliquen el Holismo: su sistema será más que la suma de sus módulos. Defínanlo formalmente identificando elementos, relaciones, límites y ambiente. Usen el modelo EPS para mapear flujos de datos y permeabilidad crítica. Aislar componentes sin considerar sus interacciones destruye la cohesión y genera acoplamiento innecesario. Describan cómo su arquitectura gestiona la jerarquía: ¿qué subsistemas existen?, ¿cuál es el suprasistema?, ¿dónde emergen propiedades nuevas? Justifiquen sus decisiones priorizando interfaces estables y bajo acoplamiento. Eviten el dogma tecnológico; el objetivo es demostrar cómo la visión relacional garantiza mantenibilidad y escalabilidad. Validen que el “todo” funcione como organismo coordinado, no como piezas aisladas. La entrega debe reflejar madurez sistémica.
+      </div>
+    </article>
+
+    <!-- PO 2: Equipos 4, 5 -->
+    <article class="po-card" id="card-po2">
+      <div class="po-header">
+        <h2>🔶 PO Coordinador: Equipos 4 y 5</h2>
+        <button class="btn" onclick="copyText('po2-text')">📋 Copiar Texto</button>
+      </div>
+      <div class="po-content" id="po2-text">
+Equipo, su sistema es un organismo vivo que debe mantener equilibrio frente a la entropía del desarrollo. Identifiquen fuentes de desorden técnico y diseñen mecanismos de Neguentropía: CI/CD, pruebas, documentación y revisiones. Apliquen la Equifinalidad para demostrar que un mismo objetivo puede alcanzarse con distintas tecnologías; busquen adaptabilidad, no perfección. Integren ciclos de feedback (negativo para corrección, positivo para innovación) que garanticen Homeostasis en producción. Expliquen cómo su arquitectura detecta desviaciones y escala o degrada servicios autónomamente. Analicen la Teleología: ¿cuál es el propósito de negocio y cómo lo sostiene cada decisión técnica? Propongan métricas de salud y migración incremental. El éxito radica en construir un sistema que se autorregule y evolucione sin colapsar.
+      </div>
+    </article>
+  </main>
+
+  <script>
+    function copyText(elementId) {
+      const text = document.getElementById(elementId).innerText.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById(elementId).closest('.po-card').querySelector('.btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Copiado';
+        setTimeout(() => btn.innerHTML = originalText, 2000);
+      }).catch(err => {
+        console.error('Error al copiar:', err);
+        alert('No se pudo copiar automáticamente. Seleccione y copie manualmente el texto.');
+      });
+    }
+
+    // Doble clic en fondo activa "Modo Pizarrón"
+    document.body.addEventListener('dblclick', (e) => {
+      if (e.target.closest('.po-card') || e.target.closest('header') || e.target.closest('button')) return;
+      document.body.classList.toggle('board-mode');
+    });
+
+    // Temporizador (opcional)
+    let timeLeft = 60 * 60;
+    const timerBadge = document.getElementById('timerBadge');
+    
+    function startTimer() {
+      timerBadge.style.display = 'block';
+      const interval = setInterval(() => {
+        timeLeft--;
+        const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+        const s = (timeLeft % 60).toString().padStart(2, '0');
+        timerBadge.textContent = `⏳ ${m}:${s}`;
+        if (timeLeft <= 0) {
+          clearInterval(interval);
+          timerBadge.textContent = '⏰ PERÍODO CERRADO';
+          timerBadge.style.background = '#475569';
+        }
+      }, 1000);
+    }
+
+    // Descomenta la siguiente línea si deseas iniciar el contador automáticamente
+    // startTimer();
+  </script>
+</body>
+</html>
