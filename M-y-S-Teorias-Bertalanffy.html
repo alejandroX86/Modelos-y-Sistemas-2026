@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clase 7: Modelos y Sistemas - Demos Interactivas | 7°4°</title>
+    <style>
+        :root {
+            --azul: #2563eb;
+            --violeta: #7c3aed;
+            --verde: #10b981;
+            --naranja: #f59e0b;
+            --rojo: #ef4444;
+            --gris: #64748b;
+            --fondo: #f8fafc;
+            --tarjeta: #ffffff;
+            --borde: #e2e8f0;
+            --texto: #1e293b;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--fondo);
+            color: var(--texto);
+            line-height: 1.65;
+            font-size: 15px;
+            scroll-behavior: smooth;
+        }
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 99;
+            background: var(--azul);
+            padding: 10px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            transition: 0.25s;
+            font-weight: 500;
+        }
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.32);
+            transform: translateY(-1px);
+        }
+        .page {
+            background: var(--tarjeta);
+            border-radius: 14px;
+            padding: 38px 42px;
+            margin: 32px auto;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+            page-break-after: always;
+        }
+        .page h1 {
+            color: var(--azul);
+            font-size: 27px;
+            margin-bottom: 12px;
+            border-bottom: 3px solid var(--azul);
+            padding-bottom: 8px;
+        }
+        .page h2 {
+            color: var(--violeta);
+            font-size: 21px;
+            margin: 24px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .page h3 {
+            color: #4b5563;
+            font-size: 17px;
+            margin: 16px 0 8px;
+        }
+        .page p,
+        .page ul,
+        .page ol {
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+        .page ul,
+        .page ol {
+            padding-left: 22px;
+        }
+        .page li {
+            margin-bottom: 6px;
+        }
+        .caja-ejemplo {
+            background: #f0f9ff;
+            border-left: 4px solid var(--azul);
+            padding: 15px 18px;
+            margin: 18px 0;
+            border-radius: 8px;
+        }
+        .caja-clave {
+            background: #fefce8;
+            border-left: 4px solid var(--naranja);
+            padding: 15px 18px;
+            margin: 18px 0;
+            border-radius: 8px;
+            font-style: italic;
+        }
+        .caja-actividad {
+            background: #f0fdf4;
+            border: 2px dashed var(--verde);
+            padding: 16px;
+            margin: 16px 0;
+            border-radius: 8px;
+        }
+        .caja-actividad h3 {
+            color: var(--verde);
+            margin-bottom: 10px;
+        }
+        .caja-formula {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 18px 22px;
+            margin: 18px 0;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .caja-formula span.var {
+            color: #facc15;
+            font-weight: bold;
+        }
+        .caja-formula span.comment {
+            color: #94a3b8;
+            font-style: italic;
+        }
+        .demo-canvas {
+            display: block;
+            margin: 16px auto;
+            border: 2px solid var(--borde);
+            border-radius: 10px;
+            cursor: pointer;
+            background: #fafafa;
+            touch-action: manipulation;
+            max-width: 100%;
+        }
+        .demo-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            margin-top: 12px;
+        }
+        .btn-demo {
+            background: var(--violeta);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: 0.2s;
+            letter-spacing: 0.3px;
+        }
+        .btn-demo:hover {
+            background: #6d28d9;
+            transform: scale(1.03);
+        }
+        .btn-demo.btn-azul {
+            background: var(--azul);
+        }
+        .btn-demo.btn-azul:hover {
+            background: #1d4ed8;
+        }
+        .btn-demo.btn-verde {
+            background: var(--verde);
+        }
+        .btn-demo.btn-verde:hover {
+            background: #059669;
+        }
+        .btn-demo.btn-naranja {
+            background: var(--naranja);
+        }
+        .btn-demo.btn-naranja:hover {
+            background: #d97706;
+        }
+        .btn-demo.btn-rojo {
+            background: var(--rojo);
+        }
+        .btn-demo.btn-rojo:hover {
+            background: #dc2626;
+        }
+        .slider-box {
+            margin: 8px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .slider-box label {
+            font-weight: bold;
+            color: var(--violeta);
+            min-width: 70px;
+            font-size: 14px;
+        }
+        .slider-box input[type="range"] {
+            flex: 1;
+            min-width: 120px;
+            accent-color: var(--violeta);
+        }
+        .slider-box span.valor {
+            font-weight: bold;
+            color: var(--azul);
+            min-width: 40px;
+            text-align: center;
+        }
+        .indicador {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 16px;
+            font-weight: bold;
+            font-size: 13px;
+            letter-spacing: 0.2px;
+        }
+        .indicador.ok {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .indicador.warn {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .indicador.crit {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .grid-act {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .act-card {
+            background: white;
+            border: 1px solid var(--borde);
+            padding: 14px;
+            border-radius: 10px;
+        }
+        .act-card h4 {
+            color: var(--violeta);
+            margin-bottom: 6px;
+        }
+        .sim-panel {
+            background: #fafafa;
+            border: 2px solid var(--violeta);
+            border-radius: 12px;
+            padding: 22px;
+            margin-top: 20px;
+        }
+        .tanque-wrapper {
+            position: relative;
+            width: 200px;
+            height: 250px;
+            margin: 20px auto;
+        }
+        .tanque-externo {
+            width: 200px;
+            height: 250px;
+            background: #e2e8f0;
+            border: 3px solid #475569;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .agua {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(to top, #2563eb, #60a5fa);
+            transition: height 0.35s ease;
+            border-top: 3px solid #1d4ed8;
+            border-radius: 0 0 7px 7px;
+        }
+        .particulas-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .particula {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: #93c5fd;
+            border-radius: 50%;
+            animation: flotar 3s ease-in-out infinite;
+        }
+        @keyframes flotar {
+            0%,
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.7;
+            }
+            50% {
+                transform: translateY(-18px) scale(1.4);
+                opacity: 1;
+            }
+        }
+        .estado-msg {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-weight: bold;
+            background: #e0f2fe;
+            color: var(--azul);
+            font-size: 15px;
+        }
+        .leyenda-nodos {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--gris);
+        }
+        @media print {
+            nav {
+                display: none;
+            }
+            body {
+                background: white;
+            }
+            .container {
+                max-width: 100%;
+                padding: 0;
+            }
+            .page {
+                box-shadow: none;
+                margin: 0;
+                padding: 30px;
+                border-radius: 0;
+                min-height: 270mm;
+            }
+            .demo-canvas {
+                border: 1px solid #ccc;
+            }
+            .btn-demo {
+                display: none;
+            }
+        }
+        @media (max-width: 640px) {
+            .page {
+                padding: 20px 16px;
+            }
+            .caja-formula {
+                font-size: 12px;
+                padding: 12px;
+            }
+            nav a {
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+            .tanque-wrapper {
+                width: 150px;
+                height: 200px;
+            }
+            .tanque-externo {
+                width: 150px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#p1">📘 Portada</a>
+        <a href="#p2">🐦 Emergencia</a>
+        <a href="#p3">🕸️ Redes</a>
+        <a href="#p4">📈 Crecimiento</a>
+        <a href="#p5">⚖️ Equilibrio</a>
+        <a href="#p6">🎯 Equifinalidad</a>
+        <a href="#p7">🧩 Actividades</a>
+        <a href="#p8">💧 Simulador</a>
+        <a href="#p9">👨‍🏫 Docente</a>
+    </nav>
+
+    <div class="container">
+
+        <!-- ==================== PÁGINA 1: PORTADA ==================== -->
+        <section class="page" id="p1">
+            <h1>📘 Clase 7: Modelos y Sistemas</h1>
+            <p style="font-size:16px;color:var(--gris);margin-top:8px;">Escuela N°1 Técnica de Muñiz | 7°4° | Prof. Omar Bazar</p>
+            <hr style="margin:18px 0;border:1px solid var(--borde);">
+            <h2>🎯 ¿De qué vamos a hablar hoy?</h2>
+            <p>Imagina que miras una foto de un equipo de fútbol, un grupo de WhatsApp, una red de WiFi o incluso tu propio cuerpo. A simple vista parecen cosas distintas, pero <strong>todos funcionan con las mismas reglas invisibles</strong>.</p>
+            <p>Hoy aprenderemos a ver el mundo como <em>sistemas</em>. No usaremos fórmulas complicadas como único recurso. Usaremos ejemplos reales, juegos interactivos y observación directa. Al final, entenderás por qué:</p>
+            <ul>
+                <li>El todo siempre sorprende más que las partes sueltas</li>
+                <li>Lo que le pasa a uno, tiembla en todos</li>
+                <li>Los sistemas sobreviven porque fluyen, no porque se queden quietos</li>
+                <li>Hay muchos caminos para llegar al mismo resultado</li>
+            </ul>
+            <div class="caja-clave">
+                💡 <strong>Regla de oro:</strong> No necesitas ser un genio de las matemáticas para entender sistemas. Solo necesitas curiosidad y ganas de conectar puntos. En cada sección encontrarás una <strong>demostración interactiva</strong> para experimentar.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 2: PROPIEDADES EMERGENTES ==================== -->
+        <section class="page" id="p2">
+            <h1>1️⃣ El Todo es Más que la Suma de sus Partes</h1>
+            <h2>🧠 Propiedades Emergentes</h2>
+            <p>Hace siglos, los científicos creían que para entender algo debían <strong>desarmarlo</strong>. Si querías saber cómo funciona un reloj, lo abrías y estudiabas cada rueda. Eso funciona con máquinas simples. Pero <strong>¿qué pasa con cosas vivas o sociales?</strong></p>
+            <div class="caja-ejemplo">
+                🧩 <strong>Ejemplo de Lego:</strong> Si tiras 100 piezas al suelo, no tienes un castillo. Tienes un desorden. El castillo solo aparece cuando las piezas se <em>organizan</em> y se conectan. La "fortaleza" no está en ninguna pieza sola. <em>Emerge</em> de cómo se unen.
+            </div>
+            <p>Ludwig von Bertalanffy llamó a esto <strong>Propiedades Emergentes</strong>. Son cualidades que <em>desaparecen</em> si separas las partes. La fórmula conceptual es:</p>
+            <div class="caja-formula">
+                <span class="comment">// Propiedad del sistema completo</span><br>
+                <span class="var">S<sub>total</sub></span> ≠ Σ <span class="var">s<sub>i</sub></span><br>
+                <span class="comment">// El todo NO es igual a la suma de las partes</span><br>
+                <span class="var">S<sub>total</sub></span> = Σ <span class="var">s<sub>i</sub></span> + <span class="var">E<sub>interacciones</sub></span><br>
+                <span class="comment">// Donde E representa las relaciones entre elementos</span>
+            </div>
+            <p><strong>En criollo:</strong> Si tenés 5 músicos excelentes pero cada uno toca una canción distinta en el mismo escenario, el resultado es ruido. La <em>sinfonía</em> emerge solo cuando se coordinan (interactúan). La música no está en ningún instrumento individual.</p>
+            <h3>🎮 Demostración Interactiva: Autómata Celular (Juego de la Vida)</h3>
+            <p>Hacé clic en las celdas para "encender" células. Luego presioná <strong>▶ Iniciar</strong>. Observá cómo reglas <em>simples</em> generan patrones <em>complejos</em> que ninguna célula individual podría producir por sí sola. Esto es <strong>emergencia pura</strong>.</p>
+            <canvas id="canvasEmergencia" class="demo-canvas" width="500" height="340"></canvas>
+            <div class="demo-controls">
+                <button class="btn-demo btn-verde" id="btnPlayEmergencia">▶ Iniciar</button>
+                <button class="btn-demo btn-rojo" id="btnStopEmergencia">⏹ Detener</button>
+                <button class="btn-demo btn-naranja" id="btnRandomEmergencia">🎲 Aleatorio</button>
+                <button class="btn-demo btn-azul" id="btnClearEmergencia">🧹 Limpiar</button>
+                <span style="font-size:13px;color:var(--gris);">Generación: <strong id="genCount">0</strong></span>
+            </div>
+            <div class="caja-clave">
+                🔑 <strong>Observá:</strong> Cada célula sigue 3 reglas simples (nace con 3 vecinos, sobrevive con 2-3, muere si hay menos de 2 o más de 3). Pero el sistema completo produce "planeadores", "osciladores" y estructuras que <em>ninguna célula individual planificó</em>. La complejidad emerge de la interacción.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 3: INTERDEPENDENCIA (REDES) ==================== -->
+        <section class="page" id="p3">
+            <h1>2️⃣ Sistemas Conectados (Redes que Respiran)</h1>
+            <h2>🕸️ Interdependencia y la Ecuación de Bertalanffy</h2>
+            <p>Un <strong>sistema</strong> es un conjunto de elementos que <em>se hablan entre sí</em>. No importa si son computadoras, personas, neuronas o semáforos. Lo importante es que se afectan mutuamente.</p>
+            <div class="caja-formula">
+                <span class="comment">// Ecuación general de sistema (Bertalanffy)</span><br>
+                d<span class="var">Q<sub>i</sub></span>/dt = <span class="var">f<sub>i</sub></span>(<span class="var">Q<sub>1</sub></span>, <span class="var">Q<sub>2</sub></span>, ..., <span class="var">Q<sub>n</sub></span>)<br>
+                <span class="comment">// El cambio de cualquier elemento Qᵢ depende</span><br>
+                <span class="comment">// de cómo interactúa con TODOS los demás</span>
+            </div>
+            <p><strong>Traducción:</strong> "El cambio de cualquier parte depende de cómo interactúa con todas las demás." Si un router falla, otros trabajan de más. Si un compañero falta, otro cubre su rol. Si sube la temperatura, el ventilador se activa.</p>
+            <h3>🎮 Demostración Interactiva: Red de Nodos Interdependientes</h3>
+            <p>Hacé clic en cualquier <strong>nodo</strong> (círculo) para "perturbarlo". Observá cómo la perturbación se propaga por toda la red. Luego ajustá el deslizador de <strong>acoplamiento</strong> para ver cómo cambia la propagación.</p>
+            <canvas id="canvasRed" class="demo-canvas" width="500" height="360"></canvas>
+            <div class="slider-box" style="justify-content:center;max-width:450px;margin:10px auto;">
+                <label for="sliderAcople">🔗 Acoplamiento:</label>
+                <input type="range" id="sliderAcople" min="10" max="100" value="55">
+                <span class="valor" id="valAcople">55%</span>
+            </div>
+            <div class="demo-controls">
+                <button class="btn-demo btn-azul" id="btnResetRed">🔄 Reiniciar Red</button>
+                <button class="btn-demo btn-naranja" id="btnPerturbarTodas">⚡ Perturbar Aleatorio</button>
+            </div>
+            <div class="leyenda-nodos">
+                <span style="color:#10b981;">● Verde = Estable</span>
+                <span style="color:#f59e0b;">● Naranja = Perturbado</span>
+                <span style="color:#ef4444;">● Rojo = Muy afectado</span>
+            </div>
+            <div class="caja-clave">
+                🔑 <strong>Observá:</strong> Con acoplamiento bajo (10-30%), las perturbaciones se disipan rápido. Con acoplamiento alto (70-100%), una pequeña perturbación en un nodo puede "contagiar" a toda la red. Así funcionan los virales en redes sociales, los cortes de luz en cascada, y los rumores en un curso.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 4: CRECIMIENTO Y SATURACIÓN ==================== -->
+        <section class="page" id="p4">
+            <h1>3️⃣ Crecimiento y Saturación</h1>
+            <h2>📈 Balance de Flujos: Lo que Entra vs Lo que Sale</h2>
+            <p>Todos los sistemas crecen o se achican según un balance simple pero poderoso:</p>
+            <div class="caja-formula">
+                <span class="comment">// Ecuación de balance de masa/flujo</span><br>
+                d<span class="var">Q</span>/dt = <span class="var">T</span> − <span class="var">P</span><br>
+                <span class="comment">// T = Transporte (entrada desde el entorno)</span><br>
+                <span class="comment">// P = Producción/Resistencia (salida o consumo)</span><br>
+                <span class="comment">// Si T > P → el sistema crece 📈</span><br>
+                <span class="comment">// Si T < P → el sistema se vacía 📉</span><br>
+                <span class="comment">// Si T = P → el sistema se mantiene ⚖️</span>
+            </div>
+            <div class="caja-ejemplo">
+                🚿 <strong>La Bañera Científica:</strong><br>
+                Si la canilla tira <strong>5 litros/min</strong> y el desagüe drena <strong>3 litros/min</strong>, el agua <em>sube</em> a razón de 2 L/min. Si el desagüe drena <strong>7 L/min</strong>, el agua <em>baja</em> a 2 L/min. Si ambos son 5, el nivel <em>no cambia</em>. En computación: si llegan más datos de los que se pueden procesar, la memoria se llena y el programa se traba. Eso se llama <strong>saturación</strong>.
+            </div>
+            <h3>🎮 Demostración Interactiva: Tanque con Flujo y Saturación</h3>
+            <p>Ajustá los deslizadores de <strong>Entrada (T)</strong> y <strong>Salida (P)</strong>. Observá el nivel del tanque y el indicador de estado. Cuando T supera mucho a P, el tanque se acerca al 100% → <strong>¡saturación!</strong></p>
+            <div class="sim-panel">
+                <div class="slider-box">
+                    <label for="sliderT2">📥 Entrada (T):</label>
+                    <input type="range" id="sliderT2" min="0" max="100" value="55">
+                    <span class="valor" id="valT2">55</span>
+                </div>
+                <div class="slider-box">
+                    <label for="sliderP2">📤 Salida (P):</label>
+                    <input type="range" id="sliderP2" min="0" max="100" value="40">
+                    <span class="valor" id="valP2">40</span>
+                </div>
+                <div class="tanque-wrapper">
+                    <div class="tanque-externo" style="width:180px;height:230px;margin:0 auto;">
+                        <div class="agua" id="water2" style="height:45%;"></div>
+                        <div style="position:absolute;top:8px;left:8px;font-size:11px;color:#475569;font-weight:bold;">Tanque</div>
+                    </div>
+                </div>
+                <div class="estado-msg" id="estadoMsg2">
+                    Diferencia (T−P) = <strong id="diffDisplay2">+15</strong> | Estado: <span id="eqState2" style="color:#10b981;">Creciendo</span>
+                </div>
+                <div style="text-align:center;">
+                    <button class="btn-demo btn-naranja" id="btnResetTanque2">🔄 Reiniciar Tanque</button>
+                </div>
+            </div>
+            <div class="caja-clave">
+                🛑 <strong>Señal de alerta:</strong> Cuando "lo que entra" supera mucho a "lo que sale", el sistema grita (se satura, se cae, o colapsa). La solución no es tapar el desagüe, es <strong>ajustar el flujo</strong>. En redes informáticas esto se llama <em>control de congestión</em>.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 5: EQUILIBRIO DINÁMICO ==================== -->
+        <section class="page" id="p5">
+            <h1>4️⃣ Equilibrio Dinámico (Estado Uniforme)</h1>
+            <h2>⚖️ Estable pero en Movimiento Constante</h2>
+            <p>Una piedra en el suelo está en equilibrio <em>estático</em>: no se mueve, no cambia, no intercambia nada. Está "muerta" como sistema. Los sistemas vivos y sociales están en <strong>equilibrio dinámico</strong> (o Estado Uniforme). <em>Parecen quietos, pero en realidad están en constante intercambio.</em></p>
+            <div class="caja-formula">
+                <span class="comment">// Condición de Estado Uniforme (Steady State)</span><br>
+                <span class="var">T</span> + <span class="var">P</span> = 0 &nbsp;&nbsp;<span class="comment">(balance neto = 0)</span><br>
+                <span class="comment">// No significa que no haya movimiento</span><br>
+                <span class="comment">// Significa que lo que entra = lo que sale</span><br>
+                <span class="comment">// ¡Hay flujo constante pero el nivel no cambia!</span>
+            </div>
+            <div class="caja-ejemplo">
+                🏫 <strong>La Escuela N°1 Técnica de Muñiz:</strong><br>
+                Cada año se van los de 7°, entran los de 1°. Cambian profes, se pintan paredes, se renuevan cuadernos. Sin embargo, <em>"La Escuela"</em> sigue siendo la misma institución. ¿Por qué? Porque lo que sale se reemplaza por lo que entra. La estructura se mantiene gracias al <strong>flujo</strong>, no a la quietud.
+            </div>
+            <h3>🎮 Demostración Interactiva: Equilibrio con Partículas Visibles</h3>
+            <p>Ajustá los deslizadores para que <strong>T = P</strong> (por ejemplo, ambos en 50). Verás partículas azules entrando y saliendo constantemente, pero el <strong>nivel se mantiene estable</strong>. Eso es equilibrio dinámico: movimiento perpetuo, resultado constante.</p>
+            <canvas id="canvasEquilibrio" class="demo-canvas" width="500" height="300"></canvas>
+            <div class="slider-box" style="justify-content:center;max-width:450px;margin:10px auto;">
+                <label for="sliderTEq">📥 T (Entrada):</label>
+                <input type="range" id="sliderTEq" min="0" max="60" value="30">
+                <span class="valor" id="valTEq">30</span>
+            </div>
+            <div class="slider-box" style="justify-content:center;max-width:450px;margin:10px auto;">
+                <label for="sliderPEq">📤 P (Salida):</label>
+                <input type="range" id="sliderPEq" min="0" max="60" value="30">
+                <span class="valor" id="valPEq">30</span>
+            </div>
+            <div style="text-align:center;margin-top:8px;">
+                <span class="indicador" id="indEqDinamico">⚖️ T = P → Equilibrio Dinámico</span>
+            </div>
+            <div class="caja-clave">
+                🔄 <strong>Clave:</strong> La estabilidad no es congelarse. Es saber mantener el ritmo. Si dejás de fluir, el sistema se apaga. Tu cuerpo intercambia oxígeno y CO₂ todo el tiempo aunque parezca "estable". Una ciudad intercambia personas, mercancías y energía sin cesar.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 6: EQUIFINALIDAD ==================== -->
+        <section class="page" id="p6">
+            <h1>5️⃣ Equifinalidad</h1>
+            <h2>🎯 Múltiples Caminos, Mismo Destino</h2>
+            <p><strong>Equifinalidad</strong> significa que un sistema abierto puede llegar al <strong>mismo estado final</strong> partiendo desde lugares distintos y siguiendo rutas diferentes. Es lo opuesto al determinismo rígido de las máquinas simples.</p>
+            <div class="caja-formula">
+                <span class="comment">// Principio de Equifinalidad (Bertalanffy)</span><br>
+                <span class="var">Estado<sub>final</sub></span> = <span class="var">F</span>(<span class="var">condiciones<sub>iniciales</sub></span>, <span class="var">ruta<sub>elegida</sub></span>)<br>
+                <span class="comment">// Diferentes combinaciones (condiciones + ruta)</span><br>
+                <span class="comment">// pueden producir exactamente el mismo resultado</span><br>
+                <span class="comment">// No hay UN solo camino correcto</span>
+            </div>
+            <div class="caja-ejemplo">
+                🍳 <strong>Tres recetas, un mismo pastel:</strong><br>
+                - Persona A: Usa harina integral, masa madre, horno lento.<br>
+                - Persona B: Usa harina blanca, levadura rápida, horno eléctrico.<br>
+                - Persona C: Usa premezcla, microondas, 3 minutos.<br>
+                <strong>Resultado:</strong> Los tres obtienen un pastel comestible. Diferentes materiales, distintos tiempos, mismo objetivo cumplido.
+            </div>
+            <h3>🎮 Demostración Interactiva: Tres Caminos al Mismo Nivel</h3>
+            <p>Tenés <strong>tres configuraciones predefinidas</strong> (A, B, C) con distintos valores de Entrada (T) y Salida (P). Todas llevan al <strong>mismo nivel de equilibrio (~50%)</strong>. Probá cada una y observá que, aunque los valores individuales son distintos, la <strong>diferencia neta</strong> es la misma.</p>
+            <canvas id="canvasEquifinalidad" class="demo-canvas" width="500" height="280"></canvas>
+            <div class="demo-controls">
+                <button class="btn-demo btn-azul" id="btnPathA">🅰️ Camino A: T=40, P=40</button>
+                <button class="btn-demo btn-violeta" id="btnPathB" style="background:#7c3aed;">🅱️ Camino B: T=70, P=70</button>
+                <button class="btn-demo btn-verde" id="btnPathC">🅲 Camino C: T=90, P=90</button>
+            </div>
+            <div style="text-align:center;margin-top:10px;font-size:15px;">
+                Nivel actual: <strong id="nivelEquifinalidad" style="font-size:20px;color:var(--violeta);">50%</strong>
+                <span id="tagEquifinalidad" class="indicador ok" style="margin-left:10px;">🎯 Mismo destino</span>
+            </div>
+            <div class="caja-clave">
+                🌍 <strong>Lección:</strong> No existe un único camino "correcto". La inteligencia sistémica es saber adaptarse al contexto y usar los recursos disponibles para alcanzar el equilibrio o la meta. Diferentes lenguajes de programación → misma app. Diferentes rutas de colectivo → misma escuela. Diferentes técnicas de estudio → mismo aprobado.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 7: ACTIVIDADES GRUPALES ==================== -->
+        <section class="page" id="p7">
+            <h1>🎯 5 Actividades Grupales (5 grupos × 5 estudiantes)</h1>
+            <p>Cada actividad dura ~15-20 min. Materiales: papel, lápiz, cronómetro del celular, objetos simples del aula.</p>
+            <div class="grid-act">
+                <div class="act-card caja-actividad">
+                    <h3>Grupo 1: "La Torre Sin Palabras"</h3>
+                    <p><strong>Concepto:</strong> Propiedades Emergentes<br>
+                        <strong>Roles:</strong> 2 constructores (sin hablar), 1 observador, 1 registrador, 1 cronometrador.<br>
+                        <strong>Paso:</strong> Con 20 hojas y cinta, armen la torre más alta en 5 min. Prohibido hablar.<br>
+                        <strong>Cierre:</strong> ¿Qué estrategia surgió sin palabras? ¿La torre es más que hojas sueltas?</p>
+                </div>
+                <div class="act-card caja-actividad">
+                    <h3>Grupo 2: "Teléfono Sistémico"</h3>
+                    <p><strong>Concepto:</strong> Interdependencia<br>
+                        <strong>Roles:</strong> 1 emisor, 3 intermediarios, 1 receptor final, 1 observador externo.<br>
+                        <strong>Paso:</strong> Pasa un mensaje complejo. En la vuelta 2, un intermediario cambia una palabra.<br>
+                        <strong>Cierre:</strong> ¿Cómo un cambio pequeño alteró el resultado? ¿Quién fue el "nodo crítico"?</p>
+                </div>
+                <div class="act-card caja-actividad">
+                    <h3>Grupo 3: "El Balde de Datos"</h3>
+                    <p><strong>Concepto:</strong> Crecimiento y Saturación<br>
+                        <strong>Roles:</strong> 1 "entrada" (echa agua con vaso), 1 "salida" (saca con esponja), 1 "medidor", 1 "cronometrador", 1 "registrador".<br>
+                        <strong>Paso:</strong> Simulen 3 escenarios: entra > sale, entra < sale, entra = sale.<br>
+                        <strong>Cierre:</strong> ¿En qué momento se "saturó"? ¿Cómo lo evitarían en un servidor real?</p>
+                </div>
+                <div class="act-card caja-actividad">
+                    <h3>Grupo 4: "La Escuela que Fluye"</h3>
+                    <p><strong>Concepto:</strong> Equilibrio Dinámico<br>
+                        <strong>Roles:</strong> 2 "alumnos nuevos", 2 "graduados", 1 "director/regulador".<br>
+                        <strong>Paso:</strong> Entran y salen cada 30 seg. El director debe mantener 3 personas "activas" en el centro.<br>
+                        <strong>Cierre:</strong> ¿El sistema se mantuvo estable? ¿Qué pasaba si se detenía un flujo?</p>
+                </div>
+                <div class="act-card caja-actividad">
+                    <h3>Grupo 5: "Puentes Diferentes"</h3>
+                    <p><strong>Concepto:</strong> Equifinalidad<br>
+                        <strong>Roles:</strong> 1 arquitecto, 2 ingenieros, 1 probador, 1 registrador.<br>
+                        <strong>Paso:</strong> Reciben materiales distintos (clips, papeles, regla, elástico). Deben hacer un puente que sostenga un libro.<br>
+                        <strong>Cierre:</strong> ¿Lograron lo mismo con recursos distintos? ¿Qué estrategia fue más eficiente?</p>
+                </div>
+            </div>
+            <div class="caja-clave" style="margin-top:20px;">
+                📌 <strong>Instrucción para el docente:</strong> Rote entre grupos. No dé respuestas, haga preguntas: "¿Qué pasó cuando X cambió?", "¿Cómo se ajustaron?", "¿Qué les recuerda esto a una red WiFi?". Al final, 1 representante de cada grupo comparte 1 conclusión en 1 min.
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 8: SIMULADOR COMBINADO ==================== -->
+        <section class="page" id="p8">
+            <h1>💧 Simulador Integrado: Todas las Variables</h1>
+            <p>Este simulador reúne los conceptos de <strong>Crecimiento, Equilibrio Dinámico y Equifinalidad</strong>. Mové los controles y observá cómo el sistema responde en tiempo real.</p>
+            <div class="sim-panel">
+                <div class="slider-box">
+                    <label>📥 Transporte (T):</label>
+                    <input type="range" id="sliderT" min="0" max="100" value="50">
+                    <span class="valor" id="valT">50</span>
+                </div>
+                <div class="slider-box">
+                    <label>📤 Resistencia (P):</label>
+                    <input type="range" id="sliderP" min="0" max="100" value="50">
+                    <span class="valor" id="valP">50</span>
+                </div>
+                <div class="tanque-wrapper">
+                    <div class="tanque-externo">
+                        <div class="agua" id="water" style="height:50%;"></div>
+                        <div style="position:absolute;top:8px;left:8px;font-size:11px;color:#64748b;">Nivel</div>
+                        <div style="position:absolute;top:8px;right:8px;font-size:11px;color:#64748b;font-weight:bold;" id="stateText">Estable</div>
+                    </div>
+                </div>
+                <div class="estado-msg">
+                    Diferencia (T−P): <span id="diffDisplay">0</span> | Estado: <span id="eqState" style="color:var(--verde);font-weight:bold;">Equilibrio Dinámico</span>
+                </div>
+                <div style="text-align:center;">
+                    <button class="btn-demo btn-naranja" id="btnReset">🔄 Reiniciar</button>
+                </div>
+                <div class="caja-ejemplo" style="margin-top:18px;">
+                    🧪 <strong>Experimento de Equifinalidad:</strong><br>
+                    1. Poné T=40, P=40. Esperá 10 seg. Anotá el nivel (~50%).<br>
+                    2. Cambiá a T=80, P=80. ¿El nivel final es similar?<br>
+                    3. Probá T=10, P=90. ¿Qué ocurre con el flujo?<br>
+                    <em>¡Distintos valores de T y P, mismo comportamiento de equilibrio cuando T=P!</em>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PÁGINA 9: GUÍA DOCENTE ==================== -->
+        <section class="page" id="p9">
+            <h1>👨‍🏫 Guía Rápida para el Docente</h1>
+            <h2>📋 Secuencia Sugerida (80 minutos)</h2>
+            <ol>
+                <li><strong>Inicio (10 min):</strong> Presentar la idea "El todo > suma de partes" con el ejemplo del Lego o equipo de fútbol. Usar la demo del Autómata Celular.</li>
+                <li><strong>Explicación (20 min):</strong> Recorrer las 5 secciones con las demostraciones interactivas. Evite derivar fórmulas directamente; deje que los estudiantes <em>jueguen</em> con cada demo y luego pregunte: "¿Qué observaron?"</li>
+                <li><strong>Actividades Grupales (25 min):</strong> Divida en 5 grupos de 5. Asigne 1 actividad por grupo. Circule, observe, anote frases clave.</li>
+                <li><strong>Puesta en común (10 min):</strong> 1 min por grupo. Vincule cada experiencia con el concepto teórico y la fórmula correspondiente.</li>
+                <li><strong>Simulador + Cierre (15 min):</strong> Proyecte el simulador integrado. Dejen que manipulen. Cierre con la idea de equifinalidad.</li>
+            </ol>
+            <h2>🔍 Evaluación Formativa (Sin exámenes)</h2>
+            <ul>
+                <li>✅ Participación en roles grupales</li>
+                <li>✅ Capacidad de conectar el juego con el concepto</li>
+                <li>✅ Uso correcto de vocabulario sistémico (flujo, equilibrio, red, saturación, emergencia)</li>
+                <li>✅ Reflexión escrita breve (3 líneas): "¿Cómo aplicaría esto a mi celular/comunidad?"</li>
+            </ul>
+            <div class="caja-clave">
+                🌟 <strong>Frase final para la clase:</strong><br>
+                "Hoy no aprendimos fórmulas como recetas de cocina. Aprendimos a ver conexiones. Entendimos que nada existe aislado, que crecer requiere balance, que hay muchos caminos válidos, y que lo más importante de un sistema nunca está en una pieza sola, sino en cómo bailan juntas."
+            </div>
+            <p style="margin-top:20px;text-align:center;color:var(--gris);font-size:13px;">
+                Material didáctico basado en Teoría General de Sistemas (Ludwig von Bertalanffy) | Escuela N°1 Técnica de Muñiz | 7°4° | Prof. Omar Bazar
+            </p>
+        </section>
+
+    </div>
+
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // ========== PÁGINA 2: AUTÓMATA CELULAR (PROPIEDADES EMERGENTES) ==========
+        (function() {
+            const canvas = document.getElementById('canvasEmergencia');
+            const ctx = canvas.getContext('2d');
+            const cellSize = 16;
+            const cols = Math.floor(canvas.width / cellSize);
+            const rows = Math.floor(canvas.height / cellSize);
+            let grid = Array.from({ length: rows }, () => Array(cols).fill(0));
+            let running = false;
+            let gen = 0;
+            let animId;
+
+            function drawGrid() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        ctx.fillStyle = grid[r][c] ? '#2563eb' : '#f1f5f9';
+                        ctx.fillRect(c * cellSize + 1, r * cellSize + 1, cellSize - 2, cellSize - 2);
+                        ctx.strokeStyle = '#e2e8f0';
+                        ctx.strokeRect(c * cellSize, r * cellSize, cellSize, cellSize);
+                    }
+                }
+                document.getElementById('genCount').textContent = gen;
+            }
+
+            function countNeighbors(r, c) {
+                let count = 0;
+                for (let dr = -1; dr <= 1; dr++) {
+                    for (let dc = -1; dc <= 1; dc++) {
+                        if (dr === 0 && dc === 0) continue;
+                        const nr = (r + dr + rows) % rows;
+                        const nc = (c + dc + cols) % cols;
+                        count += grid[nr][nc];
+                    }
+                }
+                return count;
+            }
+
+            function step() {
+                const newGrid = grid.map(row => [...row]);
+                for (let r = 0; r < rows; r++) {
+                    for (let c = 0; c < cols; c++) {
+                        const n = countNeighbors(r, c);
+                        if (grid[r][c] === 1) {
+                            if (n < 2 || n > 3) newGrid[r][c] = 0;
+                        } else {
+                            if (n === 3) newGrid[r][c] = 1;
+                        }
+                    }
+                }
+                grid = newGrid;
+                gen++;
+                drawGrid();
+            }
+
+            function loop() {
+                if (running) {
+                    step();
+                    animId = requestAnimationFrame(() => setTimeout(loop, 180));
+                }
+            }
+            canvas.addEventListener('click', (e) => {
+                if (running) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const c = Math.floor(x / cellSize);
+                const r = Math.floor(y / cellSize);
+                if (r >= 0 && r < rows && c >= 0 && c < cols) {
+                    grid[r][c] = grid[r][c] ? 0 : 1;
+                    drawGrid();
+                }
+            });
+            document.getElementById('btnPlayEmergencia').addEventListener('click', () => {
+                running = true;
+                loop();
+            });
+            document.getElementById('btnStopEmergencia').addEventListener('click', () => {
+                running = false;
+                if (animId) cancelAnimationFrame(animId);
+            });
+            document.getElementById('btnRandomEmergencia').addEventListener('click', () => {
+                if (running) return;
+                for (let r = 0; r < rows; r++)
+                    for (let c = 0; c < cols; c++)
+                        grid[r][c] = Math.random() < 0.25 ? 1 : 0;
+                gen = 0;
+                drawGrid();
+            });
+            document.getElementById('btnClearEmergencia').addEventListener('click', () => {
+                running = false;
+                if (animId) cancelAnimationFrame(animId);
+                grid = Array.from({ length: rows }, () => Array(cols).fill(0));
+                gen = 0;
+                drawGrid();
+            });
+            drawGrid();
+        })();
+
+        // ========== PÁGINA 3: RED DE INTERDEPENDENCIA ==========
+        (function() {
+            const canvas = document.getElementById('canvasRed');
+            const ctx = canvas.getContext('2d');
+            const nodes = [
+                { x: 120, y: 80, v: 0 },
+                { x: 250, y: 50, v: 0 },
+                { x: 380, y: 80, v: 0 },
+                { x: 80, y: 200, v: 0 },
+                { x: 250, y: 180, v: 0 },
+                { x: 420, y: 200, v: 0 },
+                { x: 150, y: 310, v: 0 },
+                { x: 350, y: 310, v: 0 },
+            ];
+            const edges = [
+                [0, 1],
+                [1, 2],
+                [0, 3],
+                [1, 4],
+                [2, 5],
+                [3, 4],
+                [4, 5],
+                [3, 6],
+                [4, 7],
+                [5, 7],
+                [6, 7],
+                [1, 3],
+                [2, 4],
+                [0, 4]
+            ];
+            let coupling = 55;
+            const sliderAcople = document.getElementById('sliderAcople');
+            const valAcople = document.getElementById('valAcople');
+
+            function getCouplingFactor() {
+                return coupling / 100;
+            }
+
+            function drawNetwork() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const cf = getCouplingFactor();
+                // Draw edges
+                edges.forEach(([a, b]) => {
+                    const na = nodes[a],
+                        nb = nodes[b];
+                    const maxV = Math.max(Math.abs(na.v), Math.abs(nb.v));
+                    const alpha = 0.15 + Math.min(maxV, 1) * 0.7;
+                    ctx.beginPath();
+                    ctx.moveTo(na.x, na.y);
+                    ctx.lineTo(nb.x, nb.y);
+                    ctx.strokeStyle = `rgba(100,116,139,${alpha})`;
+                    ctx.lineWidth = 1.5 + Math.min(maxV, 1) * 3;
+                    ctx.stroke();
+                });
+                // Draw nodes
+                nodes.forEach(n => {
+                    const absV = Math.abs(n.v);
+                    let color;
+                    if (absV < 0.15) color = '#10b981';
+                    else if (absV < 0.5) color = '#f59e0b';
+                    else color = '#ef4444';
+                    const radius = 16 + absV * 16;
+                    const gradient = ctx.createRadialGradient(n.x, n.y, radius * 0.3, n.x, n.y, radius);
+                    gradient.addColorStop(0, color);
+                    gradient.addColorStop(1, 'rgba(255,255,255,0.3)');
+                    ctx.beginPath();
+                    ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+                    ctx.fillStyle = gradient;
+                    ctx.fill();
+                    ctx.strokeStyle = '#475569';
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 11px "Segoe UI"';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(Math.round(absV * 100), n.x, n.y + 4);
+                });
+            }
+
+            function perturbNode(index, intensity = 1) {
+                nodes[index].v = Math.min(1, nodes[index].v + intensity);
+            }
+
+            function updateNetwork() {
+                const cf = getCouplingFactor();
+                const newV = nodes.map(n => n.v * 0.82);
+                edges.forEach(([a, b]) => {
+                    const transfer = nodes[a].v * cf * 0.22;
+                    newV[b] += transfer;
+                    const transfer2 = nodes[b].v * cf * 0.22;
+                    newV[a] += transfer2;
+                });
+                nodes.forEach((n, i) => { n.v = Math.max(0, Math.min(1, newV[i])); });
+                drawNetwork();
+            }
+
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                const mx = e.clientX - rect.left;
+                const my = e.clientY - rect.top;
+                let closest = -1;
+                let minDist = Infinity;
+                nodes.forEach((n, i) => {
+                    const d = Math.hypot(mx - n.x, my - n.y);
+                    if (d < minDist) { minDist = d;
+                        closest = i; }
+                });
+                if (closest >= 0 && minDist < 40) {
+                    perturbNode(closest, 1);
+                }
+            });
+            document.getElementById('btnResetRed').addEventListener('click', () => {
+                nodes.forEach(n => n.v = 0);
+                drawNetwork();
+            });
+            document.getElementById('btnPerturbarTodas').addEventListener('click', () => {
+                const ri = Math.floor(Math.random() * nodes.length);
+                perturbNode(ri, 1);
+            });
+            sliderAcople.addEventListener('input', () => {
+                coupling = parseInt(sliderAcople.value);
+                valAcople.textContent = coupling + '%';
+            });
+            setInterval(updateNetwork, 80);
+            drawNetwork();
+        })();
+
+        // ========== PÁGINA 4: TANQUE DE CRECIMIENTO Y SATURACIÓN ==========
+        (function() {
+            const sT2 = document.getElementById('sliderT2');
+            const sP2 = document.getElementById('sliderP2');
+            const vT2 = document.getElementById('valT2');
+            const vP2 = document.getElementById('valP2');
+            const water2 = document.getElementById('water2');
+            const diffDisplay2 = document.getElementById('diffDisplay2');
+            const eqState2 = document.getElementById('eqState2');
+            const estadoMsg2 = document.getElementById('estadoMsg2');
+            let lvl2 = 45;
+            function loop2() {
+                const t = +sT2.value,
+                    p = +sP2.value;
+                vT2.textContent = t;
+                vP2.textContent = p;
+                const d = t - p;
+                diffDisplay2.textContent = (d >= 0 ? '+' : '') + d;
+                if (d > 8) {
+                    eqState2.textContent = 'Creciendo 📈';
+                    eqState2.style.color = '#10b981';
+                    estadoMsg2.style.background = '#d1fae5';
+                } else if (d < -8) {
+                    eqState2.textContent = 'Decreciendo 📉';
+                    eqState2.style.color = '#ef4444';
+                    estadoMsg2.style.background = '#fee2e2';
+                } else {
+                    eqState2.textContent = 'Equilibrio ⚖️';
+                    eqState2.style.color = '#2563eb';
+                    estadoMsg2.style.background = '#e0f2fe';
+                }
+                lvl2 = Math.max(0, Math.min(100, lvl2 + d * 0.1));
+                water2.style.height = lvl2 + '%';
+                if (lvl2 > 92) {
+                    estadoMsg2.style.background = '#fef3c7';
+                    eqState2.textContent = '⚠️ ¡SATURACIÓN!';
+                    eqState2.style.color = '#d97706';
+                }
+                requestAnimationFrame(loop2);
+            }
+            document.getElementById('btnResetTanque2').addEventListener('click', () => {
+                lvl2 = 45;
+                sT2.value = 55;
+                sP2.value = 40;
+            });
+            loop2();
+        })();
+
+        // ========== PÁGINA 5: EQUILIBRIO DINÁMICO CON PARTÍCULAS ==========
+        (function() {
+            const canvas = document.getElementById('canvasEquilibrio');
+            const ctx = canvas.getContext('2d');
+            const sTEq = document.getElementById('sliderTEq');
+            const sPEq = document.getElementById('sliderPEq');
+            const vTEq = document.getElementById('valTEq');
+            const vPEq = document.getElementById('valPEq');
+            const indEq = document.getElementById('indEqDinamico');
+            const tankX = 160,
+                tankW = 180,
+                tankTop = 30,
+                tankH = 230;
+            let waterLevel = 0.5;
+            let particulas = [];
+
+            function spawnParticulaEntrada() {
+                const rate = parseInt(sTEq.value);
+                if (Math.random() < rate / 70) {
+                    particulas.push({
+                        x: tankX + 30 + Math.random() * (tankW - 60),
+                        y: tankTop + 10,
+                        vy: 1.2 + Math.random() * 2,
+                        vida: 1,
+                        tipo: 'entrada',
+                        color: '#3b82f6'
+                    });
+                }
+            }
+
+            function spawnParticulaSalida() {
+                const rate = parseInt(sPEq.value);
+                if (Math.random() < rate / 70 && waterLevel > 0.03) {
+                    const waterY = tankTop + tankH * (1 - waterLevel);
+                    particulas.push({
+                        x: tankX + 30 + Math.random() * (tankW - 60),
+                        y: waterY + Math.random() * 15,
+                        vy: -1.2 - Math.random() * 2,
+                        vida: 1,
+                        tipo: 'salida',
+                        color: '#f59e0b'
+                    });
+                }
+            }
+
+            function updateParticulas() {
+                const t = parseInt(sTEq.value),
+                    p = parseInt(sPEq.value);
+                const netFlow = (t - p) * 0.00018;
+                waterLevel = Math.max(0.02, Math.min(0.92, waterLevel + netFlow));
+                spawnParticulaEntrada();
+                spawnParticulaSalida();
+                const waterY = tankTop + tankH * (1 - waterLevel);
+                particulas = particulas.filter(pt => pt.vida > 0);
+                particulas.forEach(pt => {
+                    pt.y += pt.vy;
+                    pt.vida -= 0.012;
+                    if (pt.tipo === 'entrada' && pt.y > waterY) pt.vida = 0;
+                    if (pt.tipo === 'salida' && pt.y < tankTop) pt.vida = 0;
+                });
+                if (Math.abs(t - p) < 8) {
+                    indEq.textContent = '⚖️ T ≈ P → Equilibrio Dinámico';
+                    indEq.className = 'indicador ok';
+                } else if (t > p) {
+                    indEq.textContent = '📈 T > P → Creciendo';
+                    indEq.className = 'indicador warn';
+                } else {
+                    indEq.textContent = '📉 T < P → Decreciendo';
+                    indEq.className = 'indicador crit';
+                }
+                vTEq.textContent = t;
+                vPEq.textContent = p;
+            }
+
+            function drawEquilibrio() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                // Tank
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(tankX, tankTop, tankW, tankH);
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(tankX, tankTop, tankW, tankH);
+                // Water
+                const waterY = tankTop + tankH * (1 - waterLevel);
+                const waterGrad = ctx.createLinearGradient(0, waterY, 0, tankTop + tankH);
+                waterGrad.addColorStop(0, '#60a5fa');
+                waterGrad.addColorStop(1, '#1d4ed8');
+                ctx.fillStyle = waterGrad;
+                ctx.fillRect(tankX + 2, waterY, tankW - 4, tankTop + tankH - waterY - 2);
+                ctx.strokeStyle = '#1d4ed8';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(tankX, waterY);
+                ctx.lineTo(tankX + tankW, waterY);
+                ctx.stroke();
+                // Particles
+                particulas.forEach(pt => {
+                    ctx.fillStyle = pt.color;
+                    ctx.globalAlpha = pt.vida;
+                    ctx.beginPath();
+                    ctx.arc(pt.x, pt.y, 3.5, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.globalAlpha = 1;
+                // Labels
+                ctx.fillStyle = '#475569';
+                ctx.font = '12px "Segoe UI"';
+                ctx.fillText('Entrada ↑', tankX + tankW + 8, tankTop + 20);
+                ctx.fillText('Salida ↓', tankX + tankW + 8, tankTop + tankH - 10);
+                ctx.fillText('Nivel: ' + Math.round(waterLevel * 100) + '%', tankX + tankW + 8, tankTop + tankH / 2);
+            }
+
+            function animEquilibrio() {
+                updateParticulas();
+                drawEquilibrio();
+                requestAnimationFrame(animEquilibrio);
+            }
+            animEquilibrio();
+        })();
+
+        // ========== PÁGINA 6: EQUIFINALIDAD ==========
+        (function() {
+            const canvas = document.getElementById('canvasEquifinalidad');
+            const ctx = canvas.getContext('2d');
+            let nivelEq = 50;
+            let tEq = 50,
+                pEq = 50;
+            const nivelSpan = document.getElementById('nivelEquifinalidad');
+            const tagEq = document.getElementById('tagEquifinalidad');
+
+            function drawEq() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                const tankX = 160,
+                    tankW = 180,
+                    tankTop = 20,
+                    tankH = 220;
+                const waterY = tankTop + tankH * (1 - nivelEq / 100);
+                ctx.fillStyle = '#e2e8f0';
+                ctx.fillRect(tankX, tankTop, tankW, tankH);
+                ctx.strokeStyle = '#475569';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(tankX, tankTop, tankW, tankH);
+                const wg = ctx.createLinearGradient(0, waterY, 0, tankTop + tankH);
+                wg.addColorStop(0, '#60a5fa');
+                wg.addColorStop(1, '#1d4ed8');
+                ctx.fillStyle = wg;
+                ctx.fillRect(tankX + 2, waterY, tankW - 4, tankTop + tankH - waterY - 2);
+                ctx.strokeStyle = '#1d4ed8';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(tankX, waterY);
+                ctx.lineTo(tankX + tankW, waterY);
+                ctx.stroke();
+                // Draw target line
+                const targetY = tankTop + tankH * 0.5;
+                ctx.setLineDash([6, 8]);
+                ctx.strokeStyle = '#7c3aed';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.moveTo(tankX - 20, targetY);
+                ctx.lineTo(tankX + tankW + 20, targetY);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                ctx.fillStyle = '#7c3aed';
+                ctx.font = 'bold 11px "Segoe UI"';
+                ctx.fillText('Meta 50%', tankX + tankW + 5, targetY + 4);
+                // Info
+                ctx.fillStyle = '#1e293b';
+                ctx.font = '13px "Segoe UI"';
+                ctx.fillText('T = ' + tEq + ' | P = ' + pEq, tankX, tankTop + tankH + 25);
+                ctx.fillText('Dif. neta = ' + (tEq - pEq), tankX + 130, tankTop + tankH + 25);
+                nivelSpan.textContent = Math.round(nivelEq) + '%';
+                if (Math.abs(nivelEq - 50) < 6) {
+                    tagEq.textContent = '🎯 Mismo destino (~50%)';
+                    tagEq.className = 'indicador ok';
+                } else {
+                    tagEq.textContent = '⏳ Ajustando...';
+                    tagEq.className = 'indicador warn';
+                }
+            }
+
+            function setPath(t, p) {
+                tEq = t;
+                pEq = p;
+            }
+
+            function animEq() {
+                const d = tEq - pEq;
+                nivelEq += d * 0.06;
+                nivelEq = Math.max(0, Math.min(100, nivelEq));
+                drawEq();
+                requestAnimationFrame(animEq);
+            }
+            document.getElementById('btnPathA').addEventListener('click', () => setPath(40, 40));
+            document.getElementById('btnPathB').addEventListener('click', () => setPath(70, 70));
+            document.getElementById('btnPathC').addEventListener('click', () => setPath(90, 90));
+            animEq();
+        })();
+
+        // ========== PÁGINA 8: SIMULADOR INTEGRADO ==========
+        (function() {
+            const sT = document.getElementById('sliderT');
+            const sP = document.getElementById('sliderP');
+            const vT = document.getElementById('valT');
+            const vP = document.getElementById('valP');
+            const w = document.getElementById('water');
+            const diff = document.getElementById('diffDisplay');
+            const eq = document.getElementById('eqState');
+            const stxt = document.getElementById('stateText');
+            let lvl = 50;
+
+            function loop() {
+                const t = +sT.value,
+                    p = +sP.value;
+                vT.textContent = t;
+                vP.textContent = p;
+                const d = t - p;
+                diff.textContent = d;
+                if (d > 5) { eq.textContent = "Crecimiento (+)";
+                    eq.style.color = "green";
+                    stxt.textContent = "Subiendo"; } else if (d < -5) { eq.textContent = "Decrecimiento (-)";
+                    eq.style.color = "red";
+                    stxt.textContent = "Bajando"; } else { eq.textContent = "Equilibrio Dinámico";
+                    eq.style.color = "var(--verde)";
+                    stxt.textContent = "Estable"; }
+                lvl = Math.max(0, Math.min(100, lvl + d * 0.08));
+                w.style.height = lvl + '%';
+                requestAnimationFrame(loop);
+            }
+            document.getElementById('btnReset').onclick = () => { lvl = 50;
+                sT.value = 50;
+                sP.value = 50; };
+            loop();
+        })();
+    </script>
+</body>
+</html>
