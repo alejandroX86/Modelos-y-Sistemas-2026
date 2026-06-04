@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyecto TGS - Fábrica de Celulares | Bertalanffy | Escuela Técnica N°1 Muñiz - 7°3</title>
+
+    <!-- Mermaid JS para diagramas tipo Draw.io -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js">
+    </script>
+
+    <style>
+        :root {
+            --bg: #f4f6f9;
+            --surface: #ffffff;
+            --primary: #1a3c6e;
+            --secondary: #2c5aa0;
+            --accent: #e8913a;
+            --text: #2c2c2c;
+            --text-light: #5a5a5a;
+            --border: #dce3ea;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.10);
+            --radius: 14px;
+            --radius-sm: 8px;
+            --transition: 0.25s ease;
+            --font-heading: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            --font-body: 'Segoe UI', 'Helvetica Neue', sans-serif;
+            --gradient-hero: linear-gradient(135deg, #0f2547 0%, #1a3c6e 40%, #1f4d8c 100%);
+            --gradient-accent: linear-gradient(135deg, #e8913a 0%, #f0a85c 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ============ HERO HEADER ============ */
+        .hero {
+            background: var(--gradient-hero);
+            color: #ffffff;
+            padding: 50px 30px 55px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -10%;
+            width: 120%;
+            height: 120px;
+            background: var(--bg);
+            border-radius: 50% 50% 0 0;
+            z-index: 1;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        .hero .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 7px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 2.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+        .hero h2 {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 6px;
+        }
+        .hero .subtitle {
+            font-size: 1rem;
+            opacity: 0.75;
+            margin-top: 4px;
+        }
+        .hero .school-info {
+            margin-top: 14px;
+            font-size: 0.95rem;
+            opacity: 0.85;
+            letter-spacing: 0.3px;
+        }
+
+        /* ============ CONTAINER ============ */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px 25px 60px;
+        }
+
+        /* ============ SECTION CARDS ============ */
+        .section {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 35px 32px;
+            margin-bottom: 34px;
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .section:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        .section h3 {
+            font-family: var(--font-heading);
+            font-size: 1.55rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section h3 .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-accent);
+            color: #fff;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .section h4 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: var(--secondary);
+            margin: 18px 0 8px;
+            border-left: 4px solid var(--accent);
+            padding-left: 12px;
+        }
+        .section p {
+            color: var(--text-light);
+            margin-bottom: 12px;
+            text-align: justify;
+        }
+        .section ul,
+        .section ol {
+            margin-left: 20px;
+            margin-bottom: 12px;
+            color: var(--text-light);
+        }
+        .section li {
+            margin-bottom: 6px;
+        }
+        .highlight-box {
+            background: #fdf6ee;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 16px 20px;
+            margin: 16px 0;
+            font-style: italic;
+            color: #6b4a2c;
+        }
+        .tag {
+            display: inline-block;
+            background: #eef3fa;
+            color: var(--primary);
+            padding: 4px 13px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            margin: 3px 4px;
+        }
+
+        /* ============ DIAGRAM WRAPPER ============ */
+        .diagram-wrapper {
+            background: #fafbfd;
+            border: 2px dashed #dce3ea;
+            border-radius: var(--radius-sm);
+            padding: 20px 15px;
+            margin: 20px 0;
+            text-align: center;
+            overflow-x: auto;
+            transition: var(--transition);
+        }
+        .diagram-wrapper:hover {
+            border-color: var(--accent);
+            background: #fefdfb;
+        }
+        .diagram-wrapper .diagram-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            min-height: 200px;
+        }
+        .mermaid svg {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+        }
+
+        /* ============ FOOTER ============ */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            color: #888;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+            margin-top: 10px;
+        }
+        .footer strong {
+            color: var(--primary);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            .hero h2 {
+                font-size: 1rem;
+            }
+            .section {
+                padding: 22px 16px;
+            }
+            .section h3 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== HERO ==================== -->
+    <header class="hero">
+        <div class="hero-content">
+            <span class="badge">📐 Proyecto Escolar</span>
+            <h1>Teoría General de Sistemas</h1>
+            <h2>Ludwig von Bertalanffy · Enfoque Sistémico</h2>
+            <p class="subtitle">Aplicación a una Empresa Mediana: <strong>Fábrica de Celulares "TECNOCELL S.A."</strong></p>
+            <p class="school-info">
+                🏫 Escuela Técnica N°1 de Muñiz &nbsp;|&nbsp; 📘 7°3 - Modelos y Sistemas &nbsp;|&nbsp; 👨‍🏫 Profesor: <strong>Omar Bazar</strong>
+            </p>
+        </div>
+    </header>
+
+    <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
+    <main class="container">
+
+        <!-- SECCIÓN 1: INTRODUCCIÓN A LA TGS -->
+        <section class="section" id="intro-tgs">
+            <h3><span class="icon">🧠</span> 1. Fundamentos de la Teoría General de Sistemas (TGS)</h3>
+            <p>
+                La <strong>Teoría General de Sistemas (TGS)</strong>, propuesta por el biólogo austríaco
+                <strong>Ludwig von Bertalanffy</strong> (1901-1972), es un marco conceptual interdisciplinario que
+                busca identificar principios universales aplicables a <em>sistemas</em> en cualquier ámbito:
+                biología, física, ingeniería, administración y ciencias sociales. Bertalanffy publicó sus ideas
+                principales entre las décadas de 1940 y 1960, sentando las bases del <strong>pensamiento
+                    sistémico</strong>.
+            </p>
+            <div class="highlight-box">
+                💡 <strong>Definición clave:</strong> Un <em>sistema</em> es un conjunto de elementos
+                interrelacionados que funcionan como un todo organizado, con un propósito común, y que
+                interactúan con su entorno.
+            </div>
+            <h4>🔑 Principios Fundamentales de la TGS</h4>
+            <ul>
+                <li><strong>Totalidad / Sinergia:</strong> El todo es más que la suma de sus partes. Las interacciones generan propiedades emergentes.</li>
+                <li><strong>Interrelación:</strong> Todos los elementos del sistema están conectados directa o indirectamente.</li>
+                <li><strong>Jerarquía:</strong> Los sistemas se organizan en niveles: subsistemas → sistema → suprasistema.</li>
+                <li><strong>Entrada-Proceso-Salida:</strong> Todo sistema abierto transforma insumos (entradas) en productos/servicios (salidas).</li>
+                <li><strong>Retroalimentación (Feedback):</strong> La información sobre la salida regresa al sistema para corregir o reforzar su funcionamiento.</li>
+                <li><strong>Homeostasis:</strong> Capacidad del sistema para mantener un equilibrio dinámico interno.</li>
+                <li><strong>Equifinalidad:</strong> Un sistema puede alcanzar el mismo resultado partiendo de diferentes condiciones iniciales.</li>
+                <li><strong>Entropía / Negentropía:</strong> Tendencia al desorden vs. capacidad de mantener el orden importando energía/información.</li>
+            </ul>
+            <p>
+                <strong>Aplicación empresarial:</strong> La TGS permite modelar una organización como un
+                <em>sistema abierto</em> que intercambia materia, energía e información con su entorno
+                (proveedores, clientes, gobierno, mercado). A continuación, aplicaremos estos conceptos a
+                <strong>TECNOCELL S.A.</strong>, una fábrica mediana de celulares ubicada en Argentina.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 2: LA EMPRESA -->
+        <section class="section" id="empresa">
+            <h3><span class="icon">🏭</span> 2. TECNOCELL S.A. — Fábrica Mediana de Celulares</h3>
+            <p>
+                <strong>TECNOCELL S.A.</strong> es una empresa mediana (aproximadamente 180 empleados)
+                dedicada al diseño, ensamblaje, control de calidad y distribución de teléfonos celulares
+                de gama media. Opera en un mercado competitivo, importando componentes clave y
+                ensamblando localmente. Su estructura organizacional abarca desde la recepción de
+                materias primas hasta el servicio post-venta.
+            </p>
+            <p>
+                <strong>Misión:</strong> Producir dispositivos móviles accesibles y de calidad, integrando
+                tecnología actualizada con procesos eficientes.<br>
+                <strong>Visión:</strong> Ser líder regional en el segmento de celulares de gama media,
+                destacándose por la innovación y el servicio al cliente.
+            </p>
+            <h4>📍 Principales Áreas Funcionales (Subsistemas)</h4>
+            <p>
+                <span class="tag">Aprovisionamiento</span>
+                <span class="tag">Producción / Ensamblaje</span>
+                <span class="tag">Control de Calidad</span>
+                <span class="tag">Almacenamiento</span>
+                <span class="tag">Logística y Distribución</span>
+                <span class="tag">Ventas y Marketing</span>
+                <span class="tag">Servicio Post-Venta</span>
+                <span class="tag">Administración y RRHH</span>
+                <span class="tag">Sistema de Información Integrado</span>
+            </p>
+        </section>
+
+        <!-- SECCIÓN 3: DIAGRAMA SISTEMA GENERAL (Modelo TGS) -->
+        <section class="section" id="diagrama-general">
+            <h3><span class="icon">🔍</span> 3. Diagrama General del Sistema Empresa (Modelo TGS)</h3>
+            <p>
+                El siguiente esquema representa a <strong>TECNOCELL S.A.</strong> como un
+                <strong>sistema abierto</strong> según el modelo de Bertalanffy. Se observan las
+                <strong>ENTRADAS</strong> (insumos, información, energía), el <strong>PROCESO DE
+                    TRANSFORMACIÓN</strong> interno, las <strong>SALIDAS</strong> (productos, servicios,
+                residuos) y los lazos de <strong>RETROALIMENTACIÓN</strong> que permiten la mejora continua.
+                El entorno o <strong>suprasistema</strong> incluye el mercado, las regulaciones
+                gubernamentales, los competidores y la sociedad.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 1: Modelo Sistémico General de TECNOCELL S.A.</div>
+                <pre class="mermaid">
+flowchart TB
+    subgraph ENTORNO["🌍 SUPRASISTEMA / ENTORNO"]
+        direction LR
+        MERCADO["🏪 Mercado\n(demanda, competencia)"]
+        GOBIERNO["🏛️ Gobierno\n(regulaciones, impuestos)"]
+        SOCIEDAD["👥 Sociedad\n(tendencias, RSE)"]
+        PROVEEDORES["📦 Proveedores\n(componentes)"]
+    end
+
+    subgraph EMPRESA["🏭 TECNOCELL S.A. - SISTEMA ABIERTO"]
+        direction TB
+
+        ENTRADAS["📥 ENTRADAS\n• Componentes electrónicos\n• Pantallas, baterías\n• Mano de obra\n• Información de mercado\n• Capital financiero\n• Energía eléctrica"]
+
+        PROCESO["⚙️ PROCESO DE TRANSFORMACIÓN\n(Subsistemas internos)\n────────────────────\n• Aprovisionamiento\n• Ensamblaje (SMD + manual)\n• Control de Calidad\n• Empaquetado\n• Gestión administrativa\n• Sistema de Información"]
+
+        SALIDAS["📤 SALIDAS\n• Celulares terminados\n• Servicio post-venta\n• Residuos electrónicos\n• Información al mercado\n• Dividendos / Pagos"]
+
+        RETRO1["🔄 Retroalimentación\n(Encuestas clientes,\nindicadores de calidad,\nquejas, devoluciones)"]
+        RETRO2["🔄 Feedback interno\n(Reportes de producción,\nauditorías, KPIs)"]
+    end
+
+    ENTORNO -->|"Flujo de recursos\ne información"| ENTRADAS
+    ENTRADAS --> PROCESO
+    PROCESO --> SALIDAS
+    SALIDAS -->|"Productos y servicios"| ENTORNO
+    SALIDAS -->|"Datos de salida"| RETRO1
+    RETRO1 -->|"Ajustes y mejoras"| ENTRADAS
+    PROCESO -->|"Métricas internas"| RETRO2
+    RETRO2 -->|"Correcciones"| PROCESO
+
+    style EMPRESA fill:#f0f4fb,stroke:#1a3c6e,stroke-width:3px,rx:16
+    style ENTORNO fill:#fef9f3,stroke:#e8913a,stroke-width:2px,rx:16,stroke-dasharray: 6 3
+    style ENTRADAS fill:#e3f2e8,stroke:#2e7d32,stroke-width:2px
+    style PROCESO fill:#fff3e0,stroke:#e8913a,stroke-width:2px
+    style SALIDAS fill:#e8eaf6,stroke:#1a3c6e,stroke-width:2px
+    style RETRO1 fill:#fce4ec,stroke:#c62828,stroke-width:1.5px,stroke-dasharray: 5 2
+    style RETRO2 fill:#fce4ec,stroke:#c62828,stroke-width:1.5px,stroke-dasharray: 5 2
+                </pre>
+            </div>
+            <p>
+                <strong>Análisis TGS:</strong> Este diagrama ilustra la <em>apertura sistémica</em>:
+                TECNOCELL no puede existir aislada; necesita importar <strong>negentropía</strong>
+                (orden, recursos) del entorno para contrarrestar la <strong>entropía</strong> interna
+                (desgaste, obsolescencia, desorganización). La retroalimentación negativa corrige
+                desviaciones (ej.: un lote defectuoso activa ajustes en producción), mientras que la
+                retroalimentación positiva podría impulsar el crecimiento si las ventas aumentan
+                exponencialmente.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 4: JERARQUÍA DE SISTEMAS -->
+        <section class="section" id="jerarquia">
+            <h3><span class="icon">🏗️</span> 4. Jerarquía de Sistemas y Subsistemas</h3>
+            <p>
+                La TGS postula que los sistemas se organizan en <strong>niveles jerárquicos</strong>.
+                En TECNOCELL, podemos descomponer la empresa en subsistemas anidados, cada uno con
+                sus propias entradas, procesos y salidas. Esta <em>estructura fractal</em> permite
+                gestionar la complejidad.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 2: Jerarquía de Sistemas — De lo Macro a lo Micro</div>
+                <pre class="mermaid">
+graph TD
+    SUPRA["🌐 SUPRASISTEMA\nIndustria tecnológica argentina\nMercado global de celulares"]
+    SISTEMA["🏭 SISTEMA PRINCIPAL\nTECNOCELL S.A.\n(Empresa completa)"]
+
+    subgraph SUBSISTEMAS_N1["NIVEL 1: Grandes Subsistemas"]
+        APROV["📦 Aprovisionamiento"]
+        PROD["🔧 Producción"]
+        COMER["📈 Comercialización"]
+        ADMIN["📋 Administración"]
+    end
+
+    subgraph SUBSISTEMAS_N2["NIVEL 2: Subsistemas Específicos"]
+        COMPRAS["🛒 Compras\ny recepción"]
+        ALMACEN["🏬 Almacén de\ninsumos"]
+        ENSAMBLE["🔩 Ensamblaje\n(SMD + manual)"]
+        CALIDAD["✅ Control de\nCalidad"]
+        VENTAS["💵 Ventas"]
+        LOGISTICA["🚚 Logística y\nDistribución"]
+        POSTVENTA["🔧 Post-Venta"]
+        RRHH["👥 RRHH"]
+        FINANZAS["💰 Finanzas"]
+        SIST_INFO["💻 Sistema de\nInformación"]
+    end
+
+    SUPRA --> SISTEMA
+    SISTEMA --> APROV
+    SISTEMA --> PROD
+    SISTEMA --> COMER
+    SISTEMA --> ADMIN
+    APROV --> COMPRAS
+    APROV --> ALMACEN
+    PROD --> ENSAMBLE
+    PROD --> CALIDAD
+    COMER --> VENTAS
+    COMER --> LOGISTICA
+    COMER --> POSTVENTA
+    ADMIN --> RRHH
+    ADMIN --> FINANZAS
+    ADMIN --> SIST_INFO
+
+    style SUPRA fill:#fef3e0,stroke:#e8913a,stroke-width:3px
+    style SISTEMA fill:#dce8f5,stroke:#1a3c6e,stroke-width:3px
+    style APROV fill:#e8f5e9,stroke:#388e3c,stroke-width:2px
+    style PROD fill:#fff8e1,stroke:#f9a825,stroke-width:2px
+    style COMER fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style ADMIN fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px
+                </pre>
+            </div>
+            <p>
+                <strong>Principio de Jerarquía:</strong> Cada subsistema es un sistema en sí mismo
+                (puede analizarse con el modelo entrada-proceso-salida). Por ejemplo, el subsistema de
+                <strong>Control de Calidad</strong> recibe unidades ensambladas, aplica pruebas
+                (proceso) y entrega unidades aprobadas o rechazadas (salida), retroalimentando al
+                ensamblaje si se detectan fallas recurrentes.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 5: PROCESO PRODUCTIVO DETALLADO -->
+        <section class="section" id="proceso-productivo">
+            <h3><span class="icon">📱</span> 5. Proceso Productivo: Flujo de Fabricación de Celulares</h3>
+            <p>
+                El <strong>proceso de transformación central</strong> de TECNOCELL convierte componentes
+                electrónicos en teléfonos funcionales. A continuación, se detalla el flujo completo,
+                desde la recepción de insumos hasta el despacho del producto terminado, aplicando
+                los conceptos de <em>entrada-proceso-salida</em> en cada etapa.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 3: Flujo Detallado del Proceso Productivo</div>
+                <pre class="mermaid">
+flowchart LR
+    subgraph RECEPCION["📥 RECEPCIÓN DE INSUMOS"]
+        A1["Proveedor PCB\n(placas base)"]
+        A2["Proveedor Pantallas\n(LCD/OLED)"]
+        A3["Proveedor Baterías\n(Li-Ion)"]
+        A4["Proveedor Carcasas\ny botonería"]
+        A5["Proveedor Empaques\ny manuales"]
+    end
+
+    subgraph ALMACEN_INSUMOS["🏬 ALMACÉN DE INSUMOS"]
+        B1["Control de inventario\n(Sistema ERP)"]
+        B2["Acondicionamiento\nanti-estático"]
+    end
+
+    subgraph ENSAMBLE["🔧 LÍNEA DE ENSAMBLE"]
+        C1["Estación 1:\nMontaje SMD\n(soldadura superficial)"]
+        C2["Estación 2:\nColocación de\npantalla y flex"]
+        C3["Estación 3:\nInstalación de\nbatería y módulos"]
+        C4["Estación 4:\nCierre de carcasa\ny atornillado"]
+        C5["Estación 5:\nCarga inicial\nde firmware"]
+    end
+
+    subgraph CALIDAD["✅ CONTROL DE CALIDAD"]
+        D1["Test funcional\n(pantalla, audio,\ncámara, botones)"]
+        D2["Test de batería\ny carga"]
+        D3["Test de conectividad\n(WiFi, BT, 4G/5G)"]
+        D4["Inspección visual\ny cosmética"]
+        D5{"¿Aprueba?"}
+    end
+
+    subgraph EMPAQUE["📦 EMPAQUE Y ALMACÉN PT"]
+        E1["Empaquetado\ncon accesorios"]
+        E2["Etiquetado IMEI\ny serializado"]
+        E3["Almacén de\nProducto Terminado"]
+    end
+
+    subgraph DISTRIBUCION["🚚 DISTRIBUCIÓN"]
+        F1["Preparación\nde pedidos"]
+        F2["Despacho a\ncentros de venta"]
+        F3["Entrega a\ncliente final"]
+    end
+
+    REPROCESO["🔄 REPROCESO\n(reparación o\nreemplazo de fallas)"]
+
+    RECEPCION --> ALMACEN_INSUMOS
+    ALMACEN_INSUMOS --> ENSAMBLE
+    ENSAMBLE --> CALIDAD
+    CALIDAD --> D5
+    D5 -->|"✅ SÍ"| EMPAQUE
+    D5 -->|"❌ NO (falla leve)"| REPROCESO
+    REPROCESO --> ENSAMBLE
+    D5 -->|"❌ NO (falla grave)"| DESCARTE["🗑️ Descarte /\nReciclaje"]
+    EMPAQUE --> DISTRIBUCION
+
+    style RECEPCION fill:#e3f2e8,stroke:#2e7d32
+    style ALMACEN_INSUMOS fill:#fff8e1,stroke:#f9a825
+    style ENSAMBLE fill:#fff3e0,stroke:#e8913a,stroke-width:2px
+    style CALIDAD fill:#e8eaf6,stroke:#283593,stroke-width:2px
+    style EMPAQUE fill:#e0f2f1,stroke:#00695c
+    style DISTRIBUCION fill:#fce4ec,stroke:#ad1457
+    style REPROCESO fill:#ffebee,stroke:#c62828,stroke-dasharray: 4 2
+    style DESCARTE fill:#eceff1,stroke:#546e7a
+                </pre>
+            </div>
+            <p>
+                <strong>Análisis TGS del proceso:</strong> Cada estación de ensamblaje es un
+                <em>subsistema</em> que recibe una entrada semi-elaborada, agrega valor (proceso) y
+                entrega una salida más completa. La <strong>retroalimentación negativa</strong> del
+                control de calidad (reproceso) mantiene la <strong>homeostasis</strong> del sistema
+                productivo, asegurando que los productos cumplan estándares. La
+                <strong>sinergia</strong> se manifiesta cuando todas las estaciones coordinadas
+                producen un celular funcional que ninguna estación podría crear individualmente.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 6: RETROALIMENTACIÓN Y HOMEOSTASIS -->
+        <section class="section" id="retroalimentacion">
+            <h3><span class="icon">🔄</span> 6. Retroalimentación, Homeostasis y Equifinalidad</h3>
+            <p>
+                La <strong>retroalimentación (feedback)</strong> es el mecanismo por el cual el sistema
+                recibe información sobre su propio desempeño y se ajusta. En TECNOCELL, existen
+                múltiples lazos de retroalimentación que garantizan la <strong>homeostasis</strong>
+                (equilibrio dinámico) y la <strong>equifinalidad</strong> (capacidad de alcanzar metas
+                por distintos caminos).
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 4: Lazos de Retroalimentación en TECNOCELL</div>
+                <pre class="mermaid">
+flowchart TB
+    subgraph FEEDBACK_NEGATIVO["🔴 RETROALIMENTACIÓN NEGATIVA (Correctora / Homeostática)"]
+        direction TB
+        FN1["📉 Aumento de quejas\npor batería defectuosa"] --> FN2["🔍 Análisis de causa raíz\n(Ingeniería + Calidad)"]
+        FN2 --> FN3["🔧 Ajuste en proveedor\nde baterías"]
+        FN3 --> FN4["✅ Disminución de\nfallas en batería"]
+        FN4 -->|"Equilibrio restaurado"| FN1
+    end
+
+    subgraph FEEDBACK_POSITIVO["🟢 RETROALIMENTACIÓN POSITIVA (Amplificadora / Crecimiento)"]
+        direction TB
+        FP1["📈 Aumento de ventas\npor buena reputación"] --> FP2["💰 Mayor inversión\nen marketing"]
+        FP2 --> FP3["📢 Mayor visibilidad\nde la marca"]
+        FP3 --> FP4["📈 Más ventas\n(círculo virtuoso)"]
+        FP4 -->|"Refuerza"| FP1
+    end
+
+    EQUIFINALIDAD["🎯 EQUIFINALIDAD\n─────────────────\nTECNOCELL puede alcanzar\nsus metas de producción\npor distintos caminos:\n• Más turnos de trabajo\n• Automatización\n• Tercerización parcial\n→ Todos llevan al mismo\nvolumen objetivo."]
+
+    FEEDBACK_NEGATIVO -.->|"Ambos mecanismos\ncoexisten"| FEEDBACK_POSITIVO
+    FEEDBACK_NEGATIVO -->|"Contribuye a"| EQUIFINALIDAD
+    FEEDBACK_POSITIVO -->|"Contribuye a"| EQUIFINALIDAD
+
+    style FEEDBACK_NEGATIVO fill:#fce4ec,stroke:#c62828,stroke-width:2px,rx:12
+    style FEEDBACK_POSITIVO fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px,rx:12
+    style EQUIFINALIDAD fill:#fff3e0,stroke:#e8913a,stroke-width:3px,rx:16
+                </pre>
+            </div>
+            <div class="highlight-box">
+                💡 <strong>Homeostasis empresarial:</strong> Así como el cuerpo humano mantiene su
+                temperatura, TECNOCELL mantiene su calidad y eficiencia mediante ajustes continuos.
+                Si las quejas aumentan (desequilibrio), el sistema de calidad actúa como un
+                "termostato" para volver al estado deseado.
+            </div>
+        </section>
+
+        <!-- SECCIÓN 7: SINERGIA Y PROPIEDADES EMERGENTES -->
+        <section class="section" id="sinergia">
+            <h3><span class="icon">✨</span> 7. Sinergia y Propiedades Emergentes</h3>
+            <p>
+                La <strong>sinergia</strong> es uno de los conceptos más poderosos de la TGS: el
+                sistema completo posee <strong>propiedades emergentes</strong> que ninguna de sus
+                partes tiene por separado. Un montón de componentes electrónicos no es un celular;
+                la interacción organizada de esos componentes <em>hace surgir</em> un dispositivo
+                inteligente capaz de comunicarse globalmente.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 5: Sinergia — De las Partes al Todo</div>
+                <pre class="mermaid">
+graph LR
+    subgraph PARTES["🧩 PARTES INDIVIDUALES\n(Sin interacción organizada)"]
+        P1["🔩 PCB sola"]
+        P2["📺 Pantalla sola"]
+        P3["🔋 Batería sola"]
+        P4["📦 Carcasa sola"]
+        P5["💾 Software solo"]
+    end
+
+    subgraph INTERACCION["🔗 INTERACCIÓN ORGANIZADA\n(Proceso de ensamblaje + integración)"]
+        I1["Ensamblaje físico"]
+        I2["Conexión eléctrica"]
+        I3["Carga de firmware"]
+        I4["Calibración"]
+    end
+
+    subgraph TODO["📱 SISTEMA COMPLETO\n(TECNOCELL X500)"]
+        T1["Propiedad emergente:\n📞 Comunicación telefónica"]
+        T2["Propiedad emergente:\n📷 Captura de fotos"]
+        T3["Propiedad emergente:\n🌐 Navegación web"]
+        T4["Propiedad emergente:\n🎵 Reproducción multimedia"]
+        T5["Propiedad emergente:\n📍 Geolocalización GPS"]
+    end
+
+    PARTES --> INTERACCION
+    INTERACCION --> TODO
+
+    style PARTES fill:#eceff1,stroke:#78909c,stroke-dasharray: 3 3
+    style INTERACCION fill:#fff8e1,stroke:#f9a825,stroke-width:2px
+    style TODO fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,rx:14
+                </pre>
+            </div>
+            <p>
+                <strong>Reflexión TGS:</strong> La sinergia explica por qué la gestión empresarial
+                no puede limitarse a optimizar cada departamento por separado. Las interacciones
+                entre subsistemas son tan importantes como los subsistemas mismos. Un equipo de
+                ensamblaje excelente no sirve si el control de calidad falla; la <em>coordinación
+                    sistémica</em> es la verdadera fuente de valor.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 8: ENTROPÍA Y NEGENTROPÍA -->
+        <section class="section" id="entropia">
+            <h3><span class="icon">⚡</span> 8. Entropía y Negentropía en la Organización</h3>
+            <p>
+                La <strong>entropía</strong> (tendencia al desorden) amenaza constantemente a cualquier
+                sistema. En una empresa, se manifiesta como desgaste de maquinaria, obsolescencia
+                tecnológica, rotación de personal, pérdida de información, etc. Para sobrevivir,
+                TECNOCELL debe importar <strong>negentropía</strong>: energía, información, recursos
+                frescos y conocimiento que restauren el orden.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 6: Entropía vs. Negentropía en TECNOCELL</div>
+                <pre class="mermaid">
+flowchart TB
+    subgraph ENTROPIA["🔻 FUERZAS ENTÓPICAS (Desorden)"]
+        E1["🛠️ Desgaste de equipos\nSMD y herramientas"]
+        E2["📉 Obsolescencia de\ncomponentes tecnológicos"]
+        E3["👋 Rotación de personal\ncapacitado"]
+        E4["📛 Pérdida de información\nen procesos"]
+        E5["📦 Deterioro de insumos\nen almacén"]
+    end
+
+    subgraph NEGENTROPIA["🔺 FUERZAS NEGENTRÓPICAS (Orden / Energía)"]
+        N1["🔧 Mantenimiento\npreventivo y correctivo"]
+        N2["📚 Capacitación continua\ndel personal"]
+        N3["💻 Actualización de\nsistemas (ERP, firmware)"]
+        N4["📋 Documentación de\nprocesos (ISO 9001)"]
+        N5["🤝 Alianzas con nuevos\nproveedores"]
+        N6["🔬 Innovación e\nI+D interna"]
+    end
+
+    EQUILIBRIO["⚖️ EQUILIBRIO DINÁMICO\n─────────────────\nTECNOCELL logra mantener\nsu estructura y funcionamiento\ncuando las fuerzas negentrópicas\nsuperan o igualan a las entrópicas.\nEsto requiere inversión constante."]
+
+    ENTROPIA -->|"Degrada"| EQUILIBRIO
+    NEGENTROPIA -->|"Restaura y construye"| EQUILIBRIO
+
+    style ENTROPIA fill:#ffebee,stroke:#c62828,stroke-width:2px
+    style NEGENTROPIA fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style EQUILIBRIO fill:#fff3e0,stroke:#e8913a,stroke-width:3px,rx:14
+                </pre>
+            </div>
+            <p>
+                <strong>Visión de Bertalanffy:</strong> Los sistemas abiertos como TECNOCELL evitan
+                la entropía máxima (muerte del sistema) precisamente porque intercambian con el
+                entorno. La <strong>información</strong> es un recurso negentrópico clave: los
+                reportes de ventas, las auditorías de calidad y el feedback de clientes son
+                "combustible" para mantener el orden interno.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 9: SISTEMA DE INFORMACIÓN INTEGRADO -->
+        <section class="section" id="sistema-info">
+            <h3><span class="icon">💻</span> 9. Sistema de Información: El Tejido Conector</h3>
+            <p>
+                El <strong>Sistema de Información (SI)</strong> es el subsistema transversal que
+                conecta a todos los demás, facilitando la comunicación, la toma de decisiones y
+                la retroalimentación. En TECNOCELL, un ERP (Enterprise Resource Planning) integra
+                los datos de compras, producción, inventarios, ventas y finanzas.
+            </p>
+            <div class="diagram-wrapper">
+                <div class="diagram-title">📊 Diagrama 7: Sistema de Información como Eje Transversal</div>
+                <pre class="mermaid">
+graph TD
+    SI["💻 SISTEMA DE INFORMACIÓN INTEGRADO (ERP + BI)\n────────────────────────────\n• Base de datos centralizada\n• Módulo de compras\n• Módulo de producción\n• Módulo de inventarios\n• Módulo de ventas y CRM\n• Módulo financiero-contable\n• Dashboard de KPIs"]
+
+    APROV2["📦 Aprovisionamiento"] -->|"Pedidos, stocks"| SI
+    PROD2["🔧 Producción"] -->|"Avances, mermas"| SI
+    CALIDAD2["✅ Calidad"] -->|"Resultados test"| SI
+    VENTAS2["💵 Ventas"] -->|"Órdenes, clientes"| SI
+    ADMIN2["📋 Administración"] -->|"Costos, nómina"| SI
+    SI -->|"Reportes, alertas,\nindicadores"| GERENCIA["👔 Gerencia General\n(Toma de decisiones)"]
+    GERENCIA -->|"Estrategias, ajustes"| APROV2
+    GERENCIA -->|"Estrategias, ajustes"| PROD2
+    GERENCIA -->|"Estrategias, ajustes"| VENTAS2
+
+    style SI fill:#e3f2fd,stroke:#0d47a1,stroke-width:3px,rx:14
+    style GERENCIA fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px,rx:10
+                </pre>
+            </div>
+            <p>
+                <strong>Rol sistémico del SI:</strong> Actúa como el <em>sistema nervioso</em> de la
+                organización, recogiendo señales de todos los subsistemas y distribuyendo información
+                procesada. Sin él, la <strong>interrelación</strong> entre partes sería caótica y la
+                retroalimentación, lenta o inexistente.
+            </p>
+        </section>
+
+        <!-- SECCIÓN 10: CONCLUSIÓN -->
+        <section class="section" id="conclusion">
+            <h3><span class="icon">📝</span> 10. Conclusión y Reflexión Final</h3>
+            <p>
+                El análisis de <strong>TECNOCELL S.A.</strong> desde la <strong>Teoría General de
+                    Sistemas de Ludwig von Bertalanffy</strong> nos permite comprender la empresa no como
+                una suma de departamentos aislados, sino como un <strong>todo organizado</strong>,
+                dinámico y en constante interacción con su entorno. Los diagramas presentados
+                evidencian:
+            </p>
+            <ul>
+                <li>La <strong>apertura sistémica</strong> y la dependencia del entorno.</li>
+                <li>La <strong>jerarquía</strong> de subsistemas anidados que facilitan la gestión de la complejidad.</li>
+                <li>Los <strong>flujos de entrada-proceso-salida</strong> en cada nivel de la organización.</li>
+                <li>La <strong>retroalimentación</strong> como mecanismo esencial de corrección y crecimiento.</li>
+                <li>La <strong>sinergia</strong> que genera propiedades emergentes (el celular funcional) imposibles en las partes aisladas.</li>
+                <li>La lucha constante entre <strong>entropía y negentropía</strong> que define la supervivencia empresarial.</li>
+            </ul>
+            <div class="highlight-box">
+                🎓 <strong>Para el Profesor Omar Bazar — 7°3 Modelos y Sistemas:</strong> Este proyecto
+                demuestra que la TGS no es solo una teoría abstracta, sino una <em>herramienta práctica</em>
+                para modelar, diagnosticar y mejorar organizaciones reales. Los esquemas tipo Draw.io
+                facilitan la visualización de las interrelaciones sistémicas, haciendo tangible el
+                pensamiento de Bertalanffy. La fábrica de celulares TECNOCELL S.A. es un ejemplo
+                concreto de cómo los principios sistémicos se aplican en la industria tecnológica
+                actual.
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <p>
+            📘 <strong>Escuela Técnica N°1 de Muñiz</strong> — 7°3 Modelos y Sistemas — Prof. Omar Bazar<br>
+            Proyecto basado en la <strong>Teoría General de Sistemas</strong> de Ludwig von Bertalanffy<br>
+            Alumno/a: _______________________ &nbsp;|&nbsp; Fecha: Junio 2026
+        </p>
+        <p style="margin-top:6px; font-size:0.78rem; color:#aaa;">
+            Esquemas generados con Mermaid.js · Estilo visual inspirado en Draw.io · Diagramas interactivos SVG
+        </p>
+    </footer>
+
+    <!-- ==================== INICIALIZAR MERMAID ==================== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            mermaid.initialize({
+                startOnLoad: true,
+                theme: 'default',
+                themeVariables: {
+                    fontFamily: '"Segoe UI", "Helvetica Neue", sans-serif',
+                    fontSize: '14px',
+                    primaryColor: '#eef3fa',
+                    primaryBorderColor: '#1a3c6e',
+                    primaryTextColor: '#2c2c2c',
+                    lineColor: '#5a7d9a',
+                    secondaryColor: '#fff8e1',
+                    tertiaryColor: '#fce4ec',
+                    edgeLabelBackground: '#ffffff',
+                    clusterBkg: '#fafbfd',
+                    clusterBorder: '#dce3ea',
+                    titleColor: '#1a3c6e',
+                    nodeTextColor: '#2c2c2c',
+                },
+                flowchart: {
+                    useMaxWidth: true,
+                    htmlLabels: true,
+                    curve: 'basis',
+                    padding: 18,
+                    nodeSpacing: 50,
+                    rankSpacing: 55,
+                },
+                sequence: {
+                    useMaxWidth: true,
+                    diagramMarginX: 40,
+                    diagramMarginY: 20,
+                },
+            });
+            // Forzar renderizado por si hay cambios dinámicos
+            setTimeout(() => {
+                mermaid.run();
+            }, 100);
+        });
+    </script>
+</body>
+</html>
