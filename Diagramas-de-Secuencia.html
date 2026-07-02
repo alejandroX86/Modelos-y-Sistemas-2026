@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagramas de Secuencia - Guía Completa</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .intro-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+
+        .intro-section h2 {
+            color: #e74c3c;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        .elements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .element-card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+
+        .element-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .element-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .element-icon {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: #e74c3c;
+            transform: translateY(-2px);
+        }
+
+        .diagram-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s;
+        }
+
+        .diagram-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .diagram-container {
+            background: #f8f9fa;
+            border: 3px solid #34495e;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 20px 0;
+            overflow-x: auto;
+            min-height: 600px;
+            position: relative;
+        }
+
+        .sequence-diagram {
+            min-width: 900px;
+            position: relative;
+        }
+
+        .lifeline {
+            display: inline-block;
+            vertical-align: top;
+            margin: 0 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .actor-box {
+            background: #3498db;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+        }
+
+        .actor-stick-figure {
+            width: 60px;
+            height: 100px;
+            margin: 0 auto 10px;
+            position: relative;
+        }
+
+        .stick-head {
+            width: 30px;
+            height: 30px;
+            background: #3498db;
+            border-radius: 50%;
+            margin: 0 auto;
+            border: 3px solid #2c3e50;
+        }
+
+        .stick-body {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            margin: 5px auto;
+            clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+            border: 3px solid #2c3e50;
+        }
+
+        .lifeline-line {
+            width: 4px;
+            height: 550px;
+            background: #34495e;
+            margin: 0 auto;
+            position: relative;
+            border-radius: 2px;
+        }
+
+        .activation {
+            position: absolute;
+            background: #f39c12;
+            width: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 2px solid #e67e22;
+            border-radius: 3px;
+            z-index: 5;
+        }
+
+        .message {
+            position: absolute;
+            height: 2px;
+            background: #e74c3c;
+            z-index: 8;
+        }
+
+        .message-arrow {
+            position: absolute;
+            right: -8px;
+            top: -6px;
+            width: 0;
+            height: 0;
+            border-top: 7px solid transparent;
+            border-bottom: 7px solid transparent;
+            border-left: 12px solid #e74c3c;
+        }
+
+        .message-return {
+            background: #27ae60;
+            border-style: dashed;
+        }
+
+        .message-return .message-arrow {
+            border-left: none;
+            border-right: 12px solid #27ae60;
+            right: auto;
+            left: -8px;
+        }
+
+        .message-label {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+            border: 1px solid #bdc3c7;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 9;
+        }
+
+        .message-number {
+            position: absolute;
+            top: -25px;
+            left: 10px;
+            background: #e74c3c;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .note {
+            position: absolute;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-left: 5px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            max-width: 250px;
+            font-size: 13px;
+            z-index: 10;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .note::before {
+            content: "📝";
+            margin-right: 5px;
+        }
+
+        .fragment-box {
+            position: absolute;
+            border: 2px solid #9b59b6;
+            border-radius: 8px;
+            background: rgba(155, 89, 182, 0.1);
+            padding: 10px;
+        }
+
+        .fragment-label {
+            position: absolute;
+            top: -12px;
+            left: 10px;
+            background: #9b59b6;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .explanation-panel {
+            background: #ecf0f1;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 5px solid #3498db;
+        }
+
+        .explanation-panel h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .step-list {
+            list-style: none;
+            counter-reset: step-counter;
+        }
+
+        .step-list li {
+            counter-increment: step-counter;
+            padding: 15px;
+            margin: 10px 0;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            position: relative;
+            padding-left: 50px;
+        }
+
+        .step-list li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .legend {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border: 2px solid #dee2e6;
+        }
+
+        .legend h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            gap: 15px;
+        }
+
+        .legend-symbol {
+            width: 60px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-info {
+            background: #3498db;
+        }
+
+        .btn-info:hover {
+            background: #2980b9;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .highlight {
+            animation: highlight 2s ease-in-out;
+        }
+
+        @keyframes highlight {
+            0%, 100% { background: transparent; }
+            50% { background: #fff3cd; }
+        }
+
+        @media print {
+            .nav-tabs, .btn, .controls { display: none; }
+            .diagram-section { display: block !important; page-break-after: always; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 DIAGRAMAS DE SECUENCIA</h1>
+            <h2>Guía Completa con 6 Ejemplos Prácticos</h2>
+            <div class="header-info">
+                <p><strong>Materia:</strong> Modelos y Sistemas | <strong>Curso:</strong> 7°3°</p>
+                <p><strong>Escuela:</strong> Escuela Técnica N°1 de Muniz</p>
+                <p><strong>Profesor:</strong> Omar Alejandro Bazar</p>
+                <p><strong>Año:</strong> 2026</p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN INTRODUCTORIA -->
+        <div class="intro-section">
+            <h2>🎯 ¿Qué es un Diagrama de Secuencia?</h2>
+            <p style="font-size: 16px; line-height: 1.8; margin-bottom: 20px;">
+                Un <strong>Diagrama de Secuencia</strong> es un diagrama de interacción que muestra cómo los objetos interactúan 
+                entre sí en una secuencia temporal. Es fundamental en el análisis y diseño de sistemas porque permite visualizar 
+                el flujo de mensajes entre los diferentes participantes del sistema.
+            </p>
+
+            <div class="elements-grid">
+                <div class="element-card">
+                    <h3><div class="element-icon">👤</div>Línea de Vida (Lifeline)</h3>
+                    <p>Representa la participación de un objeto o actor en la interacción. Se muestra como una línea vertical 
+                    que desciende desde el participante. Indica la existencia del objeto en el tiempo.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">⬛</div>Caja de Activación</h3>
+                    <p>Rectángulo delgado y vertical que se superpone a la línea de vida. Indica el período durante el cual 
+                    el objeto está ejecutando una operación o está activo procesando un mensaje.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">➡️</div>Mensaje Sincrónico</h3>
+                    <p>Flecha sólida con punta cerrada. El emisor espera una respuesta antes de continuar. 
+                    Representa una llamada a método o función que bloquea al emisor hasta completarse.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">⇢</div>Mensaje Asincrónico</h3>
+                    <p>Flecha con línea punteada y punta abierta. El emisor no espera respuesta y continúa 
+                    su ejecución inmediatamente. Usado para eventos o notificaciones.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">⬅️</div>Mensaje de Retorno</h3>
+                    <p>Flecha punteada que regresa al emisor original. Indica la respuesta o el valor 
+                    retornado de una operación. Es implícito en mensajes sincrónicos.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">📋</div>Nota</h3>
+                    <p>Rectángulo con esquina doblada que contiene comentarios o restricciones. 
+                    Proporciona información adicional sobre elementos del diagrama.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">🔄</div>Fragmento Combined</h3>
+                    <p>Marco que agrupa mensajes con condiciones especiales: alt (alternativa), 
+                    opt (opcional), loop (bucle), par (paralelo). Define comportamientos condicionales.</p>
+                </div>
+
+                <div class="element-card">
+                    <h3><div class="element-icon">⏱️</div>Línea de Tiempo</h3>
+                    <p>El tiempo fluye de arriba hacia abajo. Los mensajes en la parte superior ocurren 
+                    antes que los de la parte inferior. La secuencia temporal es fundamental.</p>
+                </div>
+            </div>
+
+            <div class="legend">
+                <h3>📖 Leyenda de Símbolos</h3>
+                <div class="legend-item">
+                    <div class="legend-symbol" style="background: #3498db; border-radius: 5px; color: white; font-weight: bold;">Actor</div>
+                    <span>Participante externo al sistema (usuario, sistema externo)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol" style="background: #9b59b6; border-radius: 5px; color: white; font-weight: bold;">Objeto</div>
+                    <span>Clase o componente del sistema que participa en la interacción</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol" style="border-bottom: 3px solid #e74c3c; width: 50px;"></div>
+                    <span>Mensaje Sincrónico (llamada bloqueante)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol" style="border-bottom: 3px dashed #27ae60; width: 50px;"></div>
+                    <span>Mensaje de Retorno/Respuesta</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-symbol" style="background: #f39c12; height: 30px; width: 20px; border: 2px solid #e67e22;"></div>
+                    <span>Período de activación/ ejecución</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showDiagram(1)">1️⃣ Login/Autenticación</button>
+            <button class="nav-tab" onclick="showDiagram(2)">2️⃣ Compra Online</button>
+            <button class="nav-tab" onclick="showDiagram(3)">3️⃣ Registro Usuario</button>
+            <button class="nav-tab" onclick="showDiagram(4)">4️⃣ Búsqueda Productos</button>
+            <button class="nav-tab" onclick="showDiagram(5)">5️⃣ Proceso Pago</button>
+            <button class="nav-tab" onclick="showDiagram(6)">6️⃣ Tracking Delivery</button>
+        </div>
+
+        <!-- DIAGRAMA 1: LOGIN -->
+        <div id="diagram1" class="diagram-section active">
+            <h2>🔐 Diagrama 1: Sistema de Login/Autenticación</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Este diagrama muestra el proceso completo de autenticación de un usuario en el sistema, 
+                incluyendo validación de credenciales y generación de token de sesión.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(1)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(1)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram1">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 50px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Usuario
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">Interface<br>Login</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 80px; height: 400px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Controlador<br>Auth</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 120px; height: 320px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">Base de<br>Datos</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 200px; height: 120px;"></div>
+                            <div class="activation" style="top: 360px; height: 80px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 180px; width: 130px; top: 100px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">Ingresar credenciales<br>(usuario/password)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 340px; width: 130px; top: 140px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">validarLogin(user, pass)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 500px; width: 130px; top: 220px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">consultarUsuario(user)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 500px; width: 130px; top: 280px;">
+                        <div class="message-label">datosUsuario</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 500px; width: 130px; top: 360px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">generarToken(userId)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 500px; width: 130px; top: 420px;">
+                        <div class="message-label">tokenSession</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 340px; width: 130px; top: 460px;">
+                        <div class="message-label">resultadoAutenticación</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 180px; width: 130px; top: 500px;">
+                        <div class="message-label">redireccionar(dashboard)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 700px; top: 200px;">
+                        <strong>Validación:</strong><br>
+                        - Verificar formato email<br>
+                        - Password encriptado<br>
+                        - Usuario activo
+                    </div>
+
+                    <div class="note" style="left: 50px; top: 450px;">
+                        <strong>Seguridad:</strong><br>
+                        Token JWT válido<br>
+                        por 24 horas
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación Detallada del Proceso</h3>
+                <ol class="step-list">
+                    <li><strong>Inicio de Sesión:</strong> El usuario ingresa sus credenciales (nombre de usuario y contraseña) 
+                    en la interfaz de login. Estos datos son capturados por el formulario.</li>
+                    
+                    <li><strong>Validación de Formato:</strong> La interfaz realiza validaciones básicas del lado del cliente: 
+                    verifica que los campos no estén vacíos, que el email tenga formato correcto y que la contraseña cumpla 
+                    con los requisitos mínimos de seguridad.</li>
+                    
+                    <li><strong>Consulta a Base de Datos:</strong> El controlador de autenticación consulta la base de datos 
+                    buscando un usuario que coincida con el nombre de usuario proporcionado. Se utiliza una consulta parametrizada 
+                    para prevenir inyección SQL.</li>
+                    
+                    <li><strong>Verificación de Contraseña:</strong> Si se encuentra el usuario, se compara la contraseña 
+                    ingresada (previamente hasheada con el mismo algoritmo) con el hash almacenado en la base de datos. 
+                    Nunca se almacenan contraseñas en texto plano.</li>
+                    
+                    <li><strong>Generación de Token:</strong> Si las credenciales son correctas, se genera un token JWT 
+                    (JSON Web Token) que contiene información del usuario (ID, rol, permisos) y una fecha de expiración. 
+                    Este token se firma con una clave secreta.</li>
+                    
+                    <li><strong>Registro de Sesión:</strong> Se registra el inicio de sesión en la tabla de auditoría, 
+                    guardando IP, fecha/hora, y dispositivo utilizado. Esto es importante para seguridad y trazabilidad.</li>
+                    
+                    <li><strong>Redirección:</strong> El token se almacena en el localStorage o cookies del navegador y 
+                    el usuario es redirigido al dashboard principal del sistema. Todas las peticiones posteriores incluirán 
+                    este token en el header Authorization.</li>
+                </ol>
+
+                <div style="margin-top: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+                    <strong>⚠️ Consideraciones de Seguridad:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Uso de HTTPS para encriptar la comunicación</li>
+                        <li>Rate limiting para prevenir ataques de fuerza bruta</li>
+                        <li>Hash de contraseñas con bcrypt o argon2</li>
+                        <li>Token con expiración corta y refresh token</li>
+                        <li>Validación de CSRF tokens</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 2: COMPRA ONLINE -->
+        <div id="diagram2" class="diagram-section">
+            <h2>🛒 Diagrama 2: Proceso de Compra Online</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Diagrama que representa el flujo completo de una compra en un e-commerce, desde la selección 
+                de productos hasta la confirmación del pedido, incluyendo validación de stock y cálculo de envío.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(2)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(2)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram2">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 30px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Cliente
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">Carrito de<br>Compras</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 80px; height: 550px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Sistema de<br>Pedidos</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 180px; height: 400px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">Inventario/Stock</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 250px; height: 100px;"></div>
+                            <div class="activation" style="top: 450px; height: 80px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #27ae60;">Pasarela de<br>Pago</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 380px; height: 120px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 140px; width: 130px; top: 100px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">agregarProducto(id, cant)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 140px; width: 130px; top: 160px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">procederAlPago()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 200px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">crearPedido(datos)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 460px; width: 130px; top: 270px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">verificarStock(productos)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 460px; width: 130px; top: 330px;">
+                        <div class="message-label">stockDisponible: true</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 620px; width: 130px; top: 400px;">
+                        <div class="message-number">5</div>
+                        <div class="message-label">procesarPago(monto, card)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 620px; width: 130px; top: 480px;">
+                        <div class="message-label">pagoAprobado: true<br>transaccionId: TX-123</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 460px; width: 130px; top: 520px;">
+                        <div class="message-number">6</div>
+                        <div class="message-label">actualizarStock(productos)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 300px; width: 130px; top: 560px;">
+                        <div class="message-label">pedidoConfirmado<br>nroPedido: PED-456</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 140px; width: 130px; top: 600px;">
+                        <div class="message-label">mostrarConfirmación()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Fragmento Alt -->
+                    <div class="fragment-box" style="left: 440px; top: 240px; width: 170px; height: 120px;">
+                        <div class="fragment-label">alt [stock insuficiente]</div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 800px; top: 300px;">
+                        <strong>Cálculo de Envío:</strong><br>
+                        - Peso total<br>
+                        - Código postal<br>
+                        - Tipo de envío
+                    </div>
+
+                    <div class="note" style="left: 30px; top: 500px;">
+                        <strong>Descuento:</strong><br>
+                        Aplicar cupón<br>
+                        si existe
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación del Proceso de Compra</h3>
+                <ol class="step-list">
+                    <li><strong>Agregar al Carrito:</strong> El cliente selecciona productos y los agrega al carrito de compras. 
+                    Cada producto incluye ID, cantidad, precio unitario y opciones seleccionadas (talle, color, etc.). 
+                    El carrito se mantiene en sesión o localStorage.</li>
+                    
+                    <li><strong>Iniciar Checkout:</strong> Cuando el cliente decide comprar, hace clic en "Proceder al Pago". 
+                    El sistema valida que el carrito no esté vacío y que el usuario esté logueado (si es requerido).</li>
+                    
+                    <li><strong>Crear Pedido:</strong> Se genera un nuevo registro de pedido con estado "Pendiente de Pago". 
+                    Se calcula el subtotal, impuestos, costo de envío (según ubicación y peso) y total final. 
+                    Se aplica cualquier descuento o cupón válido.</li>
+                    
+                    <li><strong>Verificación de Stock:</strong> Antes de procesar el pago, se consulta el sistema de inventario 
+                    para verificar que todos los productos estén disponibles en la cantidad solicitada. 
+                    Esto previene ventas de productos sin stock.</li>
+                    
+                    <li><strong>Procesamiento de Pago:</strong> Se envía la información de pago (tokenizada, nunca el número 
+                    de tarjeta completo) a la pasarela de pago (MercadoPago, Stripe, etc.). La pasarela valida con el banco 
+                    emisor de la tarjeta.</li>
+                    
+                    <li><strong>Actualización de Stock:</strong> Si el pago es aprobado, se decrementa el stock de los productos 
+                    comprados. Esto se hace en una transacción de base de datos para asegurar consistencia. 
+                    Si algún producto queda sin stock, se marca como "Agotado".</li>
+                    
+                    <li><strong>Confirmación:</strong> Se cambia el estado del pedido a "Confirmado", se genera un número 
+                    de pedido único y se envía un email de confirmación al cliente con el resumen de la compra y 
+                    el tiempo estimado de entrega.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 3: REGISTRO DE USUARIO -->
+        <div id="diagram3" class="diagram-section">
+            <h2>📝 Diagrama 3: Registro de Nuevo Usuario</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Proceso completo de registro de usuario incluyendo validación de datos, verificación de email único, 
+                encriptación de contraseña y envío de email de confirmación.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(3)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(3)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram3">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 30px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Nuevo Usuario
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">Formulario de<br>Registro</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 80px; height: 500px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Validador de<br>Datos</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 150px; height: 180px;"></div>
+                            <div class="activation" style="top: 400px; height: 100px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">Base de Datos<br>Usuarios</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 220px; height: 80px;"></div>
+                            <div class="activation" style="top: 450px; height: 100px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #27ae60;">Servicio de<br>Email</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 520px; height: 80px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 140px; width: 130px; top: 100px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">completarFormulario()<br>datos personales</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 140px; width: 130px; top: 170px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">submitRegistro()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 200px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">validarFormato(datos)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 460px; width: 130px; top: 270px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">emailExiste(email)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 460px; width: 130px; top: 330px;">
+                        <div class="message-label">existe: false</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 300px; width: 130px; top: 360px;">
+                        <div class="message-label">datosVálidos: true</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 420px;">
+                        <div class="message-number">5</div>
+                        <div class="message-label">guardarUsuario(userHash)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 460px; width: 130px; top: 500px;">
+                        <div class="message-label">userId: 12345<br>tokenConfirmación</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 620px; width: 130px; top: 540px;">
+                        <div class="message-number">6</div>
+                        <div class="message-label">enviarEmailConfirmación()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 140px; width: 130px; top: 580px;">
+                        <div class="message-label">mostrarMensaje()<br>"Registro exitoso"</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 800px; top: 200px;">
+                        <strong>Validaciones:</strong><br>
+                        - Email formato válido<br>
+                        - Password 8+ caracteres<br>
+                        - Teléfonos válidos<br>
+                        - DNI único
+                    </div>
+
+                    <div class="note" style="left: 30px; top: 400px;">
+                        <strong>Seguridad:</strong><br>
+                        Password hasheado<br>
+                        con bcrypt<br>
+                        (salt rounds: 10)
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación del Proceso de Registro</h3>
+                <ol class="step-list">
+                    <li><strong>Completar Formulario:</strong> El usuario ingresa sus datos personales: nombre, apellido, 
+                    email, teléfono, DNI, fecha de nacimiento y contraseña. El formulario incluye validación en tiempo 
+                    real (client-side) para mejorar la experiencia de usuario.</li>
+                    
+                    <li><strong>Validación de Formato:</strong> Al enviar el formulario, un validador verifica que todos 
+                    los campos cumplan con los requisitos: email con formato válido (regex), contraseña con mínimo 8 caracteres 
+                    incluyendo mayúsculas, números y símbolos, teléfono con formato correcto, DNI numérico y sin puntos.</li>
+                    
+                    <li><strong>Verificación de Unicidad:</strong> Se consulta la base de datos para verificar que el email 
+                    y el DNI no estén registrados previamente. Esto previene cuentas duplicadas. La consulta es indexada 
+                    para ser rápida incluso con millones de usuarios.</li>
+                    
+                    <li><strong>Encriptación de Contraseña:</strong> Antes de guardar, la contraseña se hashea usando bcrypt 
+                    con un salt único generado aleatoriamente. Nunca se guarda la contraseña en texto plano. 
+                    El salt se almacena junto al hash para permitir la verificación posterior.</li>
+                    
+                    <li><strong>Guardar Usuario:</strong> Se inserta el nuevo usuario en la base de datos con estado 
+                    "Pendiente de Confirmación". Se genera un token único de confirmación (UUID) que se almacena 
+                    en una tabla separada con fecha de expiración (24 horas).</li>
+                    
+                    <li><strong>Email de Confirmación:</strong> Se envía un email al usuario con un link de confirmación 
+                    que incluye el token. El email contiene instrucciones claras y un botón de acción. 
+                    Si el email no se puede enviar, se registra el error y se reintenta automáticamente.</li>
+                    
+                    <li><strong>Confirmación de Cuenta:</strong> Cuando el usuario hace clic en el link, se valida el token, 
+                    se cambia el estado a "Activo" y se redirige al login. El token se invalida inmediatamente después 
+                    de usar para prevenir reutilización.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 4: BÚSQUEDA DE PRODUCTOS -->
+        <div id="diagram4" class="diagram-section">
+            <h2>🔍 Diagrama 4: Búsqueda y Filtrado de Productos</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Sistema de búsqueda avanzada con filtros múltiples, ordenamiento, paginación y caché 
+                para optimizar el rendimiento de las consultas.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(4)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(4)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram4">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 30px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Cliente
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">Interfaz de<br>Búsqueda</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 80px; height: 550px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Motor de<br>Búsqueda</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 150px; height: 450px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">Caché Redis</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 200px; height: 80px;"></div>
+                            <div class="activation" style="top: 480px; height: 60px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #27ae60;">Base de Datos<br>Productos</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 320px; height: 120px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 140px; width: 130px; top: 100px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">ingresarTérminoBúsqueda()<br>+ aplicarFiltros()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 140px; width: 130px; top: 170px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">buscarProductos(query)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 220px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">get(cacheKey)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 300px; width: 130px; top: 260px;">
+                        <div class="message-label">cacheMiss: null</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 340px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">queryCompleja()<br>JOIN + WHERE + ORDER</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 300px; width: 130px; top: 420px;">
+                        <div class="message-label">resultados: [prod1, prod2...]<br>total: 156</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 300px; width: 130px; top: 500px;">
+                        <div class="message-number">5</div>
+                        <div class="message-label">set(cacheKey, results, TTL)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 140px; width: 130px; top: 560px;">
+                        <div class="message-label">mostrarResultados()<br>paginación: página 1/16</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Fragmento Opt -->
+                    <div class="fragment-box" style="left: 280px; top: 190px; width: 170px; height: 100px;">
+                        <div class="fragment-label">opt [cache hit]</div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 800px; top: 300px;">
+                        <strong>Filtros Disponibles:</strong><br>
+                        - Categoría<br>
+                        - Rango de precio<br>
+                        - Marca<br>
+                        - Stock disponible<br>
+                        - Rating mínimo
+                    </div>
+
+                    <div class="note" style="left: 30px; top: 300px;">
+                        <strong>Optimización:</strong><br>
+                        Índices en:<br>
+                        - nombre (FULLTEXT)<br>
+                        - precio<br>
+                        - categoría_id<br>
+                        - fecha_creación
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación del Sistema de Búsqueda</h3>
+                <ol class="step-list">
+                    <li><strong>Entrada de Búsqueda:</strong> El usuario ingresa términos de búsqueda en el input y puede 
+                    aplicar múltiples filtros simultáneos: categoría, rango de precios (min-max), marca, disponibilidad 
+                    de stock, rating mínimo de clientes, etc. La interfaz permite búsqueda en tiempo real (autocomplete) 
+                    o búsqueda tradicional con botón.</li>
+                    
+                    <li><strong>Procesamiento de Query:</strong> El motor de búsqueda recibe los parámetros y construye 
+                    una consulta optimizada. Limpia el texto de búsqueda (elimina caracteres especiales, normaliza acentos), 
+                    tokeniza en palabras clave y prepara los filtros para la consulta SQL o Elasticsearch.</li>
+                    
+                    <li><strong>Verificación de Caché:</strong> Antes de consultar la base de datos, se verifica si existe 
+                    una consulta idéntica en caché (Redis). Se genera una clave única basada en los parámetros de búsqueda 
+                    (hash MD5). Si hay cache hit, se retornan los resultados inmediatamente (5-10ms vs 200-500ms de DB).</li>
+                    
+                    <li><strong>Consulta a Base de Datos:</strong> Si no hay caché, se ejecuta una query compleja que incluye: 
+                    búsqueda FULLTEXT en nombre y descripción, JOIN con tablas de categorías y marcas, filtrado por rangos 
+                    de precio y stock, ordenamiento por relevancia/precio/fecha, y paginación (LIMIT/OFFSET). 
+                    Se usan índices para optimizar.</li>
+                    
+                    <li><strong>Almacenamiento en Caché:</strong> Los resultados se guardan en Redis con un TTL (Time To Live) 
+                    de 15 minutos. Esto reduce drásticamente la carga en la base de datos para búsquedas populares. 
+                    El caché se invalida automáticamente cuando se actualiza un producto.</li>
+                    
+                    <li><strong>Presentación de Resultados:</strong> Los resultados se muestran con paginación (20 productos 
+                    por página), destacando los términos buscados, mostrando imagen, precio, rating y disponibilidad. 
+                    Se incluye el total de resultados y tiempo de búsqueda. Se sugieren búsquedas relacionadas.</li>
+                </ol>
+
+                <div style="margin-top: 20px; padding: 15px; background: #d4edda; border-radius: 8px; border-left: 4px solid #28a745;">
+                    <strong>⚡ Optimizaciones Implementadas:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>Índices compuestos en columnas frecuentemente filtradas</li>
+                        <li>Caché de consultas frecuentes (Redis/Memcached)</li>
+                        <li>Búsqueda full-text indexada (Elasticsearch opcional)</li>
+                        <li>Paginación con keyset en lugar de offset para grandes volúmenes</li>
+                        <li>Lazy loading de imágenes y datos adicionales</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 5: PROCESO DE PAGO -->
+        <div id="diagram5" class="diagram-section">
+            <h2>💳 Diagrama 5: Procesamiento de Pago con Tarjeta</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Flujo seguro de procesamiento de pagos integrando pasarela de pago, validación de tarjeta, 
+                verificación de fondos, y confirmación de transacción con reintentos automáticos.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(5)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(5)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram5">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 20px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Cliente
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">Checkout/</div>
+                        <div class="actor-box" style="background: #9b59b6; margin-top: 5px;">Pago</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 100px; height: 600px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Pasarela de<br>Pago (API)</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 180px; height: 480px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">Banco Emisor<br>Tarjeta</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 280px; height: 150px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #27ae60;">Sistema de<br>Fraud Detection</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 220px; height: 100px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 120px; width: 130px; top: 120px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">ingresarDatosTarjeta()<br>tokenizar()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 120px; width: 130px; top: 200px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">iniciarPago(token, monto)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 240px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">analizarRiesgo(transacción)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 280px; width: 130px; top: 300px;">
+                        <div class="message-label">score: 85<br>riesgo: bajo</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 340px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">autorizarPago(cardToken, amount)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 440px; width: 130px; top: 400px;">
+                        <div class="message-number">5</div>
+                        <div class="message-label">validarFondos()<br>verificarCVV()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 440px; width: 130px; top: 480px;">
+                        <div class="message-label">aprobado: true<br>authCode: A12345<br>saldoRestante: $X</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 280px; width: 130px; top: 520px;">
+                        <div class="message-label">transacciónExitosa<br>id: TXN-789</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 560px;">
+                        <div class="message-number">6</div>
+                        <div class="message-label">generarComprobante()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 120px; width: 130px; top: 620px;">
+                        <div class="message-label">mostrarConfirmación()<br>emailComprobante()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 750px; top: 250px;">
+                        <strong>Anti-Fraude:</strong><br>
+                        - Verificación IP<br>
+                        - Dispositivo conocido<br>
+                        - Velocidad transacciones<br>
+                        - Monto inusual
+                    </div>
+
+                    <div class="note" style="left: 20px; top: 400px;">
+                        <strong>PCI DSS:</strong><br>
+                        Cumplimiento norma<br>
+                        seguridad datos<br>
+                        tarjeta (tokenización)
+                    </div>
+
+                    <div class="fragment-box" style="left: 420px; top: 380px; width: 170px; height: 130px;">
+                        <div class="fragment-label">alt [fondos insuficientes]</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación del Proceso de Pago</h3>
+                <ol class="step-list">
+                    <li><strong>Tokenización de Tarjeta:</strong> El cliente ingresa los datos de su tarjeta (número, 
+                    fecha de expiración, CVV). Inmediatamente, estos datos se envían a la pasarela de pago (nunca tocan 
+                    nuestro servidor) y se recibe un token único que representa la tarjeta. Esto cumple con PCI DSS 
+                    y elimina el riesgo de almacenar datos sensibles.</li>
+                    
+                    <li><strong>Inicio de Transacción:</strong> Se envía el token junto con el monto a cobrar, moneda, 
+                    descripción de la compra y datos del cliente a la API de la pasarela de pago (MercadoPago, Stripe, 
+                    etc.). Se incluye un ID de transacción único generado por nuestro sistema.</li>
+                    
+                    <li><strong>Análisis de Fraude:</strong> Antes de procesar el pago, un sistema de detección de fraude 
+                    analiza la transacción en milisegundos: verifica si la IP es de alto riesgo, si el dispositivo fue 
+                    usado en transacciones fraudulentas previas, si el monto es inusual para ese usuario, 
+                    velocidad de intentos, etc. Asigna un score de riesgo (0-100).</li>
+                    
+                    <li><strong>Autorización con Banco:</strong> Si el score de fraude es aceptable, la pasarela contacta 
+                    al banco emisor de la tarjeta a través de las redes de pago (Visa/Mastercard). Se envía el token 
+                    (que el banco puede mapear al número real), monto y datos de la transacción.</li>
+                    
+                    <li><strong>Validación de Fondos:</strong> El banco verifica: que la tarjeta exista y esté activa, 
+                    que el CVV sea correcto, que no esté reportada como robada, que tenga fondos disponibles o crédito 
+                    suficiente, y que no exceda límites de compra. Si todo está OK, reserva el monto (authorization) 
+                    y devuelve un código de autorización.</li>
+                    
+                    <li><strong>Confirmación y Captura:</strong> La pasarela notifica a nuestro sistema que el pago fue 
+                    aprobado. Se genera un comprobante de pago con todos los detalles, se actualiza el estado del pedido 
+                    a "Pagado", y se envía un email al cliente con el comprobante adjunto. El monto se captura 
+                    (transfiere realmente) automáticamente o manualmente según configuración.</li>
+                </ol>
+
+                <div style="margin-top: 20px; padding: 15px; background: #f8d7da; border-radius: 8px; border-left: 4px solid #dc3545;">
+                    <strong>🔄 Manejo de Errores y Reintentos:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Fondos Insuficientes:</strong> Se notifica al cliente inmediatamente sugiriendo otro medio de pago</li>
+                        <li><strong>Timeout del Banco:</strong> Se reintenta automáticamente hasta 3 veces con backoff exponencial</li>
+                        <li><strong>Fraude Detectado:</strong> Se bloquea la transacción y se notifica al equipo de seguridad</li>
+                        <li><strong>Card Declined:</strong> Se muestra mensaje genérico (por seguridad) sin revelar detalles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIAGRAMA 6: TRACKING DELIVERY -->
+        <div id="diagram6" class="diagram-section">
+            <h2>🚚 Diagrama 6: Tracking en Tiempo Real de Delivery</h2>
+            <p style="margin: 15px 0; font-size: 16px;">
+                Sistema de seguimiento de pedidos con GPS en tiempo real, notificaciones push, 
+                cálculo estimado de llegada (ETA) y comunicación cliente-repartidor.
+            </p>
+
+            <div class="controls">
+                <button class="btn btn-info" onclick="animateDiagram(6)">▶️ Animar Secuencia</button>
+                <button class="btn btn-success" onclick="exportDiagram(6)">📥 Exportar Imagen</button>
+            </div>
+
+            <div class="diagram-container">
+                <div class="sequence-diagram" id="seqDiagram6">
+                    <!-- Lifelines -->
+                    <div class="lifeline" style="margin-left: 20px;">
+                        <div class="actor-box">
+                            <div class="actor-stick-figure">
+                                <div class="stick-head"></div>
+                                <div class="stick-body"></div>
+                            </div>
+                            Cliente
+                        </div>
+                        <div class="lifeline-line"></div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #9b59b6;">App Móvil/</div>
+                        <div class="actor-box" style="background: #9b59b6; margin-top: 5px;">Web Tracking</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 80px; height: 600px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #e74c3c;">Servidor de<br>Tracking</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 150px; height: 520px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #f39c12;">App del<br>Repartidor</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 200px; height: 450px;"></div>
+                        </div>
+                    </div>
+
+                    <div class="lifeline">
+                        <div class="actor-box" style="background: #27ae60;">Servicio de<br>Mapas/GPS</div>
+                        <div class="lifeline-line">
+                            <div class="activation" style="top: 280px; height: 100px;"></div>
+                            <div class="activation" style="top: 450px; height: 80px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="message" style="left: 120px; width: 130px; top: 100px;">
+                        <div class="message-number">1</div>
+                        <div class="message-label">solicitarTracking(pedidoId)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 120px; width: 130px; top: 170px;">
+                        <div class="message-number">2</div>
+                        <div class="message-label">suscribirWebSocket(pedidoId)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 220px;">
+                        <div class="message-number">3</div>
+                        <div class="message-label">enviarUbicaciónGPS()<br>lat, lng, timestamp</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 300px;">
+                        <div class="message-number">4</div>
+                        <div class="message-label">calcularRuta(origen, destino)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 280px; width: 130px; top: 360px;">
+                        <div class="message-label">ruta: [coords...]<br>distancia: 3.2km<br>tiempo: 12min</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 280px; width: 130px; top: 400px;">
+                        <div class="message-number">5</div>
+                        <div class="message-label">calcularETA(tráfico, clima)</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message message-return" style="left: 280px; width: 130px; top: 470px;">
+                        <div class="message-label">ETA: 18:45<br>retraso: +3min</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 120px; width: 130px; top: 510px;">
+                        <div class="message-number">6</div>
+                        <div class="message-label">broadcastUpdate()<br>ubicación + ETA</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 120px; width: 130px; top: 560px;">
+                        <div class="message-number">7</div>
+                        <div class="message-label">actualizarMapaEnTiempoReal()</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <div class="message" style="left: 120px; width: 130px; top: 610px;">
+                        <div class="message-number">8</div>
+                        <div class="message-label">notificarPush()<br>"Llega en 5 min"</div>
+                        <div class="message-arrow"></div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="note" style="left: 750px; top: 200px;">
+                        <strong>Actualización:</strong><br>
+                        Cada 10 segundos<br>
+                        o al moverse<br>
+                        > 50 metros
+                    </div>
+
+                    <div class="note" style="left: 20px; top: 350px;">
+                        <strong>WebSocket:</strong><br>
+                        Conexión persistente<br>
+                        para updates<br>
+                        en tiempo real
+                    </div>
+
+                    <div class="note" style="left: 450px; top: 550px;">
+                        <strong>Notificaciones:</strong><br>
+                        - Pedido retirado<br>
+                        - En camino<br>
+                        - Cerca (500m)<br>
+                        - Llegó
+                    </div>
+                </div>
+            </div>
+
+            <div class="explanation-panel">
+                <h3>📝 Explicación del Sistema de Tracking</h3>
+                <ol class="step-list">
+                    <li><strong>Solicitud de Tracking:</strong> El cliente accede al link de tracking desde su email, 
+                    SMS o app. Ingresa el número de pedido o se autentica para ver sus pedidos activos. 
+                    El sistema verifica que el pedido exista y esté en estado de delivery.</li>
+                    
+                    <li><strong>Conexión WebSocket:</strong> Se establece una conexión WebSocket persistente entre 
+                    el cliente y el servidor de tracking. Esto permite recibir actualizaciones en tiempo real sin 
+                    necesidad de recargar la página o hacer polling constante. La conexión mantiene un heartbeat 
+                    cada 30 segundos para verificar que esté activa.</li>
+                    
+                    <li><strong>Envío de Ubicación GPS:</strong> La app del repartidor envía automáticamente su 
+                    ubicación GPS cada 10 segundos o cuando se mueve más de 50 metros. Incluye latitud, longitud, 
+                    timestamp, velocidad y dirección (brújula). Los datos se envían encriptados vía HTTPS 
+                    al servidor.</li>
+                    
+                    <li><strong>Cálculo de Ruta:</strong> El servidor consulta la API de mapas (Google Maps, Mapbox) 
+                    para calcular la ruta óptima desde la ubicación actual del repartidor hasta el domicilio 
+                    del cliente. Considera el tráfico en tiempo real, obras en la vía, y preferencias 
+                    (evitar autopistas, etc.).</li>
+                    
+                    <li><strong>Cálculo de ETA:</strong> Con la distancia y el tráfico actual, se calcula el 
+                    Tiempo Estimado de Arribo (ETA). Se ajusta dinámicamente considerando: clima (lluvia = más lento), 
+                    hora pico, historial de tiempos del repartidor, y eventos en la zona. 
+                    El ETA se actualiza cada vez que cambia significativamente (>2 minutos).</li>
+                    
+                    <li><strong>Broadcast en Tiempo Real:</strong> El servidor envía la ubicación actualizada, 
+                    la ruta en el mapa, y el ETA a todos los clientes suscritos a ese pedido (puede ser el cliente 
+                    y también el restaurante). Se usa WebSocket para push inmediato. La actualización es 
+                    suave (animated) en el mapa.</li>
+                    
+                    <li><strong>Notificaciones Push:</strong> Se envían notificaciones automáticas en hitos clave: 
+                    cuando el repartidor retiró el pedido, cuando está en camino, cuando está cerca (< 500m), 
+                    y cuando llegó al destino. El cliente puede contactar al repartidor por chat o teléfono 
+                    desde la app.</li>
+                </ol>
+
+                <div style="margin-top: 20px; padding: 15px; background: #d1ecf1; border-radius: 8px; border-left: 4px solid #17a2b8;">
+                    <strong>🌟 Características Avanzadas:</strong>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Geofencing:</strong> Alertas automáticas cuando el repartidor entra/sale de zonas definidas</li>
+                        <li><strong>Offline Mode:</strong> Si el repartidor pierde señal, se guarda la ubicación y se sincroniza al reconectar</li>
+                        <li><strong>Privacy:</strong> El cliente solo ve la ubicación durante el delivery activo, no antes ni después</li>
+                        <li><strong>Batería:</strong> Optimización del GPS para no consumir batería excesiva del repartidor</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE EXPORTACIÓN -->
+        <div class="intro-section" style="margin-top: 30px;">
+            <h2>💾 Exportar Diagramas</h2>
+            <p style="margin-bottom: 20px;">Puedes exportar los diagramas en diferentes formatos para incluirlos en tus trabajos prácticos:</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border: 2px solid #3498db;">
+                    <h3 style="color: #2980b9; margin-bottom: 10px;">📄 Exportar a Word</h3>
+                    <p style="margin-bottom: 15px; font-size: 14px;">Genera un documento Word con todos los diagramas y explicaciones</p>
+                    <button class="btn" onclick="exportAllToWord()">Descargar Word</button>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border: 2px solid #e74c3c;">
+                    <h3 style="color: #c0392b; margin-bottom: 10px;">🎨 Exportar a Draw.io</h3>
+                    <p style="margin-bottom: 15px; font-size: 14px;">Archivo XML editable en diagrams.net</p>
+                    <button class="btn" onclick="exportToDrawIO()">Descargar XML</button>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center; border: 2px solid #27ae60;">
+                    <h3 style="color: #229954; margin-bottom: 10px;">📊 Imprimir PDF</h3>
+                    <p style="margin-bottom: 15px; font-size: 14px;">Usa Ctrl+P y guarda como PDF</p>
+                    <button class="btn" onclick="window.print()">Imprimir / PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Navegación entre diagramas
+        function showDiagram(num) {
+            // Ocultar todos los diagramas
+            document.querySelectorAll('.diagram-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remover clase active de todos los tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar diagrama seleccionado
+            document.getElementById('diagram' + num).classList.add('active');
+            
+            // Activar tab correspondiente
+            event.target.classList.add('active');
+            
+            // Scroll suave al diagrama
+            document.getElementById('diagram' + num).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Animación de diagramas
+        function animateDiagram(num) {
+            const diagram = document.getElementById('seqDiagram' + num);
+            const messages = diagram.querySelectorAll('.message');
+            
+            // Reset
+            messages.forEach(msg => {
+                msg.style.opacity = '0.3';
+                msg.classList.remove('highlight');
+            });
+            
+            // Animar secuencialmente
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    msg.style.opacity = '1';
+                    msg.classList.add('highlight');
+                    
+                    // Scroll para mantener visible
+                    msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, index * 800);
+            });
+            
+            alert('▶️ Animación iniciada. Observa la secuencia de mensajes resaltados.');
+        }
+
+        // Exportar diagrama individual
+        function exportDiagram(num) {
+            const diagram = document.getElementById('seqDiagram' + num);
+            
+            // Crear canvas
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 1200;
+            canvas.height = 800;
+            
+            // Fondo blanco
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Mensaje de exportación
+            ctx.fillStyle = '#2c3e50';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Diagrama de Secuencia ' + num, canvas.width/2, 50);
+            ctx.font = '16px Arial';
+            ctx.fillText('Escuela Técnica N°1 de Muniz - Modelos y Sistemas', canvas.width/2, 80);
+            
+            // Nota: En una implementación real, usaríamos html2canvas
+            alert('📥 Para exportar como imagen:\n\n1. Presiona Ctrl+Shift+I (DevTools)\n2. Ejecuta: html2canvas(document.getElementById("seqDiagram' + num + '"))\n3. Descarga la imagen generada\n\nO usa la herramienta de recortes de tu sistema operativo.');
+        }
+
+        // Exportar todo a Word
+        function exportAllToWord() {
+            let content = `
+                <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+                <head>
+                    <meta charset='utf-8'>
+                    <title>Diagramas de Secuencia - Modelos y Sistemas</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 30px; }
+                        h1 { color: #2c3e50; text-align: center; border-bottom: 3px solid #e74c3c; padding-bottom: 10px; }
+                        h2 { color: #e74c3c; margin-top: 30px; border-left: 5px solid #3498db; padding-left: 15px; }
+                        h3 { color: #2c3e50; margin-top: 20px; }
+                        .header-info { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 30px; }
+                        .diagram-desc { background: #ecf0f1; padding: 15px; border-radius: 5px; margin: 15px 0; }
+                        .step { margin: 10px 0; padding: 10px; background: white; border-left: 4px solid #3498db; }
+                    </style>
+                </head>
+                <body>
+                    <h1>📊 DIAGRAMAS DE SECUENCIA</h1>
+                    <h2 style="text-align: center; border: none;">Guía Completa con 6 Ejemplos Prácticos</h2>
+                    
+                    <div class="header-info">
+                        <p><strong>Materia:</strong> Modelos y Sistemas | <strong>Curso:</strong> 7°3°</p>
+                        <p><strong>Escuela:</strong> Escuela Técnica N°1 de Muniz</p>
+                        <p><strong>Profesor:</strong> Omar Alejandro Bazar</p>
+                        <p><strong>Año:</strong> 2026</p>
+                    </div>
+
+                    <h2>🎯 Introducción a los Diagramas de Secuencia</h2>
+                    <p>Un Diagrama de Secuencia es un diagrama de interacción UML que muestra cómo los objetos interactúan 
+                    entre sí en una secuencia temporal. Es fundamental en el análisis y diseño de sistemas.</p>
+                    
+                    <h3>Elementos Principales:</h3>
+                    <ul>
+                        <li><strong>Línea de Vida (Lifeline):</strong> Representa la participación de un objeto en el tiempo</li>
+                        <li><strong>Mensaje Sincrónico:</strong> Flecha sólida - el emisor espera respuesta</li>
+                        <li><strong>Mensaje de Retorno:</strong> Flecha punteada - respuesta a un mensaje</li>
+                        <li><strong>Caja de Activación:</strong> Indica cuando un objeto está activo/procesando</li>
+                        <li><strong>Actor:</strong> Participante externo al sistema (usuario)</li>
+                    </ul>
+            `;
+
+            const diagrams = [
+                { num: 1, title: 'Login/Autenticación', desc: 'Proceso de autenticación de usuarios' },
+                { num: 2, title: 'Compra Online', desc: 'Flujo completo de e-commerce' },
+                { num: 3, title: 'Registro de Usuario', desc: 'Alta de nuevos usuarios' },
+                { num: 4, title: 'Búsqueda de Productos', desc: 'Sistema de búsqueda avanzada' },
+                { num: 5, title: 'Proceso de Pago', desc: 'Transacción con tarjeta de crédito' },
+                { num: 6, title: 'Tracking Delivery', desc: 'Seguimiento GPS en tiempo real' }
+            ];
+
+            diagrams.forEach(diag => {
+                content += `
+                    <h2>📊 Diagrama ${diag.num}: ${diag.title}</h2>
+                    <div class="diagram-desc">
+                        <p><strong>Descripción:</strong> ${diag.desc}</p>
+                        <p><em>Nota: Ver archivo HTML interactivo para el diagrama visual completo</em></p>
+                    </div>
+                    
+                    <h3>Explicación del Proceso:</h3>
+                `;
+                
+                // Agregar pasos según el diagrama
+                for (let i = 1; i <= 7; i++) {
+                    content += `<div class="step"><strong>Paso ${i}:</strong> [Ver explicación detallada en HTML interactivo]</div>`;
+                }
+            });
+
+            content += `
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Diagramas_Secuencia_Modelos_y_Sistemas.doc';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('✅ Documento Word exportado correctamente');
+        }
+
+        // Exportar a Draw.io
+        function exportToDrawIO() {
+            const drawIOContent = `
+<mxfile host="app.diagrams.net">
+  <diagram name="Diagramas de Secuencia - Guía Educativa">
+    <mxGraphModel>
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Diagrama 1: Login -->
+        <mxCell id="login_title" value="Diagrama 1: Login/Autenticación" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="50" y="20" width="400" height="30" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="actor_user" value="Usuario" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeColor=#000000;strokeWidth=1;fillColor=#FFFFFF;fontFamily=Verdana;fontSize=12;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="100" y="80" width="100" height="500" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="lifeline_interface" value="Interface Login" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;outlineConnect=0;rounded=1;shadow=0;comic=0;labelBackgroundColor=none;strokeColor=#000000;strokeWidth=1;fillColor=#FFFFFF;fontFamily=Verdana;fontSize=12;fontColor=#000000;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="80" width="100" height="500" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="msg1" value="1. Ingresar credenciales" style="html=1;verticalAlign=bottom;endArrow=block;entryX=0;entryY=0.1;" edge="1" parent="1" source="actor_user" target="lifeline_interface">
+          <mxGeometry width="80" relative="1" as="geometry">
+            <mxPoint x="200" y="150" as="sourcePoint"/>
+            <mxPoint x="280" y="150" as="targetPoint"/>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Agregar más elementos para los 6 diagramas... -->
+        <!-- Nota: Esto es un ejemplo simplificado -->
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>`;
+
+            const blob = new Blob([drawIOContent], { type: 'application/xml' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'Diagramas_Secuencia_Guia_Completa.drawio';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert('✅ Archivo Draw.io exportado. Ábrelo en https://app.diagrams.net/');
+        }
+
+        // Inicialización
+        window.onload = function() {
+            console.log('📊 Sistema de Diagramas de Secuencia cargado');
+            console.log('🏫 Escuela Técnica N°1 de Muniz');
+            console.log('📚 Materia: Modelos y Sistemas - 7°3°');
+            console.log('👨‍ Profesor: Omar Alejandro Bazar');
+        };
+
+        // Prevenir pérdida de datos
+        window.onbeforeunload = function() {
+            return "¿Estás seguro de que deseas salir?";
+        };
+    </script>
+</body>
+</html>
