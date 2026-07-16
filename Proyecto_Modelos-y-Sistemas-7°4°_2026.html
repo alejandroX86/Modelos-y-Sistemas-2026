@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proyecto Modelos y Sistemas · 7°4° · Ingeniería de Software</title>
+  <style>
+    /* ===== RESET & BASE ===== */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+      background: #f0f4fc;
+      color: #0b1a33;
+      line-height: 1.6;
+      padding: 24px;
+    }
+    a { color: #1e4b8a; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* ===== APP CONTAINER ===== */
+    .app {
+      max-width: 1440px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 36px;
+      box-shadow: 0 30px 80px rgba(0, 20, 50, 0.10);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ===== HEADER ===== */
+    .header {
+      padding: 28px 36px;
+      background: linear-gradient(145deg, #0a1e3d 0%, #1d3b6e 100%);
+      color: white;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 5px solid #fbbf24;
+    }
+    .header h1 {
+      font-weight: 700;
+      font-size: 2.1rem;
+      letter-spacing: -0.5px;
+    }
+    .header h1 small {
+      display: block;
+      font-size: 1rem;
+      font-weight: 400;
+      opacity: 0.85;
+      margin-top: 6px;
+    }
+    .header-badge {
+      background: rgba(255,255,255,0.10);
+      backdrop-filter: blur(4px);
+      padding: 10px 22px;
+      border-radius: 60px;
+      font-size: 0.95rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .header-badge .emoji { font-size: 1.3rem; }
+
+    /* ===== TABS ===== */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 18px 28px 0 28px;
+      background: #f8faff;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 14px 24px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #3e5470;
+      cursor: pointer;
+      border-radius: 40px 40px 0 0;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+    }
+    .tab-btn:hover { background: #e9eff8; color: #0a1e3d; }
+    .tab-btn.active {
+      background: white;
+      color: #0a1e3d;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.02);
+      border-bottom: 3px solid #fbbf24;
+      font-weight: 600;
+    }
+    .tab-btn .icon { font-size: 1.2rem; }
+
+    /* ===== CONTENT ===== */
+    .tab-content {
+      display: none;
+      padding: 36px 40px;
+      animation: fadeUp 0.35s ease;
+    }
+    .tab-content.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      letter-spacing: -0.3px;
+      color: #0a1e3d;
+    }
+    h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: #1d3b6e;
+    }
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 16px 0 6px;
+      color: #2a4a7a;
+    }
+    p {
+      color: #1f334f;
+      margin-bottom: 12px;
+    }
+    .text-muted {
+      color: #5a6f8a;
+      font-size: 0.95rem;
+    }
+    .text-small { font-size: 0.9rem; }
+
+    /* ===== CARDS ===== */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+    .card {
+      background: #f8fcff;
+      border-radius: 20px;
+      padding: 24px 26px;
+      border: 1px solid #e6edf6;
+      transition: 0.2s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+    .card:hover {
+      border-color: #b6cbe2;
+      background: #f4faff;
+      box-shadow: 0 8px 20px rgba(0, 20, 50, 0.05);
+    }
+    .card h3 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card p { margin-bottom: 8px; }
+    .card .link-list {
+      list-style: none;
+      margin-top: 12px;
+    }
+    .card .link-list li { margin: 6px 0; }
+    .card .link-list li a {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e4b8a;
+      font-weight: 500;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e9edf4;
+      padding: 3px 14px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1a3a6b;
+    }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
+
+    /* ===== ROADMAP (ampliado) ===== */
+    .roadmap-phase {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding: 24px 28px;
+      background: #f8fcff;
+      border-radius: 20px;
+      border-left: 8px solid #2563eb;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: 0.15s;
+    }
+    .roadmap-phase:hover { background: #f4faff; }
+    .roadmap-phase .phase-num {
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #2563eb;
+      min-width: 64px;
+      line-height: 1;
+      opacity: 0.7;
+    }
+    .roadmap-phase .phase-body { flex: 1; }
+    .roadmap-phase .phase-body h4 {
+      font-size: 1.4rem;
+      margin: 0 0 6px 0;
+      color: #0a1e3d;
+    }
+    .roadmap-phase .phase-body .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 28px;
+      font-size: 0.9rem;
+      color: #3e5a7a;
+      margin: 8px 0 12px;
+    }
+    .roadmap-phase .phase-body .meta span { display: flex; align-items: center; gap: 6px; }
+    .roadmap-phase .phase-body .desc {
+      color: #1f334f;
+      margin: 6px 0 10px;
+    }
+    .roadmap-phase .phase-body .subtasks {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-top: 12px;
+    }
+    .roadmap-phase .phase-body .subtasks span {
+      background: #e9eff8;
+      padding: 4px 16px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      color: #1a3a6b;
+    }
+    .roadmap-phase .phase-body .deliverables {
+      margin: 14px 0 4px;
+      font-weight: 500;
+      color: #0a1e3d;
+    }
+    .roadmap-phase .phase-body .deliverables ul {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      margin-top: 4px;
+    }
+    .roadmap-phase .phase-body .deliverables ul li {
+      background: #e6f0fa;
+      padding: 2px 16px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 400;
+    }
+
+    /* ===== CHECKLIST ===== */
+    .checklist-group {
+      margin: 16px 0 24px;
+    }
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #f8fcff;
+      margin-bottom: 8px;
+      transition: 0.15s;
+    }
+    .checklist-item.done {
+      background: #e6f7ed;
+      opacity: 0.85;
+    }
+    .checklist-item.done label {
+      text-decoration: line-through;
+      color: #2c5e44;
+    }
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: #2563eb;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .checklist-item label {
+      flex: 1;
+      cursor: pointer;
+      font-size: 0.98rem;
+      color: #0b1a33;
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 30px;
+      overflow: hidden;
+      margin: 18px 0 10px;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      border-radius: 30px;
+      transition: width 0.4s;
+      width: 0%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 8px;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .progress-label {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #0b1a33;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* ===== TIMER ===== */
+    .timer-box {
+      background: #0a1e3d;
+      color: white;
+      border-radius: 24px;
+      padding: 24px 32px;
+      display: inline-flex;
+      align-items: center;
+      gap: 32px;
+      flex-wrap: wrap;
+      margin: 24px 0 12px;
+      box-shadow: 0 8px 24px rgba(10, 30, 61, 0.25);
+    }
+    .timer-box .time {
+      font-size: 3.2rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 3px;
+      background: rgba(255,255,255,0.06);
+      padding: 4px 24px;
+      border-radius: 60px;
+      font-feature-settings: "tnum";
+    }
+    .timer-box .btn-group {
+      display: flex;
+      gap: 12px;
+    }
+    .timer-box button {
+      background: rgba(255,255,255,0.10);
+      border: none;
+      color: white;
+      padding: 10px 24px;
+      border-radius: 40px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      border: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.95rem;
+    }
+    .timer-box button:hover { background: rgba(255,255,255,0.20); }
+    .timer-box .hint {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-left: 4px;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      padding: 24px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal {
+      background: white;
+      border-radius: 32px;
+      max-width: 860px;
+      width: 100%;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.30);
+      transform: scale(0.96);
+      transition: 0.25s;
+    }
+    .modal-overlay.active .modal { transform: scale(1); }
+    .modal-header {
+      padding: 24px 32px;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .modal-header h3 { font-size: 1.4rem; margin: 0; }
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #5a6f8a;
+      padding: 0 8px;
+      transition: 0.15s;
+    }
+    .modal-close:hover { color: #0a1e3d; }
+    .modal-body {
+      padding: 28px 32px;
+      overflow-y: auto;
+      flex: 1;
+    }
+    .modal-body .template-block {
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      background: #f4f8fe;
+      padding: 24px;
+      border-radius: 18px;
+      border: 1px solid #dce5f0;
+      line-height: 1.7;
+      color: #0b1a33;
+    }
+
+    /* ===== HELPERS ===== */
+    .flex { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+    .mt-16 { margin-top: 16px; }
+    .mb-8 { margin-bottom: 8px; }
+    .mb-16 { margin-bottom: 16px; }
+    .gap-8 { gap: 8px; }
+    .border-top { border-top: 1px solid #e2e8f0; padding-top: 24px; margin-top: 24px; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; align-items: start; gap: 16px; padding: 20px; }
+      .header h1 { font-size: 1.6rem; }
+      .tabs { padding: 8px 12px 0; gap: 2px; }
+      .tab-btn { padding: 10px 14px; font-size: 0.82rem; }
+      .tab-content { padding: 20px; }
+      .timer-box { flex-direction: column; align-items: stretch; }
+      .roadmap-phase { flex-direction: column; padding: 20px; }
+      .roadmap-phase .phase-num { font-size: 2rem; min-width: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ===== HEADER ===== -->
+  <header class="header">
+    <div>
+      <h1>
+        📐 Proyecto Modelos y Sistemas
+        <small>7°4° · ESST Técnica N°1 de Muñiz · Ingeniería de Software</small>
+      </h1>
+    </div>
+    <div class="header-badge">
+      <span class="emoji">🏢</span> Análisis Funcional · 2026
+    </div>
+  </header>
+
+  <!-- ===== TABS ===== -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="inicio" role="tab"><span class="icon">🏠</span> Inicio</button>
+    <button class="tab-btn" data-tab="documentacion" role="tab"><span class="icon">📚</span> Documentación</button>
+    <button class="tab-btn" data-tab="prototipos" role="tab"><span class="icon">🎨</span> Prototipos</button>
+    <button class="tab-btn" data-tab="multimedia" role="tab"><span class="icon">🎬</span> Multimedia</button>
+    <button class="tab-btn" data-tab="tecnologias" role="tab"><span class="icon">🛠️</span> Tecnologías</button>
+    <button class="tab-btn" data-tab="releases" role="tab"><span class="icon">🚀</span> Releases</button>
+    <button class="tab-btn" data-tab="roadmap" role="tab"><span class="icon">🗺️</span> Roadmap</button>
+    <button class="tab-btn" data-tab="herramientas" role="tab"><span class="icon">🧰</span> Herramientas</button>
+    <button class="tab-btn" data-tab="progreso" role="tab"><span class="icon">✅</span> Progreso</button>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- ==================== CONTENIDO ============================ -->
+  <!-- ========================================================== -->
+
+  <!-- ===== INICIO ===== -->
+  <section class="tab-content active" id="tab-inicio" role="tabpanel">
+    <h2>👋 Bienvenidos al proyecto</h2>
+    <p style="font-size: 1.15rem; max-width: 820px; color: #1f334f;">
+      Este repositorio centraliza toda la documentación, análisis, modelado y prototipos del proyecto final
+      de la materia <strong>Modelos y Sistemas</strong>, correspondiente al <strong>7°4°</strong> de la
+      <strong>ESST Técnica N°1 de Muñiz</strong>. El equipo de estudiantes, actuando como <strong>Analistas Funcionales</strong>,
+      ha desarrollado un estudio completo de los procesos de negocio de nuestro cliente, con el objetivo de
+      proponer una solución tecnológica que optimice la gestión, reduzca tiempos operativos y mejore la toma
+      de decisiones.
+    </p>
+
+    <h3>🎯 Contexto y objetivo</h3>
+    <p>
+      El comercio en cuestión es un negocio de venta de productos electrónicos y accesorios, con más de 10 años
+      en el mercado. Actualmente enfrenta desafíos en la gestión de inventario, el registro de ventas y la
+      comunicación interna. Nuestro proyecto busca, a través de un enfoque sistemático y profesional, relevar
+      los procesos AS-IS, identificar puntos de mejora y diseñar un sistema TO-BE que integre módulos de
+      <strong>ventas, stock, clientes y reportes</strong>, todo ello alineado con los objetivos estratégicos del negocio.
+    </p>
+    <p>
+      El trabajo se ha llevado a cabo siguiendo las buenas prácticas de la <strong>Ingeniería de Software</strong>,
+      desde el relevamiento inicial hasta la entrega de un prototipo navegable y la documentación completa
+      (SRS, casos de uso, BPMN, DER, etc.). Además, se ha mantenido una comunicación constante con el
+      <strong>Product Owner</strong> (dueño del comercio) para validar cada etapa y asegurar que la solución
+      propuesta se ajuste a sus necesidades reales.
+    </p>
+
+    <h3>👥 Equipo de trabajo</h3>
+    <div class="card-grid" style="margin-top: 6px;">
+      <div class="card"><h3>👩‍💼 Analista Funcional 1</h3><p>Encargado del relevamiento de procesos y entrevistas con stakeholders.</p></div>
+      <div class="card"><h3>👨‍💻 Analista Funcional 2</h3><p>Responsable del modelado BPMN y UML, y de la especificación de requerimientos.</p></div>
+      <div class="card"><h3>🎨 Diseñador UX/UI</h3><p>Diseño del prototipo en Figma, validación con usuarios y creación de guías de estilo.</p></div>
+      <div class="card"><h3>📊 Documentalista</h3><p>Redacción y mantenimiento de la documentación técnica y de gestión (SRS, glosario, informes).</p></div>
+    </div>
+    <p class="text-muted">
+      <strong>Profesor guía:</strong> Omar A. Bazar · <strong>Institución:</strong> ESST Técnica N°1 de Muñiz
+    </p>
+
+    <div style="background: #f0f7ff; padding: 18px 24px; border-radius: 16px; border-left: 6px solid #fbbf24; margin-top: 20px;">
+      <strong>📢 Última release:</strong> <a href="#">v1.0.0</a> (Entrega final) ·
+      <span class="badge badge-green">✅ Validado con PO</span> ·
+      <span class="badge badge-blue">📅 2026-XX-XX</span>
+    </div>
+  </section>
+
+  <!-- ===== DOCUMENTACIÓN ===== -->
+  <section class="tab-content" id="tab-documentacion" role="tabpanel">
+    <h2>📚 Documentación Principal</h2>
+    <p class="text-muted" style="margin-bottom: 20px;">
+      Todos los artefactos generados durante el proyecto se encuentran versionados en el repositorio.
+      A continuación se detalla cada documento y su propósito.
+    </p>
+    <div class="card-grid">
+      <div class="card">
+        <h3>📄 Visión y Alcance</h3>
+        <p>Define el alcance del proyecto, los objetivos, los stakeholders y las restricciones de alto nivel.</p>
+        <p><a href="#">docs/01-Vision-Alcance.pdf</a></p>
+      </div>
+      <div class="card">
+        <h3>📄 SRS IEEE 830</h3>
+        <p>Especificación de Requerimientos de Software según estándar IEEE 830. Incluye requerimientos funcionales y no funcionales.</p>
+        <p><a href="#">docs/02-SRS-IEEE830.pdf</a></p>
+      </div>
+      <div class="card">
+        <h3>📄 Catálogo de Requerimientos</h3>
+        <p>Listado detallado de requerimientos con priorización (MoSCoW), trazabilidad y fuentes.</p>
+        <p><a href="#">docs/03-Catalogo-Requerimientos.pdf</a></p>
+      </div>
+      <div class="card">
+        <h3>📄 Casos de Uso Detallados</h3>
+        <p>Especificaciones de casos de uso con flujos principales, alternativos y pre/post condiciones.</p>
+        <p><a href="#">docs/04-Especificacion-CU.pdf</a></p>
+      </div>
+      <div class="card">
+        <h3>📄 Glosario</h3>
+        <p>Términos clave del dominio del negocio y del sistema, con definiciones consensuadas.</p>
+        <p><a href="#">docs/05-Glosario.pdf</a></p>
+      </div>
+      <div class="card">
+        <h3>📄 Informe Final</h3>
+        <p>Documento integrador que resume todo el trabajo realizado, lecciones aprendidas y conclusiones.</p>
+        <p><a href="#">docs/07-Informe-Final.pdf</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROTOTIPOS ===== -->
+  <section class="tab-content" id="tab-prototipos" role="tabpanel">
+    <h2>🎨 Prototipos</h2>
+    <div class="card" style="max-width: 600px;">
+      <h3>👉 Prototipo navegable en Figma</h3>
+      <p>
+        Se ha desarrollado un prototipo de alta fidelidad que simula la interacción del usuario con el sistema.
+        Incluye las pantallas principales: <strong>dashboard, ventas, gestión de productos, clientes y reportes</strong>.
+        El prototipo ha sido validado con el Product Owner y se han incorporado sus sugerencias.
+      </p>
+      <p><a href="https://figma.com/file/XXX" target="_blank">Acceder al prototipo interactivo</a></p>
+      <p class="text-muted text-small">Última actualización: 2026-XX-XX</p>
+    </div>
+  </section>
+
+  <!-- ===== MULTIMEDIA ===== -->
+  <section class="tab-content" id="tab-multimedia" role="tabpanel">
+    <h2>🎬 Material Audiovisual</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>🎤 Entrevista con el dueño</h3>
+        <p>Entrevista en profundidad donde el dueño del comercio expone los principales problemas y expectativas.</p>
+        <p><a href="#">media/entrevistas/ent-01.mp4</a></p>
+      </div>
+      <div class="card">
+        <h3>🎤 Entrevista con empleado</h3>
+        <p>Perspectiva del personal operativo sobre las dificultades diarias y oportunidades de mejora.</p>
+        <p><a href="#">media/entrevistas/ent-02.mp4</a></p>
+      </div>
+      <div class="card">
+        <h3>🎞️ Demo reel del proyecto</h3>
+        <p>Compilación de los momentos más relevantes del proyecto, incluyendo fragmentos de entrevistas y navegación del prototipo.</p>
+        <p><a href="#">media/demo-reel.mp4</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TECNOLOGÍAS ===== -->
+  <section class="tab-content" id="tab-tecnologias" role="tabpanel">
+    <h2>🛠️ Tecnologías y Herramientas</h2>
+    <div class="card-grid">
+      <div class="card"><h3>📐 Modelado BPMN</h3><p>Bizagi Modeler · Diagramas de procesos AS-IS y TO-BE.</p></div>
+      <div class="card"><h3>📊 Modelado UML</h3><p>StarUML · Diagramas de casos de uso, clases y secuencia.</p></div>
+      <div class="card"><h3>🖌️ Prototipos</h3><p>Figma · Diseño de interfaces y flujos de navegación.</p></div>
+      <div class="card"><h3>📝 Documentación</h3><p>LaTeX y Markdown · Generación de documentos formales.</p></div>
+      <div class="card"><h3>🐙 Repositorio</h3><p>GitHub + GitFlow · Control de versiones y colaboración.</p></div>
+      <div class="card"><h3>⚙️ CI/CD</h3><p>GitHub Actions · Automatización de builds y validaciones.</p></div>
+    </div>
+  </section>
+
+  <!-- ===== RELEASES ===== -->
+  <section class="tab-content" id="tab-releases" role="tabpanel">
+    <h2>🚀 Releases</h2>
+    <div style="display: flex; flex-direction: column; gap: 16px; max-width: 500px;">
+      <div class="card" style="background: #f0f7ff; border-left: 6px solid #2563eb;">
+        <h3>v1.0.0</h3>
+        <p><strong>Entrega final</strong> · 2026-XX-XX</p>
+        <p>Versión completa con todos los artefactos, prototipo finalizado y documentación consolidada.</p>
+      </div>
+      <div class="card">
+        <h3>v0.5.0</h3>
+        <p><strong>Análisis funcional completo</strong> · 2026-XX-XX</p>
+        <p>Incluye BPMN TO-BE, casos de uso detallados, DER y requerimientos priorizados.</p>
+      </div>
+      <div class="card">
+        <h3>v0.1.0</h3>
+        <p><strong>Relevamiento inicial</strong> · 2026-XX-XX</p>
+        <p>Primera versión con entrevistas, procesos AS-IS, actores y métricas del negocio.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ROADMAP (ampliado y profesional) ===== -->
+  <section class="tab-content" id="tab-roadmap" role="tabpanel">
+    <h2>🗺️ Roadmap · Guía de trabajo profesional</h2>
+    <p class="text-muted" style="margin-bottom: 28px;">
+      Esta hoja de ruta detalla las fases del proyecto, sus actividades, entregables, duración estimada y
+      responsables sugeridos. Sirve como guía para la gestión del proyecto y la asignación de tareas.
+    </p>
+
+    <!-- Fase 1 -->
+    <div class="roadmap-phase">
+      <div class="phase-num">1</div>
+      <div class="phase-body">
+        <h4>📋 Relevamiento primario</h4>
+        <div class="meta">
+          <span>📅 Duración: 3 semanas</span>
+          <span>👥 Responsables: Analistas funcionales</span>
+        </div>
+        <p class="desc">
+          Objetivo: comprender el negocio, sus procesos actuales y las necesidades de los stakeholders.
+          Se realizan entrevistas en profundidad, observación directa y análisis de documentos existentes.
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Actas de entrevistas</li>
+          <li>Matriz de actores e influencia</li>
+          <li>Mapa de procesos AS-IS (nivel 0)</li>
+          <li>Glosario inicial</li>
+        </ul>
+        <div class="subtasks">
+          <span>Entrevistas a dueño y empleados</span>
+          <span>Fotografías y videos del local</span>
+          <span>Identificación de métricas clave</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 2 -->
+    <div class="roadmap-phase" style="border-left-color: #7c3aed;">
+      <div class="phase-num">2</div>
+      <div class="phase-body">
+        <h4>🔍 Relevamiento detallado</h4>
+        <div class="meta">
+          <span>📅 Duración: 2 semanas</span>
+          <span>👥 Responsables: Analistas + Documentalista</span>
+        </div>
+        <p class="desc">
+          Profundización en las reglas de negocio, flujos de información, volúmenes de datos y
+          puntos críticos. Se identifican cuellos de botella y oportunidades de mejora.
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Reglas de negocio documentadas</li>
+          <li>Métricas clave (ventas, stock, etc.)</li>
+          <li>Glosario ampliado</li>
+          <li>Informe de hallazgos</li>
+        </ul>
+        <div class="subtasks">
+          <span>Análisis de datos históricos</span>
+          <span>Entrevistas complementarias</span>
+          <span>Validación de reglas con PO</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 3 -->
+    <div class="roadmap-phase" style="border-left-color: #fbbf24;">
+      <div class="phase-num">3</div>
+      <div class="phase-body">
+        <h4>🧩 Análisis funcional y modelado</h4>
+        <div class="meta">
+          <span>📅 Duración: 4 semanas</span>
+          <span>👥 Responsables: Analistas + Diseñador</span>
+        </div>
+        <p class="desc">
+          Construcción de los modelos TO-BE: procesos BPMN optimizados, casos de uso UML,
+          modelo entidad-relación y especificación de requerimientos (SRS). Se priorizan
+          funcionalidades mediante MoSCoW.
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Diagramas BPMN TO-BE</li>
+          <li>Diagrama de casos de uso UML</li>
+          <li>DER conceptual</li>
+          <li>Catálogo de requerimientos (RF y RNF)</li>
+          <li>SRS IEEE 830</li>
+        </ul>
+        <div class="subtasks">
+          <span>Modelado de procesos</span>
+          <span>Especificación de CU</span>
+          <span>Diseño de base de datos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 4 -->
+    <div class="roadmap-phase" style="border-left-color: #10b981;">
+      <div class="phase-num">4</div>
+      <div class="phase-body">
+        <h4>🎨 Prototipado y validación</h4>
+        <div class="meta">
+          <span>📅 Duración: 3 semanas</span>
+          <span>👥 Responsables: Diseñador + Analistas</span>
+        </div>
+        <p class="desc">
+          Diseño de interfaces de usuario en Figma, basado en los casos de uso y requerimientos.
+          Se realizan pruebas de usabilidad con el Product Owner y ajustes iterativos.
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Prototipo navegable (alta fidelidad)</li>
+          <li>Guía de estilos</li>
+          <li>Feedback documentado del PO</li>
+          <li>Iteraciones del prototipo</li>
+        </ul>
+        <div class="subtasks">
+          <span>Diseño de pantallas</span>
+          <span>Pruebas con usuarios</span>
+          <span>Refinamiento de flujos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 5 -->
+    <div class="roadmap-phase" style="border-left-color: #f97316;">
+      <div class="phase-num">5</div>
+      <div class="phase-body">
+        <h4>📄 Documentación final</h4>
+        <div class="meta">
+          <span>📅 Duración: 2 semanas</span>
+          <span>👥 Responsables: Documentalista + Todo el equipo</span>
+        </div>
+        <p class="desc">
+          Consolidación de todos los artefactos en un informe final ejecutivo, revisión de la
+          documentación técnica y preparación de los materiales de presentación (pitch deck, demo reel).
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Informe final ejecutivo</li>
+          <li>Pitch Deck (25 slides)</li>
+          <li>Demo reel en video</li>
+          <li>Repositorio completo y documentado</li>
+        </ul>
+        <div class="subtasks">
+          <span>Revisión de coherencia</span>
+          <span>Generación de presentaciones</span>
+          <span>Edición de video</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fase 6 -->
+    <div class="roadmap-phase" style="border-left-color: #ef4444;">
+      <div class="phase-num">6</div>
+      <div class="phase-body">
+        <h4>🎤 Defensa y entrega</h4>
+        <div class="meta">
+          <span>📅 Duración: 1 semana</span>
+          <span>👥 Responsables: Todo el equipo</span>
+        </div>
+        <p class="desc">
+          Presentación del proyecto ante la comisión evaluadora y el Product Owner.
+          Se entrega el repositorio final con todo el material generado.
+        </p>
+        <div class="deliverables">Entregables:</div>
+        <ul>
+          <li>Presentación oral (25 min)</li>
+          <li>Repositorio finalizado</li>
+          <li>Acta de cierre con firma del PO</li>
+          <li>Lecciones aprendidas</li>
+        </ul>
+        <div class="subtasks">
+          <span>Ensayo de presentación</span>
+          <span>Preparación de sala</span>
+          <span>Entrega formal</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top: 24px; background: #f4f8fe; padding: 18px 24px; border-radius: 16px; border: 1px dashed #b6cbe2;">
+      <p class="text-muted">
+        <strong>Nota:</strong> Este roadmap es orientativo y puede adaptarse según la disponibilidad del equipo y
+        las necesidades del cliente. Se recomienda realizar reuniones de seguimiento semanales.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== HERRAMIENTAS (plantillas) ===== -->
+  <section class="tab-content" id="tab-herramientas" role="tabpanel">
+    <h2>🧰 Plantillas y recursos</h2>
+    <p class="text-muted">Estas plantillas facilitan la estandarización de la comunicación y la gestión del proyecto.</p>
+    <div class="card-grid">
+      <div class="card" style="cursor: pointer;" onclick="openModal('modal-pitch')">
+        <h3>🎤 Pitch Deck (25 slides)</h3>
+        <p>Estructura detallada para la presentación final de 25 minutos.</p>
+        <span class="badge badge-blue">Abrir plantilla</span>
+      </div>
+      <div class="card" style="cursor: pointer;" onclick="openModal('modal-pr')">
+        <h3>🔀 Pull Request</h3>
+        <p>Plantilla para solicitudes de fusión en el repositorio GitHub.</p>
+        <span class="badge badge-blue">Abrir plantilla</span>
+      </div>
+      <div class="card" style="cursor: pointer;" onclick="openModal('modal-issue')">
+        <h3>📋 Issue</h3>
+        <p>Plantilla para reportar tareas, bugs o mejoras en el proyecto.</p>
+        <span class="badge badge-blue">Abrir plantilla</span>
+      </div>
+    </div>
+
+    <div style="margin-top: 28px; background: #f4f8fe; padding: 20px 28px; border-radius: 16px; border-left: 6px solid #1e4b8a;">
+      <p><strong>📌 Licencia:</strong> MIT · <a href="#">LICENSE</a></p>
+      <p><strong>🙏 Agradecimientos:</strong> Al cliente por abrirnos las puertas de su comercio y confiar en nuestro trabajo. Al <strong>Prof. Omar A. Bazar</strong> por su guía y acompañamiento constante.</p>
+      <p><strong>📞 Contacto:</strong> <a href="mailto:equipo@proyecto.com">equipo@proyecto.com</a> · ESST Técnica N°1 de Muñiz</p>
+    </div>
+  </section>
+
+  <!-- ===== PROGRESO ===== -->
+  <section class="tab-content" id="tab-progreso" role="tabpanel">
+    <h2>✅ Progreso del proyecto</h2>
+    <div class="progress-label">
+      <span>Avance total</span>
+      <span id="totalProgress">0% (0/0)</span>
+    </div>
+    <div class="progress-bar">
+      <div class="fill" id="totalProgressBar" style="width:0%;">0%</div>
+    </div>
+
+    <div class="checklist-group" id="checklistContainer">
+      <!-- Se llena desde JS -->
+    </div>
+
+    <hr style="margin: 32px 0; border: none; border-top: 2px dashed #dce5f0;">
+
+    <h3>⏱️ Temporizador de presentación (25 min)</h3>
+    <p class="text-muted">Utiliza este temporizador para ensayar el pitch deck y ajustar los tiempos.</p>
+    <div class="timer-box">
+      <span class="time" id="timerDisplay">00:00</span>
+      <div class="btn-group">
+        <button onclick="startTimer()">▶ Iniciar</button>
+        <button onclick="pauseTimer()">⏸ Pausar</button>
+        <button onclick="resetTimer()">⟳ Reiniciar</button>
+      </div>
+      <span class="hint">⏰ Alerta a los 25 min</span>
+    </div>
+  </section>
+
+</div><!-- /.app -->
+
+<!-- ========================================================== -->
+<!-- ==================== MODALES ============================== -->
+<!-- ========================================================== -->
+
+<!-- PITCH DECK -->
+<div class="modal-overlay" id="modal-pitch">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🎤 Estructura del Pitch Deck (25 slides)</h3>
+      <button class="modal-close" onclick="closeModal('modal-pitch')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="template-block">
+ESTRUCTURA PITCH DECK - 25 MINUTOS
+═══════════════════════════════════
+BLOQUE 1: APERTURA (5 min) - 5 slides
+─────────────────────────────────
+Slide 1 - PORTADA (15 seg)
+• Nombre del proyecto
+• Nombre del comercio cliente
+• Equipo + foto grupal
+• Institución, materia, profesor, año
+• Logo del comercio + logo escuela
+
+Slide 2 - EL HOOK (30 seg)
+• Historia breve del comercio
+• Foto icónica del local
+• Dato impactante: "Atiende X clientes por día"
+• Frase del dueño: "Necesitaba organizarme mejor..."
+
+Slide 3 - EL PROBLEMA (1 min)
+• Los 3-5 problemas principales detectados
+• Iconografía visual de cada problema
+• Ejemplo: "Pierden 2hs/día buscando info en papel"
+
+Slide 4 - LA SOLUCIÓN EN 1 FRASE (30 seg)
+• Visión general de la propuesta
+• Diagrama de alto nivel: AS-IS → TO-BE
+
+Slide 5 - EL EQUIPO (1 min)
+• Foto individual de cada integrante
+• Nombre + rol asignado
+• Especialidad de cada uno
+
+BLOQUE 2: RELEVAMIENTO (7 min) - 5 slides
+─────────────────────────────────
+Slide 6 - METODOLOGÍA (1 min)
+• Técnicas usadas (entrevistas, observación, etc)
+• Datos cuantitativos: X entrevistas, Y horas observación
+• Herramientas utilizadas
+
+Slide 7 - VIDEO DE ENTREVISTA (2 min)
+• Fragmento editado de entrevista filmada
+• Subtítulos en español
+• Momento más revelador
+
+Slide 8 - ACTORES CLAVE (1 min)
+• Fotos reales de los actores
+• Nombre, rol, años en el comercio
+• Matriz de influencia/interés
+
+Slide 9 - HALLAZGOS TOP 5 (2 min)
+• Los 5 descubrimientos más importantes
+• Iconografía + breve descripción
+• Datos de soporte
+
+Slide 10 - MÉTRICAS DEL NEGOCIO (1 min)
+• Gráficos: ventas diarias, clientes, stock
+• Números impactantes
+• Comparaciones
+
+BLOQUE 3: ANÁLISIS (8 min) - 6 slides
+─────────────────────────────────
+Slide 11 - PROCESO AS-IS (1.5 min)
+• Diagrama BPMN del proceso principal actual
+• Resaltar cuellos de botella
+• Explicar flujo
+
+Slide 12 - PROCESO TO-BE (1.5 min)
+• Diagrama BPMN del proceso mejorado
+• Resaltar mejoras con color
+• Mostrar automatizaciones
+
+Slide 13 - CASOS DE USO UML (1 min)
+• Diagrama completo de CU
+• Actores y casos principales
+• Relaciones clave
+
+Slide 14 - REQUERIMIENTOS PRIORITARIOS (1.5 min)
+• Top 5 RF con MoSCoW
+• Top 3 RNF importantes
+• Justificación de priorización
+
+Slide 15 - MODELO DE DATOS (1.5 min)
+• DER conceptual simplificado
+• Entidades principales
+• Relaciones clave
+
+Slide 16 - REGLAS DE NEGOCIO (1 min)
+• Las 5 reglas más críticas
+• Ejemplos concretos
+• Impacto en el sistema
+
+BLOQUE 4: PROPUESTA (3 min) - 5 slides
+─────────────────────────────────
+Slides 17-20 - DEMO PROTOTIPO (2.5 min)
+• Navegación EN VIVO de 4 pantallas
+• Escenario de uso real
+• Casos de uso principales
+
+Slide 21 - VALOR ENTREGADO (30 seg)
+• Beneficios cuantificables
+• ROI esperado
+• Mejoras específicas
+
+BLOQUE 5: CIERRE (2 min) - 4 slides
+─────────────────────────────────
+Slide 22 - LECCIONES APRENDIDAS (1 min)
+• 3 aprendizajes profesionales
+• Anécdota ilustrativa
+• Crecimiento del equipo
+
+Slide 23 - TESTIMONIO DEL PO (30 seg)
+• Frase del cliente
+• Video corto (opcional)
+• Sign-off firmado
+
+Slide 24 - REPOSITORIO GITHUB (30 seg)
+• URL y QR para escanear
+• Estadísticas del repo
+• Invitación a explorar
+
+Slide 25 - GRACIAS (30 seg)
+• Agradecimientos
+• Contacto del equipo
+• Frase final inspiradora
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PR -->
+<div class="modal-overlay" id="modal-pr">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>🔀 Plantilla de Pull Request</h3>
+      <button class="modal-close" onclick="closeModal('modal-pr')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="template-block">
+## 📝 Pull Request Template
+
+### Descripción
+[Describir brevemente qué contiene este PR]
+
+### Tipo de cambio
+- [ ] feat: Nueva característica
+- [ ] docs: Documentación
+- [ ] diagram: Diagrama nuevo o modificado
+- [ ] media: Video/foto
+- [ ] fix: Corrección
+- [ ] refactor: Refactorización
+- [ ] chore: Mantenimiento
+
+### Archivos modificados
+- `docs/SRS.pdf` - Agregada sección 3.2
+- `diagrams/bpmn/ventas.bpmn` - Nuevo proceso
+
+### Checklist
+- [ ] He probado localmente los cambios
+- [ ] La documentación está actualizada
+- [ ] He agregado los commits con formato convencional
+- [ ] He actualizado el CHANGELOG.md
+- [ ] He notificado al revisor asignado
+
+### Reviewer asignado
+@[nombre-del-revisor]
+
+### Issue relacionado
+Closes #[numero-issue]
+
+### Screenshots (si aplica)
+[Agregar imágenes antes/después]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ISSUE -->
+<div class="modal-overlay" id="modal-issue">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>📋 Plantilla de Issue</h3>
+      <button class="modal-close" onclick="closeModal('modal-issue')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="template-block">
+## 📋 Issue Template
+
+### Tipo de issue
+- [ ] 🐛 Bug / Corrección
+- [ ] ✨ Enhancement / Mejora
+- [ ] 📚 Documentation
+- [ ] 🎨 Diagram
+- [ ] 🎬 Media (video/foto)
+- [ ] ❓ Question
+
+### Título descriptivo
+[Ej: Agregar requerimiento RF-015 sobre descuentos]
+
+### Descripción detallada
+[Describir claramente qué se necesita hacer]
+
+### Contexto
+[¿Por qué es importante esta tarea?]
+
+### Criterios de aceptación
+- [ ] Criterio 1
+- [ ] Criterio 2
+- [ ] Criterio 3
+
+### Prioridad
+- [ ] 🔴 Crítica
+- [ ] 🟠 Alta
+- [ ] 🟡 Media
+- [ ] 🟢 Baja
+
+### Asignado a
+@[nombre-integrante]
+
+### Milestone (fase)
+- [ ] Fase 1: Inicio
+- [ ] Fase 2: Relevamiento primario
+- [ ] Fase 3: Relevamiento detallado
+- [ ] Fase 4: Análisis funcional
+- [ ] Fase 5: Documentación
+- [ ] Fase 6: Validación PO
+- [ ] Fase 7: Preparación defensa
+- [ ] Fase 8: Defensa final
+
+### Labels
+[asignar labels apropiados]
+
+### Archivos esperados
+- [archivo1]
+- [archivo2]
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================== -->
+<!-- ==================== JAVASCRIPT ========================== -->
+<!-- ========================================================== -->
+<script>
+  (function() {
+    // ---------- TABS ----------
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.tab-content');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', function() {
+        const target = this.dataset.tab;
+        tabs.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('tab-' + target).classList.add('active');
+      });
+    });
+
+    // ---------- CHECKLIST ----------
+    const checklistData = [
+      { id: 'c1', label: '📄 Visión y Alcance completado' },
+      { id: 'c2', label: '📄 SRS IEEE 830 redactado' },
+      { id: 'c3', label: '📄 Catálogo de Requerimientos' },
+      { id: 'c4', label: '📄 Casos de Uso Detallados' },
+      { id: 'c5', label: '📄 Glosario actualizado' },
+      { id: 'c6', label: '🎨 Prototipo Figma navegable' },
+      { id: 'c7', label: '🎬 Entrevistas filmadas y editadas' },
+      { id: 'c8', label: '📐 Diagramas BPMN AS-IS y TO-BE' },
+      { id: 'c9', label: '📊 Diagrama UML de casos de uso' },
+      { id: 'c10', label: '🗄️ DER conceptual' },
+      { id: 'c11', label: '📝 Reglas de negocio documentadas' },
+      { id: 'c12', label: '📦 Releases versionadas' },
+      { id: 'c13', label: '🧪 Validación con PO' },
+      { id: 'c14', label: '📹 Demo reel generado' },
+      { id: 'c15', label: '📑 Informe final entregado' }
+    ];
+
+    const container = document.getElementById('checklistContainer');
+    container.innerHTML = '';
+    checklistData.forEach(item => {
+      const div = document.createElement('div');
+      div.className = 'checklist-item';
+      div.innerHTML = `
+        <input type="checkbox" data-id="${item.id}" id="${item.id}">
+        <label for="${item.id}">${item.label}</label>
+      `;
+      container.appendChild(div);
+    });
+
+    // Load saved state
+    const saved = JSON.parse(localStorage.getItem('tgs-project-progress') || '{}');
+    document.querySelectorAll('.checklist-item input[type="checkbox"]').forEach(cb => {
+      const id = cb.dataset.id;
+      if (saved[id]) {
+        cb.checked = true;
+        cb.closest('.checklist-item').classList.add('done');
+      }
+      cb.addEventListener('change', function() {
+        const item = this.closest('.checklist-item');
+        const id = this.dataset.id;
+        if (this.checked) {
+          item.classList.add('done');
+          saved[id] = true;
+        } else {
+          item.classList.remove('done');
+          delete saved[id];
+        }
+        localStorage.setItem('tgs-project-progress', JSON.stringify(saved));
+        updateProgress();
+      });
+    });
+
+    function updateProgress() {
+      const all = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+      const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+      const total = all.length;
+      const done = checked.length;
+      const percent = total === 0 ? 0 : Math.round((done / total) * 100);
+      document.getElementById('totalProgress').textContent = percent + '% (' + done + '/' + total + ')';
+      const bar = document.getElementById('totalProgressBar');
+      bar.style.width = percent + '%';
+      bar.textContent = percent + '%';
+    }
+    updateProgress();
+
+    // ---------- TIMER ----------
+    let timerSeconds = 0;
+    let timerInterval = null;
+    const timerDisplay = document.getElementById('timerDisplay');
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(timerSeconds / 60);
+      const secs = timerSeconds % 60;
+      timerDisplay.textContent = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+      if (timerSeconds === 25 * 60) {
+        alert('⏰ ¡Has llegado a los 25 minutos! Tiempo ideal de presentación.');
+      }
+    }
+
+    window.startTimer = function() {
+      if (timerInterval) return;
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay();
+      }, 1000);
+    };
+    window.pauseTimer = function() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    };
+    window.resetTimer = function() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerSeconds = 0;
+      updateTimerDisplay();
+    };
+
+    // ---------- MODALS ----------
+    window.openModal = function(id) {
+      document.getElementById(id).classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+    window.closeModal = function(id) {
+      document.getElementById(id).classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    document.querySelectorAll('.modal-overlay').forEach(m => {
+      m.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay.active').forEach(m => {
+          m.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+    });
+
+  })();
+</script>
+
+</body>
+</html>
