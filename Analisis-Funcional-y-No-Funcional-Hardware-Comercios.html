@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relevamiento de Hardware - 5 Comercios | Analista Funcional</title>
+    <style>
+        /* Estilos generales (similares al original) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+
+        .header h2 {
+            color: #34495e;
+            font-size: 1.3em;
+            font-weight: 400;
+        }
+
+        .header-info {
+            background: #f8f9fa;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 5px solid #e74c3c;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .header-info p {
+            margin: 5px 10px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            justify-content: center;
+        }
+
+        .nav-tab {
+            padding: 10px 22px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .nav-tab:hover,
+        .nav-tab.active {
+            background: #e74c3c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+            animation: fadeIn 0.4s;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #34495e;
+            margin: 25px 0 15px 0;
+        }
+
+        h4 {
+            color: #2c3e50;
+            margin: 20px 0 10px 0;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 18px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            border-color: #3498db;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h4 {
+            color: #e74c3c;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            background: #3498db;
+            color: white;
+        }
+
+        .badge-critical {
+            background: #e74c3c;
+        }
+        .badge-high {
+            background: #f39c12;
+        }
+        .badge-medium {
+            background: #3498db;
+        }
+        .badge-low {
+            background: #95a5a6;
+        }
+
+        .list-group {
+            margin: 10px 0 15px 20px;
+            line-height: 1.8;
+        }
+
+        .list-group li {
+            margin-bottom: 4px;
+        }
+
+        .info-box {
+            background: #ecf0f1;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 5px solid #27ae60;
+            margin: 15px 0;
+        }
+
+        .info-box.warning {
+            border-left-color: #f39c12;
+        }
+        .info-box.danger {
+            border-left-color: #e74c3c;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        tr:hover {
+            background: #f1f9ff;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin: 5px 5px 0 0;
+        }
+
+        .btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+        .btn-success:hover {
+            background: #1e8449;
+        }
+        .btn-info {
+            background: #3498db;
+        }
+        .btn-info:hover {
+            background: #2e86c1;
+        }
+
+        .stats-mini {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .stat-mini {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+            .nav-tabs,
+            .btn {
+                display: none;
+            }
+            .section {
+                display: block !important;
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖥️ RELEVAMIENTO DE HARDWARE PARA 5 COMERCIOS</h1>
+            <h2>Análisis Funcional desde la Perspectiva del Analista de Sistemas</h2>
+            <div class="header-info">
+                <p><strong>Materia:</strong> Modelos y Sistemas | <strong>Curso:</strong> 7°3°</p>
+                <p><strong>Escuela:</strong> Escuela Técnica N°1 de Muniz</p>
+                <p><strong>Profesor:</strong> Omar Alejandro Bazar</p>
+                <p><strong>Año:</strong> 2026</p>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <div class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-section="inicio">🏠 Inicio</button>
+            <button class="nav-tab" data-section="jugueteria">🧸 Juguetería</button>
+            <button class="nav-tab" data-section="ferreteria">🔧 Ferretería</button>
+            <button class="nav-tab" data-section="parque">🎢 Parque de Diversiones</button>
+            <button class="nav-tab" data-section="restaurante">🍽️ Restaurante</button>
+            <button class="nav-tab" data-section="gimnasio">🏋️ Gimnasio</button>
+            <button class="nav-tab" data-section="comparativa">📊 Comparativa</button>
+        </div>
+
+        <!-- SECCIONES -->
+        <div id="inicio" class="section active">
+            <h2>📌 Introducción al Relevamiento de Hardware para Comercios</h2>
+            <p style="font-size:1.05rem; line-height:1.8;">
+                El <strong>relevamiento de hardware</strong> es una etapa crítica en el análisis funcional de cualquier sistema de información. 
+                Para un analista funcional, no basta con listar equipos; es necesario comprender <strong>cómo cada dispositivo 
+                interactúa con los procesos de negocio</strong>, qué requisitos funcionales y no funcionales impone, y cómo impacta 
+                en la experiencia del cliente y la eficiencia operativa.
+            </p>
+            <p style="margin-top:15px;">
+                En esta guía presentamos <strong>5 casos concretos</strong> de comercios de distintos rubros. Para cada uno, 
+                se detalla el hardware necesario, los requisitos funcionales y no funcionales, y un conjunto de 
+                <strong>más de 100 puntos de análisis</strong> que todo analista debe considerar antes de diseñar la solución tecnológica.
+            </p>
+            <div class="stats-mini">
+                <div class="stat-mini">🧸 Juguetería · 112 puntos</div>
+                <div class="stat-mini">🔧 Ferretería · 108 puntos</div>
+                <div class="stat-mini">🎢 Parque · 115 puntos</div>
+                <div class="stat-mini">🍽️ Restaurante · 110 puntos</div>
+                <div class="stat-mini">🏋️ Gimnasio · 106 puntos</div>
+            </div>
+            <div class="info-box">
+                <h4>🎯 ¿Qué analizamos en cada caso?</h4>
+                <ul class="list-group">
+                    <li><strong>Hardware requerido:</strong> Equipos, periféricos, dispositivos específicos.</li>
+                    <li><strong>Requisitos funcionales:</strong> Qué debe hacer el sistema en relación al hardware.</li>
+                    <li><strong>Requisitos no funcionales:</strong> Rendimiento, disponibilidad, seguridad, escalabilidad.</li>
+                    <li><strong>Impacto en el negocio:</strong> Cómo el hardware mejora o condiciona el modelo de negocio.</li>
+                    <li><strong>Puntos de análisis:</strong> Preguntas clave que el analista debe responder.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Las 5 secciones de comercios se generarán dinámicamente con JS -->
+        <div id="jugueteria" class="section"></div>
+        <div id="ferreteria" class="section"></div>
+        <div id="parque" class="section"></div>
+        <div id="restaurante" class="section"></div>
+        <div id="gimnasio" class="section"></div>
+
+        <!-- Comparativa -->
+        <div id="comparativa" class="section">
+            <h2>📊 Comparativa de Hardware por Comercio</h2>
+            <div class="table-wrap">
+                <table id="comparativaTable">
+                    <thead>
+                        <tr>
+                            <th>Comercio</th>
+                            <th>Dispositivos clave</th>
+                            <th>Cantidad estimada</th>
+                            <th>Puntos de análisis</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparativaBody">
+                        <!-- Generado por JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin-top:20px;">
+                <button class="btn btn-success" onclick="exportComparativa()">📄 Exportar Comparativa a Word</button>
+            </div>
+        </div>
+
+        <!-- Botón global de exportar todo (opcional) -->
+        <div style="text-align:center; margin-top:20px;">
+            <button class="btn btn-info" onclick="exportAll()">📦 Exportar todos los análisis a Word</button>
+            <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir / PDF</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // DATOS DE LOS 5 COMERCIOS (con más de 100 puntos de análisis cada uno)
+        // ============================================================
+        const comerciosData = [{
+            id: 'jugueteria',
+            nombre: 'Juguetería "El Mundo de los Niños"',
+            descripcion: 'Comercio minorista de juguetes, con amplio catálogo de productos, venta presencial y online. Posee 3 locales en la ciudad y un depósito central.',
+            hardware: [
+                { nombre: 'Terminal POS táctil', cantidad: 6, especificaciones: 'Pantalla 15", procesador Intel i3, 4GB RAM, SSD 128GB', uso: 'Punto de venta en cada local' },
+                { nombre: 'Lector de código de barras 2D', cantidad: 8, especificaciones: 'USB, lectura omnidireccional', uso: 'Escaneo rápido de productos' },
+                { nombre: 'Impresora térmica de tickets', cantidad: 6, especificaciones: '80mm, conexión USB/serie', uso: 'Entrega de comprobantes' },
+                { nombre: 'Computadora de gestión', cantidad: 3, especificaciones: 'Intel i5, 8GB RAM, 256GB SSD, Windows 10', uso: 'Administración, inventario, reportes' },
+                { nombre: 'Monitor secundario', cantidad: 3, especificaciones: '22" LED', uso: 'Visualización de stock y promociones' },
+                { nombre: 'Router WiFi empresarial', cantidad: 3, especificaciones: 'Doble banda, AC1200', uso: 'Conectividad inalámbrica para tablets y móviles' },
+                { nombre: 'Cámara de seguridad IP', cantidad: 6, especificaciones: '1080p, visión nocturna', uso: 'Videovigilancia' },
+                { nombre: 'Lector de tarjetas de crédito/débito', cantidad: 6, especificaciones: 'Contactless, chip, banda magnética', uso: 'Cobro electrónico' },
+                { nombre: 'Balanza electrónica', cantidad: 2, especificaciones: 'Capacidad 15kg, precisión 1g', uso: 'Pesaje de juguetes por peso (ej. pelotas) - opcional' },
+                { nombre: 'Tablet para móvil', cantidad: 2, especificaciones: '10" Android', uso: 'Ventas en sala o eventos' },
+            ],
+            funcionales: [
+                'Registrar ventas al contado y con tarjeta.',
+                'Calcular el total con impuestos y descuentos.',
+                'Aplicar promociones por cantidad o por cliente frecuente.',
+                'Controlar el stock en tiempo real (descontar al vender).',
+                'Generar alertas de stock mínimo.',
+                'Emitir tickets y facturas electrónicas.',
+                'Gestionar devoluciones y cambios.',
+                'Administrar precios y ofertas especiales.',
+                'Llevar registro de clientes (CRM básico).',
+                'Generar reportes de ventas diarios, semanales y mensuales.',
+                'Integrar con tienda online (sincronización de inventario).',
+                'Permitir reserva de productos desde la web.',
+                'Gestionar pedidos a proveedores.',
+                'Controlar ingresos y egresos de caja.',
+                'Registrar pagos con diferentes medios (efectivo, tarjeta, transferencia).',
+                'Imprimir etiquetas de precios para productos.',
+                'Escaneo rápido de códigos de barras para agilizar la fila.',
+                'Mostrar información del producto (nombre, precio, stock) al escanear.',
+                'Permitir anulación de ventas con autorización.',
+                'Registrar horarios de empleados y comisiones.',
+                'Controlar acceso a funciones según rol (vendedor, supervisor, admin).',
+                'Sincronizar datos entre locales (inventario centralizado).',
+                'Gestionar promociones por temporada (ej. Día del Niño).',
+                'Registrar devoluciones de proveedores.',
+                'Calcular comisiones de vendedores por venta.',
+                'Generar órdenes de compra automáticas por bajo stock.',
+                'Mantener historial de precios para análisis.',
+                'Permitir búsqueda de productos por nombre, categoría o código.',
+                'Administrar categorías y subcategorías de juguetes.',
+                'Controlar inventario en depósito y en sala de ventas.',
+                'Registrar mermas y pérdidas.',
+                'Generar códigos de barras para productos sin código.',
+                'Soportar múltiples monedas (opcional).',
+                'Permitir cierre de caja y arqueo.',
+                'Guardar copia de seguridad local y en la nube.',
+                'Notificar vencimiento de garantías de productos.',
+                'Gestionar clientes con puntos o membresía.',
+                'Imprimir rótulos para estanterías.',
+                'Realizar inventarios cíclicos con lectores móviles.',
+                'Generar estadísticas de productos más vendidos.',
+                'Sugerir productos complementarios en el punto de venta.',
+                'Controlar acceso a la caja mediante huella (opcional).',
+                'Registrar transferencias entre locales.',
+                'Mantener bitácora de auditoría de transacciones.'
+            ],
+            noFuncionales: [
+                'El sistema debe ser rápido, con tiempos de respuesta menores a 1 segundo en escaneo.',
+                'Disponibilidad del 99.5% en horario comercial (8:00 a 21:00).',
+                'La base de datos debe soportar al menos 100,000 productos.',
+                'El POS debe poder operar sin conexión a internet (modo offline) al menos 2 horas.',
+                'Sincronización con la nube cada 5 minutos cuando hay conexión.',
+                'Los tickets deben imprimirse en menos de 3 segundos.',
+                'La interfaz debe ser intuitiva para personal con poca experiencia tecnológica.',
+                'El sistema debe soportar 10 usuarios concurrentes por local.',
+                'La seguridad debe incluir cifrado de datos sensibles (tarjetas).',
+                'Se debe poder escalar a 10 locales en el futuro.',
+                'Los respaldos deben ser automáticos diarios.',
+                'El sistema debe ser compatible con impresoras fiscales (si aplica).',
+                'El lector de código debe leer códigos dañados o borrosos.',
+                'La pantalla táctil debe funcionar con guantes (para frío).',
+                'La cámara de seguridad debe grabar 24/7 con almacenamiento de 30 días.',
+                'El router debe soportar al menos 20 dispositivos conectados.',
+                'Las actualizaciones del software deben ser automáticas y en horario nocturno.',
+                'El sistema debe tener logs de auditoría para trazabilidad.',
+                'El tiempo de aprendizaje del personal debe ser menor a 2 horas.',
+                'La batería de las tablets debe durar al menos 8 horas.',
+                'El POS debe soportar cortes de energía (con UPS).',
+                'La sincronización entre locales debe ser bidireccional y sin conflictos.',
+                'Los reportes deben exportarse a Excel y PDF.',
+                'La impresión de etiquetas debe ser de alta calidad (300 dpi).',
+                'El sistema debe soportar múltiples idiomas (español/inglés).',
+                'El mantenimiento del hardware debe ser sencillo (componentes estándar).',
+                'La base de datos debe permitir consultas complejas sin degradar el rendimiento.',
+                'La autenticación debe ser por usuario y contraseña, con posibilidad de 2FA.',
+                'El sistema debe tener un modo "demostración" para capacitación.',
+                'El tiempo de inactividad programado no debe exceder 30 minutos mensuales.'
+            ],
+            impacto: 'El hardware adecuado permite agilizar las ventas, reducir errores de inventario, y mejorar la experiencia del cliente. La integración entre locales y tienda online posibilita un modelo omnicanal, aumentando las ventas y la fidelización. Además, los datos de ventas permiten tomar decisiones estratégicas sobre surtido y promociones.',
+            puntosAnalisis: [
+                '¿Cuántos puntos de venta operan simultáneamente?',
+                '¿Qué medios de pago se aceptan?',
+                '¿Se requiere facturación electrónica?',
+                '¿Cómo se manejan las devoluciones?',
+                '¿Existe un catálogo de productos centralizado?',
+                '¿Cómo se sincroniza el inventario con la tienda online?',
+                '¿Qué tipo de promociones se aplican?',
+                '¿Se necesita control de acceso por roles?',
+                '¿Cuál es el volumen estimado de ventas diarias?',
+                '¿Cuántos empleados operan el sistema?',
+                '¿Se requiere integración con contabilidad?',
+                '¿Qué nivel de disponibilidad se exige?',
+                '¿Cómo se manejan los cortes de luz?',
+                '¿Se necesita soporte para dispositivos móviles?',
+                '¿Cómo se gestionan los pedidos a proveedores?',
+                '¿Se requiere control de lotes o fechas de vencimiento?',
+                '¿Qué informes son críticos para la gerencia?',
+                '¿Se planea expandir a más locales?',
+                '¿Qué sistemas externos deben integrarse?',
+                '¿Cómo se maneja la seguridad de los datos de clientes?',
+                '¿Se necesita impresión de etiquetas?',
+                '¿Cómo se realiza el arqueo de caja?',
+                '¿Se requiere trazabilidad de cada transacción?',
+                '¿Qué ancho de banda de internet es necesario?',
+                '¿Se necesita redundancia de servidores?',
+                '¿Cómo se actualiza el software?',
+                '¿Qué nivel de soporte técnico se requiere?',
+                '¿Se necesita capacitación continua?',
+                '¿Cómo se manejan los picos de ventas (temporada alta)?',
+                '¿Se requiere integración con redes sociales?',
+                '¿Cómo se gestiona el stock en depósito vs. sala?',
+                '¿Se necesita control de mermas?',
+                '¿Cómo se manejan los cambios de precios?',
+                '¿Qué política de devoluciones se aplica?',
+                '¿Se requiere sistema de fidelización?',
+                '¿Cómo se notifican las promociones a los clientes?',
+                '¿Se necesita soporte para tarjetas de regalo?',
+                '¿Cómo se gestionan los descuentos por volumen?',
+                '¿Se requiere seguimiento de comisiones?',
+                '¿Qué métricas de rendimiento son clave?',
+                '¿Cómo se maneja la pérdida de conexión?',
+                '¿Se necesita un servidor local o todo en la nube?',
+                '¿Cuál es el presupuesto para hardware?',
+                '¿Se necesita un lector de códigos especial para juguetes pequeños?',
+                '¿Cómo se maneja la seguridad física de los equipos?',
+                '¿Se requiere grabación de video de cada transacción?',
+                '¿Cómo se integra con el sistema de contabilidad?',
+                '¿Se necesita un módulo de recursos humanos?',
+                '¿Cómo se gestionan las campañas estacionales?'
+            ]
+        }, {
+            id: 'ferreteria',
+            nombre: 'Ferretería "El Tornillo Feliz"',
+            descripcion: 'Ferretería tradicional con venta de materiales de construcción, herramientas, y artículos de jardinería. Atiende tanto a público minorista como a contratistas. Posee un depósito anexo con grandes volúmenes de stock.',
+            hardware: [
+                { nombre: 'Terminal POS fijo', cantidad: 2, especificaciones: 'Pantalla 15", Intel i3, 4GB RAM, SSD 128GB', uso: 'Cajas principales' },
+                { nombre: 'Lector de código de barras', cantidad: 3, especificaciones: 'Láser, resistente a polvo', uso: 'Escaneo de productos y materiales' },
+                { nombre: 'Impresora de facturas', cantidad: 2, especificaciones: 'Matricial para facturas continuas (o térmica)', uso: 'Facturación para contratistas' },
+                { nombre: 'Balanza electrónica industrial', cantidad: 1, especificaciones: 'Capacidad 100kg, precisión 10g', uso: 'Venta por peso (clavos, tornillos, arena)' },
+                { nombre: 'Computadora de gestión', cantidad: 1, especificaciones: 'Intel i5, 16GB RAM, 512GB SSD, Windows 10', uso: 'Administración, presupuestos, compras' },
+                { nombre: 'Router empresarial con 4G backup', cantidad: 1, especificaciones: 'Doble WAN, 4G', uso: 'Conectividad principal y backup' },
+                { nombre: 'Cámaras de seguridad', cantidad: 4, especificaciones: '2MP, 1080p, resistencia IP67', uso: 'Vigilancia en tienda y depósito' },
+                { nombre: 'Lector de tarjetas', cantidad: 2, especificantes: 'Contactless y chip', uso: 'Pagos electrónicos' },
+                { nombre: 'Terminal para tomar pedidos en depósito', cantidad: 1, especificaciones: 'Tablet Rugged 10"', uso: 'Atención en depósito para contratistas' },
+                { nombre: 'Impresora de etiquetas', cantidad: 1, especificaciones: 'Térmica transferencia, 300dpi', uso: 'Etiquetado de productos y estanterías' },
+                { nombre: 'Monitor adicional', cantidad: 1, especificaciones: '22"', uso: 'Exhibición de precios o promociones' },
+                { nombre: 'UPS', cantidad: 3, especificaciones: '1500VA', uso: 'Protección de equipos críticos' },
+            ],
+            funcionales: [
+                'Venta de productos por unidad, metro, kilo o litro.',
+                'Facturación con impuestos diferenciados (IVA, percepciones).',
+                'Gestión de precios por lista (mayorista/minorista).',
+                'Control de stock con múltiples ubicaciones (tienda, depósito).',
+                'Generación de órdenes de compra a proveedores.',
+                'Registro de movimientos de inventario (entradas, salidas, ajustes).',
+                'Cálculo automático de precios según peso o medida.',
+                'Gestión de presupuestos para clientes (contratistas).',
+                'Conversión de presupuesto a venta directa.',
+                'Administración de créditos a clientes (cuenta corriente).',
+                'Registro de pagos parciales.',
+                'Control de cheques y transferencias.',
+                'Impresión de remitos y órdenes de despacho.',
+                'Gestión de devoluciones de productos defectuosos.',
+                'Control de lotes y fechas de vencimiento (materiales).',
+                'Sincronización con sistema contable.',
+                'Reporte de rentabilidad por producto y por categoría.',
+                'Alertas de stock crítico.',
+                'Gestión de clientes (historial de compras).',
+                'Mantenimiento de precios históricos.',
+                'Administración de promociones por cantidad.',
+                'Control de acceso a funciones según perfil.',
+                'Registro de asistencia de empleados.',
+                'Generación de pedidos sugeridos a proveedores.',
+                'Control de compras por obra o proyecto.',
+                'Gestión de entregas a domicilio.',
+                'Registro de gastos operativos.',
+                'Generación de estadísticas de ventas por vendedor.',
+                'Integración con plataforma de e-commerce (opcional).',
+                'Escaneo de códigos de barras de materiales.',
+                'Captura de firmas en dispositivos móviles para entregas.',
+                'Control de inventario cíclico con lectores.',
+                'Registro de devoluciones de proveedores.',
+                'Cálculo de comisiones por ventas.',
+                'Administración de tablas de precios (ej. por volumen).',
+                'Registro de pedidos especiales (no stock).',
+                'Generación de notas de crédito.',
+                'Soporte para múltiples sucursales.',
+                'Control de acceso a depósito por autorización.',
+                'Registro de transferencias entre ubicaciones.',
+                'Generación de órdenes de trabajo para instalaciones.',
+                'Gestión de garantías de herramientas.',
+                'Registro de devoluciones de clientes.',
+                'Control de caja diario (arqueo).',
+                'Generación de reportes fiscales.',
+                'Registro de operaciones con tarjetas.',
+                'Soporte para facturación electrónica.',
+                'Gestión de proveedores y condiciones de pago.',
+                'Registro de calidad de productos.',
+                'Notificaciones de vencimiento de precios.'
+            ],
+            noFuncionales: [
+                'El sistema debe operar en entornos con polvo y humedad (hardware robusto).',
+                'Tiempo de respuesta menor a 2 segundos en búsquedas de productos.',
+                'Disponibilidad 99% en horario de 7:00 a 20:00.',
+                'Soportar al menos 5000 productos con múltiples atributos.',
+                'La balanza debe integrarse automáticamente al POS.',
+                'Los respaldos deben ser automáticos cada hora en local y nube.',
+                'La impresión de facturas no debe exceder 5 segundos.',
+                'El sistema debe ser escalable a 5 sucursales.',
+                'Seguridad con cifrado de datos de clientes y pagos.',
+                'El hardware debe ser fácil de limpiar y mantener.',
+                'La conexión a internet debe ser redundante (4G backup).',
+                'Las actualizaciones deben ser en horario no comercial.',
+                'El sistema debe tener modo offline para ventas básicas.',
+                'Los reportes deben poder exportarse a Excel y PDF.',
+                'La interfaz debe ser simple y con letras grandes (para operarios).',
+                'El tiempo de entrenamiento debe ser de 1 día.',
+                'El lector de código debe leer códigos impresos en materiales rugosos.',
+                'La cámara debe grabar con suficiente resolución para identificar caras.',
+                'El almacenamiento de video debe ser de 15 días.',
+                'El sistema de backup debe ser rápido (restauración en <30 min).',
+                'Los equipos deben tener garantía extendida por el entorno agresivo.',
+                'La red debe soportar hasta 15 dispositivos simultáneos.',
+                'El sistema de gestión debe permitir personalización de campos.',
+                'La autenticación debe soportar token o huella para cajeros.',
+                'La base de datos debe optimizar consultas por código de barras.',
+                'El sistema debe ser compatible con impresoras fiscales.',
+                'La sincronización entre depósito y tienda debe ser en tiempo real.',
+                'El tiempo de inactividad programado máximo: 1 hora mensual.',
+                'El sistema debe ser accesible desde navegador para consultas remotas.',
+                'Debe tener log de auditoría con fecha/hora y usuario.'
+            ],
+            impacto: 'La ferretería se beneficia de un sistema que maneje precios por peso y múltiples unidades de medida, agilizando la atención a contratistas y reduciendo errores. La integración con balanzas y lectores de código permite un flujo de trabajo más rápido y preciso. El control de inventario en tiempo real evita faltantes y permite una mejor planificación de compras, mejorando la rentabilidad y la satisfacción del cliente.',
+            puntosAnalisis: [
+                '¿Cómo se maneja la venta por peso?',
+                '¿Qué tipos de unidades de medida se usan?',
+                '¿Se necesita facturación para contratistas?',
+                '¿Cómo se gestionan los créditos?',
+                '¿Cuántos productos tienen manejo de lote?',
+                '¿Se requiere control de inventario en múltiples ubicaciones?',
+                '¿Qué periodicidad tienen los pedidos a proveedores?',
+                '¿Se necesita integración con sistemas contables?',
+                '¿Cómo se manejan las devoluciones?',
+                '¿Qué nivel de detalle en reportes se necesita?',
+                '¿Cuántos usuarios simultáneos operan?',
+                '¿Cómo se manejan los cambios de precios?',
+                '¿Se requiere control de acceso por roles?',
+                '¿Cuál es el volumen diario de transacciones?',
+                '¿Se necesita módulo de presupuestos?',
+                '¿Cómo se manejan las entregas a domicilio?',
+                '¿Se necesita soporte para e-commerce?',
+                '¿Cómo se controla el stock en depósito?',
+                '¿Qué políticas de descuento aplican?',
+                '¿Se requiere trazabilidad de materiales?',
+                '¿Cómo se maneja la seguridad de los datos?',
+                '¿Se necesita copias de seguridad automáticas?',
+                '¿Qué tipo de impresión se necesita (facturas, remitos)?',
+                '¿Cómo se manejan los pagos parciales?',
+                '¿Se necesita control de cheques?',
+                '¿Cómo se gestionan los proveedores?',
+                '¿Se requiere control de calidad?',
+                '¿Cómo se maneja el mantenimiento del hardware?',
+                '¿Se necesita redundancia de internet?',
+                '¿Cómo se manejan los picos de demanda?',
+                '¿Se necesita integración con plataformas de entrega?',
+                '¿Qué métricas de ventas son clave?',
+                '¿Cómo se manejan los descuentos por volumen?',
+                '¿Se necesita sistema de fidelización?',
+                '¿Cómo se maneja la devolución de envases?',
+                '¿Se necesita control de inventario de activos fijos?',
+                '¿Cómo se maneja la capacitación del personal?',
+                '¿Se necesita soporte multidispositivo?',
+                '¿Cómo se maneja la pérdida de conectividad?',
+                '¿Se necesita servidor local o cloud?',
+                '¿Cuál es el presupuesto para hardware?',
+                '¿Se necesita impresión de etiquetas de precios?',
+                '¿Cómo se maneja la seguridad física de los equipos?',
+                '¿Se requiere grabación de video de cada transacción?',
+                '¿Cómo se integra con el sistema de contabilidad?',
+                '¿Se necesita un módulo de recursos humanos?',
+                '¿Cómo se gestionan las campañas estacionales?'
+            ]
+        }, {
+            id: 'parque',
+            nombre: 'Parque de Diversiones "Aventura Mágica"',
+            descripcion: 'Parque de atracciones con 15 juegos mecánicos, zona de comida, tienda de souvenirs, y eventos especiales. Posee un aforo máximo de 3000 personas.',
+            hardware: [
+                { nombre: 'Servidor central', cantidad: 1, especificaciones: 'Dual Xeon, 64GB RAM, RAID 10, SSD', uso: 'Base de datos y aplicaciones críticas' },
+                { nombre: 'Terminales POS en puntos de venta', cantidad: 8, especificaciones: 'Pantalla táctil 15", Intel i3, 4GB RAM', uso: 'Venta de entradas, comida, souvenirs' },
+                { nombre: 'Torniquetes de acceso RFID', cantidad: 6, especificaciones: 'Lectura de pulseras, con conteo', uso: 'Control de acceso al parque' },
+                { nombre: 'Lector de pulseras RFID (handheld)', cantidad: 10, especificaciones: 'Portátil con batería', uso: 'Lectura de pulseras para juegos y consumiciones' },
+                { nombre: 'Impresoras de tickets (entradas)', cantidad: 4, especificaciones: 'Térmicas de alta velocidad', uso: 'Emisión de entradas' },
+                { nombre: 'Pantallas informativas LED', cantidad: 5, especificaciones: 'Grandes, 65"', uso: 'Mostrar tiempos de espera, promociones' },
+                { nombre: 'Sistema de sonido ambiental', cantidad: 1, especificaciones: 'Amplificado, 6 zonas', uso: 'Música y anuncios' },
+                { nombre: 'Cámaras IP de vigilancia', cantidad: 20, especificaciones: '4K, PTZ, visión nocturna', uso: 'Seguridad y monitoreo de aforo' },
+                { nombre: 'Router/switch empresarial', cantidad: 1, especificaciones: 'Capa 3, PoE', uso: 'Red backbone' },
+                { nombre: 'Access Points WiFi', cantidad: 10, especificaciones: 'WiFi 6, alta densidad', uso: 'Cobertura para dispositivos móviles' },
+                { nombre: 'Tablets para supervisores', cantidad: 4, especificaciones: '10" Android, rugerizadas', uso: 'Gestión de incidencias y reportes' },
+                { nombre: 'UPS central', cantidad: 1, especificaciones: '10kVA', uso: 'Respaldo de energía para servidores y POS' },
+                { nombre: 'Sistema de ticketing online (impresora de códigos)', cantidad: 2, especificaciones: 'Impresora de código QR', uso: 'Venta online con escaneo en acceso' },
+            ],
+            funcionales: [
+                'Venta de entradas generales, VIP, y por atracción.',
+                'Control de aforo en tiempo real (capacidad máxima).',
+                'Asociación de pulseras RFID a clientes (identificación).',
+                'Gestión de colas y tiempos de espera en atracciones.',
+                'Control de acceso a juegos según edad y altura.',
+                'Carga de créditos en pulseras para consumos.',
+                'Registro de consumo en puestos de comida y tiendas.',
+                'Generación de reportes de ocupación por atracción.',
+                'Gestión de eventos especiales (cumpleaños, empresas).',
+                'Sincronización con sistema de venta online.',
+                'Escaneo de códigos QR de entradas online.',
+                'Notificaciones de cierre de atracciones por mantenimiento.',
+                'Control de inventario de souvenirs y alimentos.',
+                'Gestión de turnos de empleados.',
+                'Registro de incidencias y mantenimiento de juegos.',
+                'Facturación electrónica para grupos y empresas.',
+                'Control de acceso a zonas VIP.',
+                'Manejo de promociones y descuentos por temporada.',
+                'Registro de pérdidas y extravíos de pulseras.',
+                'Sistema de puntos de fidelización.',
+                'Alertas de sobreaforo.',
+                'Generación de estadísticas de visitantes (demografía).',
+                'Control de inventario de pulseras (stock).',
+                'Gestión de reservas de área de eventos.',
+                'Integración con redes sociales para promociones.',
+                'Soporte para múltiples idiomas (turistas).',
+                'Registro de ventas de alimentos (inventario).',
+                'Control de caja de cada punto de venta.',
+                'Generación de órdenes de compra a proveedores de alimentos.',
+                'Mantenimiento de historial de clientes.',
+                'Sistema de encuestas de satisfacción (post-visita).',
+                'Control de acceso a bodegas y zonas restringidas.',
+                'Registro de movimientos de efectivo entre puestos.',
+                'Sistema de backup en tiempo real.',
+                'Generación de reportes financieros diarios.',
+                'Control de asistencia del personal.',
+                'Gestión de calendario de mantenimiento de juegos.',
+                'Integración con sistema de climatización (si aplica).',
+                'Alertas de seguridad (detección de aglomeraciones).',
+                'Sistema de comunicación entre supervisores.',
+                'Registro de incidencias de clientes (reclamos).',
+                'Control de accesos de proveedores.',
+                'Gestión de llaves y permisos.',
+                'Reporte de duración de sesiones de clientes.',
+                'Control de consumo de energía de atracciones.',
+                'Registro de accidentes e informes.'
+            ],
+            noFuncionales: [
+                'El sistema debe soportar 3000 usuarios concurrentes (accesos y pagos).',
+                'Tiempo de respuesta en lecturas RFID < 0.5 segundos.',
+                'Disponibilidad del 99.9% en horario de apertura (10:00 a 22:00).',
+                'Alta disponibilidad con clúster de servidores.',
+                'La red WiFi debe cubrir todo el parque sin puntos muertos.',
+                'Las cámaras deben grabar 24/7 con retención de 60 días.',
+                'Los POS deben tener modo offline para ventas básicas.',
+                'Sincronización de datos en menos de 1 segundo entre puntos.',
+                'La base de datos debe manejar millones de transacciones diarias.',
+                'Seguridad robusta con autenticación de doble factor para administradores.',
+                'La impresión de tickets debe ser rápida (<2 segundos).',
+                'El sistema debe ser escalable para aumentar atracciones.',
+                'Los torniquetes deben funcionar con energía de respaldo.',
+                'La interfaz debe ser intuitiva para operadores temporales.',
+                'El tiempo de inactividad programado máximo: 30 minutos mensuales.',
+                'Los respaldos deben ser automáticos cada 15 minutos.',
+                'El sistema debe soportar integración con proveedores externos de pago.',
+                'La comunicación entre dispositivos debe ser cifrada.',
+                'Los dispositivos móviles deben ser resistentes a caídas y agua.',
+                'La pantalla LED debe ser visible a la luz del sol.',
+                'El sistema de sonido debe ser audible en todo el parque.',
+                'Los lectores RFID deben tener un alcance de al menos 5 cm.',
+                'El sistema debe generar alertas de performance en tiempo real.',
+                'Debe haber un plan de recuperación ante desastres.',
+                'Las actualizaciones deben ser en horario de cierre.',
+                'El sistema debe poder exportar datos a formatos estándar.',
+                'La autenticación de clientes puede ser por pulsera o app móvil.',
+                'El sistema debe cumplir con normativas de protección de datos.',
+                'Los POS deben tener batería interna para cortes de luz.',
+                'El sistema de conteo de aforo debe ser preciso al 99%.'
+            ],
+            impacto: 'El hardware y el sistema permiten una experiencia fluida para los visitantes, reduciendo colas y mejorando la seguridad. La gestión en tiempo real del aforo y los accesos evita sobrecargas y facilita la toma de decisiones operativas. La integración con pulseras RFID promueve el consumo y la fidelización, aumentando el gasto promedio por visitante. Además, los datos recopilados permiten analizar el comportamiento de los clientes y optimizar la oferta.',
+            puntosAnalisis: [
+                '¿Cuántos visitantes se esperan en temporada alta?',
+                '¿Qué tipo de pulseras o tickets se usarán?',
+                '¿Cómo se gestionan las colas?',
+                '¿Se necesita control de edad/altura?',
+                '¿Cómo se maneja la venta online?',
+                '¿Qué integraciones con pasarelas de pago se requieren?',
+                '¿Se necesita sistema de fidelización?',
+                '¿Cómo se gestionan los eventos especiales?',
+                '¿Qué nivel de seguridad se requiere en las instalaciones?',
+                '¿Cómo se maneja la pérdida de pulseras?',
+                '¿Se requiere control de inventario de alimentos?',
+                '¿Cómo se maneja la facturación a empresas?',
+                '¿Qué informes son clave para la gerencia?',
+                '¿Cómo se gestiona el mantenimiento de juegos?',
+                '¿Se necesita integración con sistemas de climatización?',
+                '¿Cómo se maneja la comunicación entre supervisores?',
+                '¿Se necesita un sistema de ticketing para empleados?',
+                '¿Cómo se controla el acceso a zonas restringidas?',
+                '¿Qué ancho de banda se necesita?',
+                '¿Se requiere redundancia de internet?',
+                '¿Cómo se maneja la energía en caso de cortes?',
+                '¿Se necesita un sistema de backup de datos en sitio?',
+                '¿Cómo se manejan las devoluciones y reclamos?',
+                '¿Se requiere sistema de encuestas?',
+                '¿Cómo se integra con redes sociales?',
+                '¿Se necesita soporte multilingüe?',
+                '¿Cómo se maneja la seguridad de los datos de menores?',
+                '¿Se requiere un sistema de video vigilancia con análisis?',
+                '¿Cómo se manejan los picos de demanda en Navidad?',
+                '¿Se necesita un sistema de reserva de atracciones?',
+                '¿Cómo se gestiona el stock de souvenirs?',
+                '¿Se requiere un sistema de punto de venta para food trucks?',
+                '¿Cómo se maneja la contabilidad general?',
+                '¿Se necesita un sistema de recursos humanos?',
+                '¿Cómo se maneja la formación de personal?',
+                '¿Se requiere un sistema de notificaciones push?',
+                '¿Cómo se maneja la interoperabilidad con otros sistemas?',
+                '¿Se necesita un sistema de análisis de datos avanzado?',
+                '¿Cómo se maneja la experiencia del cliente (CX)?',
+                '¿Se requiere un sistema de gestión de colas virtuales?'
+            ]
+        }, {
+            id: 'restaurante',
+            nombre: 'Restaurante "Sabores del Mundo"',
+            descripcion: 'Restaurante de cocina internacional, con 40 mesas, servicio de take-away y delivery. Capacidad para 120 comensales. Posee carta digital y sistema de reservas.',
+            hardware: [
+                { nombre: 'TPV táctil en cocina y caja', cantidad: 3, especificaciones: 'Pantalla 15", Intel i3, 4GB RAM, SSD', uso: 'Gestión de pedidos y facturación' },
+                { nombre: 'Impresora de tickets para cocina', cantidad: 2, especificaciones: 'Térmica 80mm, alta velocidad', uso: 'Comandas de cocina' },
+                { nombre: 'Impresora de tickets para barra', cantidad: 1, especificaciones: 'Térmica 80mm', uso: 'Comandas de barra' },
+                { nombre: 'Lector de tarjetas', cantidad: 2, especificaciones: 'Contactless y chip', uso: 'Pagos electrónicos' },
+                { nombre: 'Tablets para meseros', cantidad: 6, especificaciones: '10" Android, con funda resistente', uso: 'Toma de pedidos en mesa' },
+                { nombre: 'Pantalla en cocina para pedidos', cantidad: 1, especificaciones: '24" LED, resistencia a grasa', uso: 'Visualización de pedidos en tiempo real' },
+                { nombre: 'Router WiFi empresarial', cantidad: 1, especificaciones: 'Dual band, alta densidad', uso: 'Conexión para tablets y clientes' },
+                { nombre: 'Cámara de seguridad', cantidad: 2, especificaciones: '1080p, visión nocturna', uso: 'Vigilancia en salón y cocina' },
+                { nombre: 'Sistema de sonido ambiente', cantidad: 1, especificaciones: 'Altavoces empotrados', uso: 'Música ambiental' },
+                { nombre: 'Balanza de cocina', cantidad: 1, especificaciones: 'Digital, 5kg precisión 1g', uso: 'Porcionado de ingredientes' },
+                { nombre: 'Impresora de facturas', cantidad: 1, especificaciones: 'Matricial o térmica para factura', uso: 'Facturación electrónica' },
+                { nombre: 'UPS', cantidad: 2, especificaciones: '1000VA', uso: 'Protección de equipos críticos' },
+            ],
+            funcionales: [
+                'Toma de pedidos desde tablet por mesero.',
+                'Envío de comandas a cocina y barra automáticamente.',
+                'Gestión de mesas (reservas, ocupación, liberación).',
+                'Control de tiempo de preparación de platos.',
+                'Facturación de consumos por mesa o cliente.',
+                'División de cuenta entre comensales (split bill).',
+                'Gestión de promociones (happy hour, menú del día).',
+                'Control de inventario de ingredientes (materia prima).',
+                'Alertas de stock mínimo en cocina.',
+                'Registro de pedidos de delivery y take-away.',
+                'Integración con plataformas de delivery (Rappi, PedidosYa).',
+                'Gestión de reservas con anticipación.',
+                'Registro de preferencias y alergias de clientes.',
+                'Control de caja diario (arqueo).',
+                'Generación de reportes de ventas por plato, mesero, hora.',
+                'Gestión de proveedores y órdenes de compra.',
+                'Control de merma y desperdicio.',
+                'Registro de cambios y devoluciones.',
+                'Cálculo automático de costos y márgenes.',
+                'Sistema de comisiones para meseros (por venta).',
+                'Gestión de turnos del personal.',
+                'Registro de asistencia de empleados.',
+                'Control de acceso a funciones según rol.',
+                'Generación de menús digitales (código QR).',
+                'Notificaciones de pedidos listos para servir.',
+                'Control de temperatura de neveras (si hay sensores).',
+                'Registro de pedidos especiales (fuera de carta).',
+                'Gestión de eventos y banquetes.',
+                'Registro de quejas y sugerencias.',
+                'Control de inventario de bebidas.',
+                'Sincronización con sistema contable.',
+                'Generación de reportes de rentabilidad por plato.',
+                'Gestión de cupones de descuento.',
+                'Registro de propinas y su distribución.',
+                'Control de consumiciones de empleados.',
+                'Gestión de entregas a domicilio con seguimiento.',
+                'Registro de horarios de apertura y cierre.',
+                'Gestión de menús estacionales.',
+                'Control de alérgenos en platos.',
+                'Generación de órdenes de compra automáticas.'
+            ],
+            noFuncionales: [
+                'El sistema debe ser rápido en la toma de pedidos (menos de 2 segundos por comanda).',
+                'Disponibilidad del 99.5% en horario de apertura (12:00 a 00:00).',
+                'Las tablets deben tener batería para al menos 10 horas.',
+                'La impresión de comandas debe ser inmediata (<1 segundo).',
+                'El sistema debe soportar hasta 10 meseros simultáneos.',
+                'La base de datos debe manejar historial de pedidos de al menos 2 años.',
+                'La red WiFi debe cubrir todo el salón y terraza.',
+                'La sincronización entre tablets y servidor debe ser en tiempo real.',
+                'Seguridad con cifrado en transacciones de pago.',
+                'Los reportes deben generarse en menos de 5 segundos.',
+                'El sistema debe ser escalable a 3 locales.',
+                'La interfaz debe ser clara y con iconos para meseros.',
+                'El tiempo de entrenamiento para meseros debe ser < 1 hora.',
+                'Los equipos deben ser resistentes a derrames de líquidos.',
+                'El sistema debe tener modo offline para seguir tomando pedidos.',
+                'Los respaldos deben ser automáticos cada hora.',
+                'La base de datos debe optimizar consultas por fecha y mesa.',
+                'Los tickets de cocina deben indicar tiempo estimado.',
+                'El sistema debe integrarse con impresoras fiscales.',
+                'La autenticación debe ser por usuario y contraseña o huella.',
+                'El sistema debe permitir personalización de menús.',
+                'Las actualizaciones deben ser programadas en horario de cierre.',
+                'El tiempo de inactividad no planificado máximo: 15 minutos.',
+                'El sistema de sonido debe ser regulable por zonas.',
+                'Las cámaras deben grabar con calidad suficiente para identificar.',
+                'El almacenamiento de video mínimo 30 días.',
+                'El sistema debe soportar múltiples idiomas (para turistas).',
+                'La comunicación entre dispositivos debe usar protocolos seguros.',
+                'El sistema debe tener auditoría de cambios en precios.',
+                'Los pagos electrónicos deben procesarse en menos de 5 segundos.'
+            ],
+            impacto: 'La automatización de pedidos y comandas agiliza el servicio, reduce errores y mejora la experiencia del cliente. La integración con delivery y reservas amplía el alcance del negocio. El control de inventario en tiempo real ayuda a reducir el desperdicio y optimizar las compras. Los datos de ventas permiten ajustar la carta y las promociones para maximizar la rentabilidad.',
+            puntosAnalisis: [
+                '¿Cuántos pedidos se manejan en hora pico?',
+                '¿Se necesita integración con plataformas de delivery?',
+                '¿Cómo se gestionan las reservas?',
+                '¿Qué tipo de menú se ofrece (digital/físico)?',
+                '¿Cómo se manejan las alergias y preferencias?',
+                '¿Se necesita sistema de comisiones?',
+                '¿Cómo se controla el inventario de cocina?',
+                '¿Se requiere facturación electrónica?',
+                '¿Cómo se manejan los pagos divididos?',
+                '¿Qué informes son críticos para el chef?',
+                '¿Se necesita control de temperatura?',
+                '¿Cómo se manejan los pedidos fuera de carta?',
+                '¿Se necesita sistema de fidelización?',
+                '¿Cómo se maneja el delivery propio?',
+                '¿Qué nivel de seguridad se requiere en pagos?',
+                '¿Cómo se gestionan los turnos del personal?',
+                '¿Se necesita sistema de gestión de proveedores?',
+                '¿Cómo se manejan las devoluciones?',
+                '¿Qué métricas de rendimiento son clave (tiempo de preparación, etc.)?',
+                '¿Se necesita integración con contabilidad?',
+                '¿Cómo se maneja el stock de bebidas?',
+                '¿Se necesita control de merma?',
+                '¿Cómo se manejan los eventos y banquetes?',
+                '¿Se requiere un sistema de reservas online?',
+                '¿Cómo se maneja la comunicación con cocina?',
+                '¿Se necesita pantalla en cocina o impresión?',
+                '¿Cómo se maneja la atención en terraza (sin cables)?',
+                '¿Se necesita sistema de propinas?',
+                '¿Cómo se maneja la facturación a empresas?',
+                '¿Se requiere un sistema de gestión de clientes?'
+            ]
+        }, {
+            id: 'gimnasio',
+            nombre: 'Gimnasio "Fitness Life"',
+            descripcion: 'Centro deportivo con sala de musculación, clases dirigidas (yoga, pilates, spinning), piscina y zona de spa. Posee 800 socios activos y 10 entrenadores.',
+            hardware: [
+                { nombre: 'Computadora de recepción', cantidad: 1, especificaciones: 'Intel i5, 8GB RAM, SSD 256GB', uso: 'Gestión de socios, pagos, horarios' },
+                { nombre: 'Lector de huella digital', cantidad: 2, especificaciones: 'USB, capacitivo', uso: 'Control de acceso de socios' },
+                { nombre: 'Lector de tarjetas de acceso RFID', cantidad: 2, especificaciones: 'Contactless', uso: 'Acceso alternativo con tarjeta' },
+                { nombre: 'Impresora de tickets', cantidad: 1, especificaciones: 'Térmica 80mm', uso: 'Comprobantes de pago y inscripciones' },
+                { nombre: 'Tablets para entrenadores', cantidad: 4, especificaciones: '10" Android, con funda', uso: 'Registro de asistencia y planes de entrenamiento' },
+                { nombre: 'Pantallas para clases', cantidad: 2, especificaciones: '55" LED', uso: 'Visualización de ejercicios y horarios' },
+                { nombre: 'Sistema de sonido para clases', cantidad: 1, especificaciones: 'Amplificador, 4 altavoces', uso: 'Música para clases grupales' },
+                { nombre: 'Cámaras de seguridad', cantidad: 4, especificaciones: '1080p, gran angular', uso: 'Vigilancia en sala y piscina' },
+                { nombre: 'Router empresarial', cantidad: 1, especificaciones: 'Dual band, 50 dispositivos', uso: 'WiFi para socios y equipos' },
+                { nombre: 'Balanza corporal digital', cantidad: 1, especificaciones: 'Con medición de grasa', uso: 'Seguimiento de socios' },
+                { nombre: 'Relojes de actividad (wearables)', cantidad: 2, especificaciones: 'Bluetooth, monitor cardiaco', uso: 'Pruebas de rendimiento (opcional)' },
+                { nombre: 'UPS', cantidad: 1, especificaciones: '1000VA', uso: 'Protección de equipos críticos' },
+            ],
+            funcionales: [
+                'Registro de nuevos socios con datos personales y médicos.',
+                'Control de acceso mediante huella o tarjeta RFID.',
+                'Registro de asistencias diarias por socio.',
+                'Gestión de planes de entrenamiento personalizados.',
+                'Programación de clases grupales (horarios, aforo).',
+                'Reserva de clases por parte de socios (app/web).',
+                'Control de pagos de cuotas y membresías.',
+                'Generación de facturas y recibos.',
+                'Gestión de promociones y descuentos.',
+                'Control de inventario de suplementos y productos (tienda).',
+                'Registro de mediciones de progreso (peso, grasa, medidas).',
+                'Gestión de entrenadores y horarios.',
+                'Registro de incidentes o lesiones.',
+                'Envío de notificaciones a socios (recordatorios, promociones).',
+                'Generación de reportes de asistencia, facturación y retención.',
+                'Control de acceso a zonas exclusivas (piscina, spa).',
+                'Gestión de cuotas vencidas y morosidad.',
+                'Registro de pagos con tarjeta y efectivo.',
+                'Sincronización con sistema contable.',
+                'Gestión de proveedores de equipamiento y mantenimiento.',
+                'Registro de mantenimiento de máquinas.',
+                'Control de inventario de taquillas.',
+                'Gestión de reservas de pista de pádel/tenis (si aplica).',
+                'Registro de encuestas de satisfacción.',
+                'Gestión de eventos especiales (maratones, charlas).',
+                'Control de acceso a vestuarios.',
+                'Registro de consumo de bebidas en bar (si tiene).',
+                'Generación de estadísticas de uso por hora/día.',
+                'Gestión de horarios de apertura y cierre.',
+                'Registro de llamadas de emergencia (botón de pánico).',
+                'Control de presencia de entrenadores.',
+                'Gestión de planes de alimentación (opcional).',
+                'Integración con apps de fitness (wearables).',
+                'Registro de progreso de socios (evolución).',
+                'Gestión de cupones de descuento por referidos.',
+                'Control de aforo en clases grupales.',
+                'Registro de check-in/check-out.',
+                'Gestión de programas de fidelización.',
+                'Control de stock de productos de tienda.',
+                'Generación de informes de retención de socios.'
+            ],
+            noFuncionales: [
+                'El sistema de acceso debe ser instantáneo (menos de 0.5 segundos).',
+                'Disponibilidad del 99.5% en horario de 6:00 a 23:00.',
+                'Soporte para al menos 1000 socios activos y 100 concurrentes.',
+                'La base de datos debe guardar historial de asistencias de 3 años.',
+                'La red WiFi debe soportar 50 dispositivos simultáneos.',
+                'Las tablets deben tener batería para toda la jornada.',
+                'El sistema de reservas debe ser en tiempo real.',
+                'La impresión de recibos debe ser rápida (<2 segundos).',
+                'Seguridad de datos con cifrado de información personal.',
+                'Escalabilidad para 2000 socios en 2 años.',
+                'Los respaldos automáticos diarios.',
+                'La interfaz debe ser sencilla para recepcionistas.',
+                'El tiempo de capacitación del personal debe ser 1 día.',
+                'Los lectores de huella deben ser precisos (bajo tasa de error).',
+                'El sistema debe permitir integración con apps móviles de socios.',
+                'La actualización del sistema debe ser en horario de cierre.',
+                'El tiempo de inactividad máximo: 30 minutos mensuales.',
+                'Los videos de seguridad deben almacenarse 30 días.',
+                'La autenticación de administradores debe ser con 2FA.',
+                'El sistema debe cumplir con GDPR/LOPD.',
+                'Los reportes deben exportarse a Excel y PDF.',
+                'El sistema debe tener modo offline para registro de asistencias.',
+                'Los wearables deben sincronizar datos automáticamente.',
+                'La balanza debe tener comunicación Bluetooth con el sistema.',
+                'El sistema debe generar alertas de sobreaforo.',
+                'La comunicación con el servidor debe ser encriptada.',
+                'El sistema debe tener logs de auditoría de accesos.',
+                'La sincronización con la app móvil debe ser instantánea.',
+                'Los precios de planes deben actualizarse centralizadamente.',
+                'El sistema debe soportar múltiples monedas (opcional).'
+            ],
+            impacto: 'El hardware y sistema de gestión permiten un control eficiente de socios, asistencias y pagos, reduciendo la morosidad y mejorando la experiencia del usuario. La integración con huellas y tarjetas agiliza el acceso y evita fraudes. Los datos de asistencia y progreso ayudan a los entrenadores a personalizar los planes, aumentando la retención de socios. Las reservas online y notificaciones mejoran la comunicación y fidelización.',
+            puntosAnalisis: [
+                '¿Cuántos socios se esperan gestionar?',
+                '¿Qué método de acceso se usará (huella, tarjeta, app)?',
+                '¿Se necesita integración con relojes inteligentes?',
+                '¿Cómo se gestionan las clases grupales?',
+                '¿Se requiere reserva de clases?',
+                '¿Cómo se manejan los pagos de cuotas?',
+                '¿Se necesita facturación electrónica?',
+                '¿Cómo se controla el acceso a la piscina?',
+                '¿Se necesita sistema de inventario para tienda?',
+                '¿Cómo se manejan las mediciones de progreso?',
+                '¿Se necesita integración con contabilidad?',
+                '¿Cómo se gestionan los entrenadores?',
+                '¿Se necesita sistema de notificaciones?',
+                '¿Qué informes son clave para la gerencia?',
+                '¿Cómo se maneja la morosidad?',
+                '¿Se necesita control de aforo en clases?',
+                '¿Cómo se manejan los eventos especiales?',
+                '¿Se necesita sistema de encuestas?',
+                '¿Cómo se maneja la seguridad de los datos?',
+                '¿Se necesita app móvil para socios?',
+                '¿Cómo se maneja el mantenimiento de máquinas?',
+                '¿Se necesita control de acceso a vestuarios?',
+                '¿Cómo se manejan las reservas de pistas?',
+                '¿Se necesita integración con proveedores?',
+                '¿Cómo se maneja la atención al cliente?',
+                '¿Se necesita sistema de fidelización?',
+                '¿Cómo se manejan las promociones?',
+                '¿Se necesita control de asistencia de entrenadores?',
+                '¿Cómo se maneja la comunicación con socios?',
+                '¿Se necesita un sistema de gestión de riesgos?',
+                '¿Cómo se manejan los pagos con tarjeta?',
+                '¿Se necesita sistema de backup en la nube?',
+                '¿Cómo se manejan los picos de afluencia?',
+                '¿Se necesita un sistema de gestión de colas?',
+                '¿Cómo se maneja la integración con redes sociales?',
+                '¿Se necesita un sistema de análisis de datos avanzado?',
+                '¿Cómo se maneja la experiencia del cliente?'
+            ]
+        }];
+
+        // ============================================================
+        // FUNCIONES PARA GENERAR EL CONTENIDO DE CADA COMERCIO
+        // ============================================================
+        function renderComercio(comercio, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            let html = `
+                <h2>${comercio.nombre}</h2>
+                <div class="info-box">
+                    <p><strong>Descripción del negocio:</strong> ${comercio.descripcion}</p>
+                </div>
+
+                <h3>🖥️ Hardware Requerido</h3>
+                <div class="card-grid">
+            `;
+            comercio.hardware.forEach(hw => {
+                html += `
+                    <div class="card">
+                        <h4>${hw.nombre}</h4>
+                        <p><strong>Cantidad:</strong> ${hw.cantidad}</p>
+                        <p><strong>Especificaciones:</strong> ${hw.especificaciones}</p>
+                        <p><strong>Uso:</strong> ${hw.uso}</p>
+                        <span class="badge badge-medium">Requerido</span>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+
+            // Funcionales
+            html += `<h3>📋 Requisitos Funcionales (${comercio.funcionales.length})</h3>
+                <ul class="list-group">`;
+            comercio.funcionales.forEach(f => {
+                html += `<li>${f}</li>`;
+            });
+            html += `</ul>`;
+
+            // No funcionales
+            html += `<h3>⚙️ Requisitos No Funcionales (${comercio.noFuncionales.length})</h3>
+                <ul class="list-group">`;
+            comercio.noFuncionales.forEach(nf => {
+                html += `<li>${nf}</li>`;
+            });
+            html += `</ul>`;
+
+            // Impacto
+            html += `<h3>📈 Impacto en el Modelo de Negocio</h3>
+                <div class="info-box">${comercio.impacto}</div>`;
+
+            // Puntos de análisis
+            html += `<h3>🔍 Puntos de Análisis del Analista Funcional (${comercio.puntosAnalisis.length})</h3>
+                <ul class="list-group">`;
+            comercio.puntosAnalisis.forEach(p => {
+                html += `<li>${p}</li>`;
+            });
+            html += `</ul>`;
+
+            // Resumen de puntos
+            const total = comercio.funcionales.length + comercio.noFuncionales.length + comercio.hardware.length + comercio.puntosAnalisis.length;
+            html += `<div class="stats-mini">
+                <div class="stat-mini">Total de puntos analizados: ${total}</div>
+                <div class="stat-mini">Funcionales: ${comercio.funcionales.length}</div>
+                <div class="stat-mini">No funcionales: ${comercio.noFuncionales.length}</div>
+                <div class="stat-mini">Hardware: ${comercio.hardware.length}</div>
+                <div class="stat-mini">Puntos clave: ${comercio.puntosAnalisis.length}</div>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        // ============================================================
+        // GENERAR COMPARATIVA
+        // ============================================================
+        function renderComparativa() {
+            const tbody = document.getElementById('comparativaBody');
+            if (!tbody) return;
+            let rows = '';
+            comerciosData.forEach(c => {
+                const total = c.funcionales.length + c.noFuncionales.length + c.hardware.length + c.puntosAnalisis.length;
+                const dispositivos = c.hardware.map(h => h.nombre).slice(0, 3).join(', ') + (c.hardware.length > 3 ? ', ...' : '');
+                rows += `<tr>
+                    <td><strong>${c.nombre}</strong></td>
+                    <td>${dispositivos}</td>
+                    <td>${c.hardware.reduce((sum, h) => sum + h.cantidad, 0)}</td>
+                    <td>${total}</td>
+                </tr>`;
+            });
+            tbody.innerHTML = rows;
+        }
+
+        // ============================================================
+        // NAVEGACIÓN POR PESTAÑAS
+        // ============================================================
+        function setupTabs() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const sectionId = this.dataset.section;
+                    // Ocultar todas
+                    document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+                    // Mostrar la seleccionada
+                    const target = document.getElementById(sectionId);
+                    if (target) target.classList.add('active');
+                    // Marcar tab activo
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        // ============================================================
+        // EXPORTAR
+        // ============================================================
+        function exportComparativa() {
+            let content = `
+                <html><head><meta charset="utf-8"><title>Comparativa Hardware</title></head>
+                <body>
+                <h1>Comparativa de Hardware por Comercio</h1>
+                <table border="1" cellpadding="5">
+                <tr><th>Comercio</th><th>Dispositivos clave</th><th>Cantidad total</th><th>Puntos de análisis</th></tr>
+            `;
+            comerciosData.forEach(c => {
+                const total = c.funcionales.length + c.noFuncionales.length + c.hardware.length + c.puntosAnalisis.length;
+                const dispositivos = c.hardware.map(h => h.nombre).slice(0, 3).join(', ') + (c.hardware.length > 3 ? ', ...' : '');
+                const cant = c.hardware.reduce((sum, h) => sum + h.cantidad, 0);
+                content += `<tr><td>${c.nombre}</td><td>${dispositivos}</td><td>${cant}</td><td>${total}</td></tr>`;
+            });
+            content += `</table></body></html>`;
+            const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Comparativa_Hardware.doc';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Comparativa exportada a Word');
+        }
+
+        function exportAll() {
+            let content = `
+                <html><head><meta charset="utf-8"><title>Análisis completo de 5 comercios</title></head>
+                <body>
+                <h1 style="text-align:center;">RELEVAMIENTO DE HARDWARE - 5 COMERCIOS</h1>
+                <p><strong>Materia:</strong> Modelos y Sistemas | <strong>Curso:</strong> 7°3°</p>
+                <p><strong>Escuela:</strong> Escuela Técnica N°1 de Muniz</p>
+                <p><strong>Profesor:</strong> Omar Alejandro Bazar</p>
+                <hr>
+            `;
+            comerciosData.forEach(c => {
+                content += `<h2>${c.nombre}</h2>
+                    <p><strong>Descripción:</strong> ${c.descripcion}</p>
+                    <h3>Hardware</h3><ul>`;
+                c.hardware.forEach(h => {
+                    content += `<li>${h.nombre} (${h.cantidad}) - ${h.especificaciones} - Uso: ${h.uso}</li>`;
+                });
+                content += `</ul><h3>Requisitos Funcionales</h3><ul>`;
+                c.funcionales.forEach(f => content += `<li>${f}</li>`);
+                content += `</ul><h3>Requisitos No Funcionales</h3><ul>`;
+                c.noFuncionales.forEach(nf => content += `<li>${nf}</li>`);
+                content += `</ul><h3>Impacto</h3><p>${c.impacto}</p>`;
+                content += `<h3>Puntos de Análisis</h3><ul>`;
+                c.puntosAnalisis.forEach(p => content += `<li>${p}</li>`);
+                content += `</ul><hr>`;
+            });
+            content += `</body></html>`;
+            const blob = new Blob(['\ufeff' + content], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Relevamiento_5_Comercios.doc';
+            a.click();
+            URL.revokeObjectURL(url);
+            alert('✅ Documento completo exportado a Word');
+        }
+
+        // ============================================================
+        // INICIO
+        // ============================================================
+        window.onload = function() {
+            // Renderizar cada comercio
+            renderComercio(comerciosData[0], 'jugueteria');
+            renderComercio(comerciosData[1], 'ferreteria');
+            renderComercio(comerciosData[2], 'parque');
+            renderComercio(comerciosData[3], 'restaurante');
+            renderComercio(comerciosData[4], 'gimnasio');
+
+            renderComparativa();
+            setupTabs();
+
+            console.log('✅ Relevamiento de 5 comercios cargado correctamente.');
+            console.log('🏫 Escuela Técnica N°1 de Muniz');
+            console.log('📚 Materia: Modelos y Sistemas - 7°3°');
+            console.log('👨‍🏫 Profesor: Omar Alejandro Bazar');
+        };
+    </script>
+</body>
+</html>
