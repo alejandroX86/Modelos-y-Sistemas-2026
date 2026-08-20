@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistemas «Llave en Mano» · Modelos y Sistemas · EEST N°1 Muñiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800;900&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ BASE ============ */
+:root{
+  --ink:#0b161e; --ink2:#0e1a24; --panel:#111f2b; --panel2:#0d1923;
+  --line:#1f3846; --line2:#2a4a5c;
+  --text:#e3eef3; --mut:#8ba6b4; --dim:#5f7887;
+  --amber:#ffb02e; --cyan:#3fd0e0; --green:#5fe38a; --coral:#ff7a59;
+  --violet:#c9a2ff; --gold:#ffd76a; --sky:#63b3ff; --teal:#7ee0c3;
+  --disp:'Barlow Condensed',sans-serif; --body:'IBM Plex Sans',sans-serif; --mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--body); background:var(--ink); color:var(--text);
+  line-height:1.6; overflow-x:hidden;
+}
+/* fondo técnico en capas: grilla blueprint + brillos */
+body::before{
+  content:''; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(110,170,195,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(110,170,195,.055) 1px, transparent 1px);
+  background-size:44px 44px;
+  animation:gridpan 90s linear infinite;
+}
+body::after{
+  content:''; position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background:
+    radial-gradient(700px 420px at 12% -5%, rgba(63,208,224,.10), transparent 65%),
+    radial-gradient(800px 500px at 95% 12%, rgba(255,176,46,.08), transparent 60%),
+    radial-gradient(900px 600px at 50% 115%, rgba(95,227,138,.06), transparent 60%);
+}
+@keyframes gridpan{to{background-position:440px 440px,440px 440px}}
+::selection{background:var(--amber);color:#1a1206}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+.wrap{width:min(1180px,92%);margin:0 auto}
+.mono{font-family:var(--mono)}
+h1,h2,h3,.disp{font-family:var(--disp);text-transform:uppercase;letter-spacing:.5px}
+
+/* barra de progreso de scroll */
+#pbar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--amber),var(--coral));z-index:99}
+
+/* ============ TICKER ============ */
+.ticker{background:#081018;border-bottom:1px solid var(--line);overflow:hidden;white-space:nowrap}
+.ticker-track{display:inline-flex;padding:.45rem 0;animation:tick 55s linear infinite}
+.ticker span{font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--dim);padding:0 1.4rem}
+.ticker b{color:var(--amber);font-weight:500}
+@keyframes tick{to{transform:translateX(-50%)}}
+.ticker:hover .ticker-track{animation-play-state:paused}
+
+/* ============ NAV ============ */
+.nav{position:sticky;top:0;z-index:90;background:rgba(11,22,30,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:1.4rem;padding:.65rem 0}
+.brand{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.brand-badge{font-family:var(--disp);font-weight:900;font-size:1rem;background:var(--amber);color:#1a1206;padding:.15rem .5rem;letter-spacing:.05em}
+.brand small{font-family:var(--mono);font-size:.6rem;color:var(--mut);letter-spacing:.12em;line-height:1.3}
+.nav-links{display:flex;gap:.2rem;overflow-x:auto;scrollbar-width:none;margin-left:auto}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;color:var(--mut);padding:.5rem .7rem;border-bottom:2px solid transparent;white-space:nowrap;transition:.25s}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--amber);border-color:var(--amber)}
+
+/* ============ HERO / PORTADA ============ */
+.hero{padding:4.2rem 0 3rem;position:relative}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:3rem;align-items:start}
+.kicker{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.22em;color:var(--cyan);border:1px solid var(--line2);padding:.4rem .9rem;margin-bottom:1.4rem}
+.kicker .led{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hero h1{font-size:clamp(2.9rem,7vw,5.4rem);font-weight:900;line-height:.95}
+.hero h1 .ltm{color:var(--amber);position:relative;display:inline-block}
+.hero h1 .ltm::after{content:'';position:absolute;left:0;right:0;bottom:6px;height:6px;background:var(--amber);opacity:.28}
+.hero-sub{margin-top:1.2rem;font-size:1.06rem;color:var(--mut);max-width:34rem}
+.hero-sub b{color:var(--text)}
+.typeline{margin-top:1.6rem;font-family:var(--mono);font-size:.8rem;color:var(--green);background:var(--panel2);border:1px solid var(--line);padding:.7rem 1rem;display:inline-block;max-width:100%}
+.typeline .prompt{color:var(--dim)}
+.cursor{animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.hero-cta{margin-top:1.8rem;display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.85rem 1.4rem;border:1px solid var(--amber);background:var(--amber);color:#1a1206;font-weight:600;cursor:pointer;transition:.25s;display:inline-block}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,176,46,.25)}
+.btn-ghost{background:transparent;color:var(--amber)}
+.btn-ghost:hover{background:rgba(255,176,46,.1);box-shadow:none}
+.btn.dark{background:var(--panel);color:var(--text);border-color:var(--line2)}
+.btn.dark:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:none}
+
+/* ficha técnica */
+.ficha{background:var(--panel);border:1px solid var(--line2);padding:1.8rem;position:relative}
+.ficha::before,.ficha::after,.ficha .ck::before,.ficha .ck::after{content:'';position:absolute;width:14px;height:14px;border:2px solid var(--amber)}
+.ficha::before{top:-2px;left:-2px;border-right:none;border-bottom:none}
+.ficha::after{top:-2px;right:-2px;border-left:none;border-bottom:none}
+.ficha .ck::before{bottom:-2px;left:-2px;border-right:none;border-top:none}
+.ficha .ck::after{bottom:-2px;right:-2px;border-left:none;border-top:none}
+.ficha h3{font-size:1.15rem;color:var(--amber);letter-spacing:.14em;margin-bottom:1.2rem;display:flex;align-items:center;gap:.6rem}
+.frow{display:flex;align-items:baseline;gap:.6rem;padding:.45rem 0;font-size:.82rem}
+.frow .fl{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;flex-shrink:0}
+.frow .fdots{flex:1;border-bottom:1px dotted var(--line2);transform:translateY(-3px)}
+.frow .fv{font-weight:600;text-align:right}
+.fstatus{margin-top:1.2rem;display:flex;align-items:center;gap:.6rem;font-family:var(--mono);font-size:.68rem;letter-spacing:.14em;color:var(--green);border-top:1px dashed var(--line2);padding-top:1rem}
+.stats{margin-top:3rem;border:1px solid var(--line);background:var(--panel2);display:grid;grid-template-columns:repeat(5,1fr)}
+.stat{padding:1.3rem 1rem;border-right:1px solid var(--line);text-align:left}
+.stat:last-child{border-right:none}
+.stat .n{font-family:var(--disp);font-weight:900;font-size:2.3rem;color:var(--amber);line-height:1}
+.stat:nth-child(2) .n{color:var(--cyan)}.stat:nth-child(3) .n{color:var(--green)}
+.stat:nth-child(4) .n{color:var(--coral)}.stat:nth-child(5) .n{color:var(--violet)}
+.stat .l{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--mut);text-transform:uppercase;margin-top:.3rem}
+
+/* ============ SECCIONES ============ */
+.sec{padding:4.5rem 0;scroll-margin-top:70px}
+.sec-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:2.4rem;flex-wrap:wrap}
+.sec-kicker{font-family:var(--mono);font-size:.68rem;letter-spacing:.24em;color:var(--amber)}
+.sec-title{font-size:clamp(1.7rem,4vw,2.6rem);font-weight:800}
+.sec-head::after{content:'';flex:1;height:1px;min-width:60px;background:linear-gradient(90deg,var(--line2),transparent)}
+.sec-intro{color:var(--mut);max-width:60rem;margin-bottom:2rem}
+.sec-intro b{color:var(--text)}
+
+/* objetivo */
+.objetivo{border-left:4px solid var(--amber);background:var(--panel);padding:1.8rem 2rem;font-size:1.15rem;line-height:1.7;position:relative}
+.objetivo strong{color:var(--amber)}
+.objetivo .tag{position:absolute;top:-11px;left:1.5rem;background:var(--amber);color:#1a1206;font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;padding:.2rem .7rem;font-weight:600}
+
+/* entregas: ledger numerado */
+.ledger{margin-top:2.5rem;border-top:1px solid var(--line)}
+.lrow{display:grid;grid-template-columns:90px 260px 1fr;gap:1.5rem;padding:1.4rem .5rem;border-bottom:1px solid var(--line);align-items:start;transition:.3s}
+.lrow:hover{background:rgba(255,176,46,.04);padding-left:1rem}
+.lnum{font-family:var(--disp);font-weight:900;font-size:2.6rem;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--line2);transition:.3s}
+.lrow:hover .lnum{-webkit-text-stroke:1.5px var(--amber);color:var(--amber)}
+.ltitle{font-family:var(--disp);font-size:1.35rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.ldesc{color:var(--mut);font-size:.92rem}
+.reglas{margin-top:2.5rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.regla{background:var(--panel2);padding:1.3rem;font-size:.85rem;color:var(--mut)}
+.regla b{display:block;color:var(--text);font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;margin-bottom:.5rem;color:var(--cyan)}
+.regla:hover{background:var(--panel)}
+
+/* método: pipeline */
+.pipeline{display:grid;grid-template-columns:repeat(6,1fr);gap:0;position:relative;counter-reset:fase}
+.pipeline::before{content:'';position:absolute;top:26px;left:3%;right:3%;height:2px;background:repeating-linear-gradient(90deg,var(--line2) 0 10px,transparent 10px 18px)}
+.fase{padding:0 .8rem;position:relative;transition:.3s}
+.fase:hover{transform:translateY(-6px)}
+.fdot{width:52px;height:52px;border-radius:50%;background:var(--panel);border:2px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--disp);font-weight:800;font-size:1.2rem;color:var(--amber);margin-bottom:1rem;position:relative;z-index:1;transition:.3s}
+.fase:hover .fdot{border-color:var(--amber);box-shadow:0 0 20px rgba(255,176,46,.3)}
+.fase h4{font-family:var(--disp);font-size:1.05rem;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.4rem}
+.fase p{font-size:.76rem;color:var(--mut);line-height:1.5}
+.fout{margin-top:.7rem;font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;color:var(--green);border:1px dashed rgba(95,227,138,.4);padding:.3rem .5rem;display:inline-block}
+
+/* ============ PROYECTOS ============ */
+.roles{display:flex;gap:.6rem;flex-wrap:wrap;margin-bottom:2rem}
+.rol{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;border:1px solid var(--line2);padding:.45rem .9rem;color:var(--mut);transition:.25s;cursor:default}
+.rol:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px)}
+.tabs{display:flex;gap:.7rem;flex-wrap:wrap;margin-bottom:2rem}
+.tab{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;background:var(--panel);border:1px solid var(--line2);color:var(--mut);padding:.75rem 1.2rem;cursor:pointer;display:flex;align-items:center;gap:.6rem;transition:.25s;text-transform:uppercase}
+.tab .tdot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.tab:hover{color:var(--text);border-color:var(--dim);transform:translateY(-2px)}
+.tab.on{color:#0b161e;font-weight:600;border-color:transparent}
+.team-panel{background:var(--panel);border:1px solid var(--line2);border-top:3px solid var(--acc);padding:2.2rem;animation:fadeUp .45s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.tp-head{display:flex;gap:1.4rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:1.8rem;padding-bottom:1.6rem;border-bottom:1px dashed var(--line2)}
+.tp-ico{font-size:2.6rem;background:var(--panel2);border:1px solid var(--line);width:84px;height:84px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tp-head h3{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;line-height:1.05}
+.tp-head .cons{color:var(--mut);font-size:.95rem;margin-top:.5rem;max-width:44rem}
+.tp-metrics{margin-left:auto;display:flex;gap:.6rem;flex-wrap:wrap;justify-content:flex-end}
+.tpm{border:1px solid var(--acc);padding:.5rem .8rem;text-align:center;min-width:86px}
+.tpm b{display:block;font-family:var(--disp);font-size:1.35rem;font-weight:800;color:var(--acc);line-height:1}
+.tpm span{font-family:var(--mono);font-size:.56rem;letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+.tp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-bottom:1.8rem}
+.tp-box{background:var(--panel2);border:1px solid var(--line);padding:1.4rem}
+.tp-box h4{font-size:1rem;letter-spacing:.12em;color:var(--acc);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem}
+.tp-box ul{list-style:none}
+.tp-box li{padding:.5rem 0 .5rem 1.6rem;position:relative;font-size:.9rem;color:var(--mut);border-bottom:1px dotted var(--line)}
+.tp-box li:last-child{border-bottom:none}
+.tp-box li b{color:var(--text)}
+.tp-box.af li::before{content:'▸';position:absolute;left:.2rem;color:var(--acc)}
+.tp-box.anf li::before{content:'◈';position:absolute;left:.2rem;color:var(--acc)}
+.tp-box.anf li{color:var(--text)}
+.tp-box.anf li em{color:var(--mut);font-style:normal;font-size:.82rem}
+.catalogo h4{font-size:1rem;letter-spacing:.12em;color:var(--text);margin:1.6rem 0 .8rem;display:flex;align-items:center;gap:.6rem}
+.catalogo h4::after{content:'';flex:1;height:1px;background:var(--line)}
+.cat-item{display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:.7rem .8rem;border:1px solid transparent;border-bottom:1px solid var(--line);transition:.2s}
+.cat-item:hover{border-color:var(--acc);background:rgba(255,255,255,.02)}
+.cat-item b{font-size:.92rem}
+.cat-item span{font-size:.8rem;color:var(--mut);font-family:var(--mono)}
+.callouts{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:1.8rem}
+.callout{padding:1.3rem 1.4rem;border:1px solid var(--line2)}
+.callout h5{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;margin-bottom:.8rem;text-transform:uppercase}
+.callout.preg{border-color:rgba(255,215,106,.35);background:rgba(255,215,106,.04)}
+.callout.preg h5{color:var(--gold)}
+.callout.crit{border-color:rgba(255,122,89,.4);background:rgba(255,122,89,.05)}
+.callout.crit h5{color:var(--coral)}
+.callout ol,.callout p{font-size:.88rem;color:var(--mut);padding-left:1.2rem}
+.callout ol li{margin-bottom:.4rem}
+.callout p{padding-left:0}
+.callout.crit p b{color:var(--coral)}
+
+/* ============ CONCEPTOS ============ */
+.g-tools{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.8rem}
+.g-search{flex:1;min-width:240px;background:var(--panel);border:1px solid var(--line2);color:var(--text);font-family:var(--mono);font-size:.8rem;padding:.8rem 1rem;outline:none;transition:.25s}
+.g-search:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(63,208,224,.12)}
+.g-chips{display:flex;gap:.5rem;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;padding:.4rem .8rem;border:1px solid var(--line2);color:var(--mut);cursor:pointer;background:transparent;transition:.2s;text-transform:uppercase}
+.chip:hover{color:var(--text)}
+.chip.on{color:#0b161e;font-weight:600;border-color:transparent}
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.g-card{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gc,var(--cyan));padding:1.2rem;transition:.25s}
+.g-card:hover{transform:translateY(-4px);border-color:var(--gc,var(--cyan));box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.g-cat{font-family:var(--mono);font-size:.56rem;letter-spacing:.2em;color:var(--gc,var(--cyan));text-transform:uppercase}
+.g-card h4{font-size:1.25rem;margin:.3rem 0 .5rem;letter-spacing:.03em}
+.g-card p{font-size:.83rem;color:var(--mut)}
+.g-card .tip{margin-top:.7rem;padding-top:.6rem;border-top:1px dashed var(--line);font-size:.78rem;color:var(--text)}
+.g-card .tip b{color:var(--gc,var(--cyan));font-family:var(--mono);font-size:.6rem;letter-spacing:.14em}
+.g-empty{color:var(--dim);font-family:var(--mono);font-size:.8rem;padding:2rem;text-align:center;grid-column:1/-1}
+
+/* ============ HERRAMIENTAS ============ */
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+.tool{background:var(--panel);border:1px solid var(--line2);padding:1.8rem}
+.tool.wide{grid-column:1/-1}
+.tool-head{display:flex;align-items:center;gap:.9rem;margin-bottom:.4rem}
+.tool-head .tn{font-family:var(--disp);font-weight:900;font-size:2rem;color:transparent;-webkit-text-stroke:1.5px var(--tc,var(--amber))}
+.tool h4{font-size:1.25rem;letter-spacing:.08em}
+.tool .td{font-size:.82rem;color:var(--mut);margin-bottom:1.3rem}
+.tlabel{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--dim);text-transform:uppercase;display:block;margin:.9rem 0 .35rem}
+.tin{width:100%;background:var(--panel2);border:1px solid var(--line2);color:var(--text);font-family:var(--mono);font-size:.85rem;padding:.6rem .8rem;outline:none;transition:.2s}
+.tin:focus{border-color:var(--tc,var(--amber))}
+input[type=range].tin{padding:0;height:2rem;accent-color:var(--tc,var(--amber))}
+.tcheck{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:var(--mut);margin-top:.8rem;cursor:pointer}
+.tcheck input{accent-color:var(--tc,var(--amber));width:16px;height:16px}
+.tout{margin-top:1.3rem;border-top:1px dashed var(--line2);padding-top:1.1rem}
+.tout-line{display:flex;justify-content:space-between;gap:1rem;padding:.4rem 0;font-size:.85rem;border-bottom:1px dotted var(--line)}
+.tout-line b{font-family:var(--mono);color:var(--tc,var(--amber));font-weight:600;text-align:right}
+.tnote{margin-top:.9rem;font-size:.75rem;color:var(--dim);font-style:italic}
+.tbig{font-family:var(--disp);font-weight:900;font-size:2.6rem;color:var(--tc,var(--amber));line-height:1.1}
+.preset-btns{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
+.preset-btns button{font-family:var(--mono);font-size:.62rem;background:var(--panel2);border:1px solid var(--line2);color:var(--mut);padding:.35rem .6rem;cursor:pointer;transition:.2s}
+.preset-btns button:hover{border-color:var(--tc,var(--amber));color:var(--text)}
+/* presupuesto */
+.btable{width:100%;border-collapse:collapse;margin-top:1rem}
+.btable th{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--dim);text-transform:uppercase;text-align:left;padding:.5rem;border-bottom:1px solid var(--line2)}
+.btable td{padding:.35rem .3rem;border-bottom:1px solid var(--line)}
+.btable input{width:100%;background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:.82rem;padding:.4rem;outline:none;border-bottom:1px solid transparent}
+.btable input:focus{border-bottom-color:var(--amber)}
+.btable .num{text-align:right}
+.bdel{background:none;border:1px solid var(--line2);color:var(--coral);cursor:pointer;font-size:.8rem;width:26px;height:26px;transition:.2s}
+.bdel:hover{border-color:var(--coral);background:rgba(255,122,89,.1)}
+.bsums{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem;margin-top:1.4rem}
+.bcontrols{display:flex;flex-direction:column;gap:.6rem}
+.btotals div{display:flex;justify-content:space-between;padding:.35rem 0;font-size:.9rem;border-bottom:1px dotted var(--line)}
+.btotals .big{font-family:var(--disp);font-size:1.7rem;font-weight:900;color:var(--amber);border-bottom:none;padding-top:.6rem}
+.bactions{display:flex;gap:.7rem;margin-top:1.4rem;flex-wrap:wrap}
+.tpl{background:#0a141c;border:1px solid var(--line);padding:1.2rem;font-family:var(--mono);font-size:.72rem;color:var(--mut);white-space:pre;overflow-x:auto;line-height:1.7}
+
+/* ============ EVALUACIÓN ============ */
+.rubrica{overflow-x:auto;margin-bottom:2.5rem}
+.rubrica table{width:100%;border-collapse:collapse;min-width:640px}
+.rubrica th{font-family:var(--mono);font-size:.62rem;letter-spacing:.16em;color:var(--amber);text-transform:uppercase;text-align:left;padding:.8rem;border:1px solid var(--line2);background:var(--panel)}
+.rubrica td{padding:1rem;border:1px solid var(--line);font-size:.88rem;color:var(--mut);vertical-align:top}
+.rubrica td:first-child{font-family:var(--disp);font-size:1.1rem;text-transform:uppercase;color:var(--text);letter-spacing:.05em;width:220px}
+.autoeval{background:var(--panel);border:1px solid var(--line2);padding:2rem}
+.autoeval h3{font-size:1.5rem;margin-bottom:.4rem}
+.autoeval .sub{color:var(--mut);font-size:.88rem;margin-bottom:1.6rem}
+.crit-row{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;padding:.9rem 0;border-bottom:1px solid var(--line)}
+.crit-row .cn{font-weight:600;font-size:.92rem}
+.crit-row .ct{font-size:.72rem;color:var(--dim)}
+.lvls{display:flex;gap:3px}
+.lv{width:38px;height:38px;background:var(--panel2);border:1px solid var(--line2);color:var(--dim);font-family:var(--mono);font-size:.75rem;cursor:pointer;transition:.2s}
+.lv:hover{border-color:var(--amber);color:var(--text)}
+.lv.fill{background:var(--amber);color:#1a1206;border-color:var(--amber);font-weight:600}
+.eval-result{margin-top:1.6rem;display:grid;grid-template-columns:auto 1fr;gap:2rem;align-items:center}
+.eval-score{text-align:center}
+.eval-score .sc{font-family:var(--disp);font-weight:900;font-size:3.6rem;color:var(--amber);line-height:1}
+.eval-score .mx{font-family:var(--mono);font-size:.7rem;color:var(--dim)}
+.eval-bar{height:10px;background:var(--panel2);border:1px solid var(--line2);margin:.6rem 0;overflow:hidden}
+.eval-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--coral),var(--amber),var(--green));transition:width .6s ease}
+.eval-verdict{font-family:var(--disp);font-size:1.3rem;text-transform:uppercase;letter-spacing:.08em}
+.tips-out{margin-top:1.2rem;border-top:1px dashed var(--line2);padding-top:1rem}
+.tips-out li{font-size:.84rem;color:var(--mut);margin-bottom:.4rem;list-style:none;padding-left:1.4rem;position:relative}
+.tips-out li::before{content:'⚠';position:absolute;left:0;color:var(--gold)}
+
+/* ============ BITÁCORA ============ */
+.bitacora{display:grid;grid-template-columns:1fr 340px;gap:2rem;align-items:start}
+.chk-list{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.chk{display:flex;gap:.9rem;align-items:flex-start;background:var(--panel);border:1px solid var(--line);padding:1rem;cursor:pointer;transition:.25s;user-select:none}
+.chk:hover{border-color:var(--cyan);transform:translateY(-2px)}
+.chk .box{width:20px;height:20px;border:2px solid var(--line2);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:#0b161e;transition:.2s}
+.chk.done{border-color:rgba(95,227,138,.4);background:rgba(95,227,138,.04)}
+.chk.done .box{background:var(--green);border-color:var(--green)}
+.chk.done .txt{color:var(--dim);text-decoration:line-through}
+.chk .txt{font-size:.85rem}
+.bit-side{background:var(--panel);border:1px solid var(--line2);padding:1.8rem;position:sticky;top:90px}
+.ring{width:150px;height:150px;margin:0 auto 1rem;position:relative}
+.ring svg{transform:rotate(-90deg)}
+.ring .pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .pct b{font-family:var(--disp);font-size:2.2rem;font-weight:900;color:var(--green)}
+.ring .pct span{font-family:var(--mono);font-size:.55rem;letter-spacing:.16em;color:var(--dim)}
+.bit-msg{font-size:.84rem;color:var(--mut);text-align:center;margin-bottom:1rem;min-height:2.5em}
+
+/* ============ PLAN / CALENDARIO ============ */
+.timeline{display:grid;grid-template-columns:repeat(6,1fr);gap:1rem;position:relative;margin-bottom:3.5rem}
+.timeline::before{content:'';position:absolute;top:14px;left:4%;right:4%;height:2px;background:var(--line2)}
+.tl-item{position:relative;padding-top:2.2rem}
+.tl-item::before{content:'';position:absolute;top:8px;left:0;width:14px;height:14px;border-radius:50%;background:var(--ink);border:3px solid var(--cyan)}
+.tl-item:nth-child(2)::before{border-color:var(--green)}
+.tl-item:nth-child(3)::before{border-color:var(--gold)}
+.tl-item:nth-child(4)::before{border-color:var(--amber)}
+.tl-item:nth-child(5)::before{border-color:var(--coral)}
+.tl-item:nth-child(6)::before{border-color:var(--violet)}
+.tl-w{font-family:var(--mono);font-size:.62rem;letter-spacing:.2em;color:var(--dim)}
+.tl-item h5{font-family:var(--disp);font-size:1.05rem;text-transform:uppercase;margin:.3rem 0}
+.tl-item p{font-size:.74rem;color:var(--mut)}
+.tl-tag{display:inline-block;margin-top:.5rem;font-family:var(--mono);font-size:.56rem;letter-spacing:.1em;color:var(--green);border:1px dashed rgba(95,227,138,.4);padding:.2rem .5rem}
+.tips2{display:grid;grid-template-columns:1fr 1fr;gap:1.6rem}
+.tips2 .col{background:var(--panel);border:1px solid var(--line2);padding:1.6rem}
+.tips2 .col.no{border-top:3px solid var(--coral)}
+.tips2 .col.si{border-top:3px solid var(--green)}
+.tips2 h4{font-size:1.2rem;letter-spacing:.1em;margin-bottom:1rem}
+.tips2 .no h4{color:var(--coral)}.tips2 .si h4{color:var(--green)}
+.tips2 li{list-style:none;padding:.55rem 0 .55rem 1.7rem;position:relative;font-size:.88rem;color:var(--mut);border-bottom:1px dotted var(--line)}
+.tips2 .no li::before{content:'✕';position:absolute;left:0;color:var(--coral);font-weight:700}
+.tips2 .si li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:700}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);background:#081018;padding:3rem 0 2rem;margin-top:3rem}
+.foot-grid{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;align-items:flex-start}
+.foot-grid h4{font-size:1.4rem;color:var(--amber)}
+.foot-grid p{font-size:.82rem;color:var(--mut);max-width:26rem}
+.foot-meta{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;color:var(--dim);margin-top:2rem;padding-top:1.2rem;border-top:1px dashed var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+.rv.in{opacity:1;transform:none}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1020px){
+  .hero-grid{grid-template-columns:1fr}
+  .pipeline,.timeline{grid-template-columns:repeat(3,1fr);gap:1.5rem}
+  .pipeline::before,.timeline::before{display:none}
+  .reglas{grid-template-columns:1fr 1fr}
+  .tools{grid-template-columns:1fr}
+  .bitacora{grid-template-columns:1fr}
+  .bit-side{position:static}
+}
+@media(max-width:720px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .stat{border-bottom:1px solid var(--line)}
+  .lrow{grid-template-columns:60px 1fr;gap:.8rem}
+  .lrow .ldesc{grid-column:2}
+  .tp-grid,.callouts,.tips2,.bsums,.chk-list{grid-template-columns:1fr}
+  .pipeline,.timeline,.reglas{grid-template-columns:1fr 1fr}
+  .crit-row{grid-template-columns:1fr}
+  .tp-metrics{margin-left:0;justify-content:flex-start}
+  .cat-item{grid-template-columns:1fr;gap:.2rem}
+}
+@media print{
+  .ticker,.nav,#pbar,.hero-cta,.bactions,.btn,.tabs,.g-tools,.lvls,.chk .box{display:none!important}
+  body{background:#fff;color:#111}
+  body::before,body::after{display:none}
+  .tool,.team-panel,.sec{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="pbar"></div>
+
+<!-- cinta de términos -->
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="tickerTrack"></div></div>
+
+<!-- navegación -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <div class="brand">
+      <span class="brand-badge">MS</span>
+      <small>EEST N°1 · MUÑIZ<br>MODELOS Y SISTEMAS · 7°4°</small>
+    </div>
+    <nav class="nav-links" id="navLinks">
+      <a href="#portada" class="active">PORTADA</a>
+      <a href="#consigna">CONSIGNA</a>
+      <a href="#metodo">MÉTODO</a>
+      <a href="#proyectos">PROYECTOS</a>
+      <a href="#conceptos">CONCEPTOS</a>
+      <a href="#herramientas">HERRAMIENTAS</a>
+      <a href="#evaluacion">EVALUACIÓN</a>
+      <a href="#bitacora">BITÁCORA</a>
+      <a href="#plan">PLAN</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ============ PORTADA ============ -->
+<section class="hero wrap" id="portada">
+  <div class="hero-grid">
+    <div>
+      <span class="kicker"><span class="led"></span>TRABAJO PRÁCTICO INTEGRADOR · CONSIGNA PUBLICADA</span>
+      <h1>Sistemas<br><span class="ltm">«Llave en Mano»</span></h1>
+      <p class="hero-sub">Cinco equipos, cinco negocios reales. El desafío: <b>relevar, dimensionar y presupuestar</b> el software, el hardware, la red, los periféricos y la seguridad necesarios para entregar cada negocio <b>operando desde el día uno</b>.</p>
+      <div class="typeline mono"><span class="prompt">prof.bazar@eest1:~$</span> <span id="typed"></span><span class="cursor">▮</span></div>
+      <div class="hero-cta">
+        <a class="btn" href="#proyectos">Ver los 5 proyectos ▸</a>
+        <a class="btn btn-ghost" href="#evaluacion">Matriz de evaluación</a>
+      </div>
+    </div>
+    <aside class="ficha rv"><span class="ck"></span>
+      <h3>◈ Ficha técnica del TP</h3>
+      <div class="frow"><span class="fl">Establecimiento</span><span class="fdots"></span><span class="fv">EEST N°1 — Muñiz</span></div>
+      <div class="frow"><span class="fl">Cátedra</span><span class="fdots"></span><span class="fv">Modelos y Sistemas</span></div>
+      <div class="frow"><span class="fl">Curso</span><span class="fdots"></span><span class="fv">7° año · 4° división</span></div>
+      <div class="frow"><span class="fl">Profesor</span><span class="fdots"></span><span class="fv">Omar A. Bazar</span></div>
+      <div class="frow"><span class="fl">Modalidad</span><span class="fdots"></span><span class="fv">Equipos · Dossier técnico</span></div>
+      <div class="frow"><span class="fl">Propuestas</span><span class="fdots"></span><span class="fv">5 negocios integrales</span></div>
+      <div class="frow"><span class="fl">Entrega</span><span class="fdots"></span><span class="fv">Negocio operando</span></div>
+      <div class="fstatus"><span class="led"></span> ESTADO: LISTO PARA TRABAJAR</div>
+    </aside>
+  </div>
+  <div class="stats rv">
+    <div class="stat"><div class="n" data-count="5" data-pad="2">0</div><div class="l">Propuestas integrales</div></div>
+    <div class="stat"><div class="n" data-count="5" data-pad="2">0</div><div class="l">Entregables por equipo</div></div>
+    <div class="stat"><div class="n" data-count="38">0</div><div class="l">Conceptos clave</div></div>
+    <div class="stat"><div class="n" data-count="3" data-pad="2">0</div><div class="l">Calculadoras didácticas</div></div>
+    <div class="stat"><div class="n" data-count="99.9" data-dec="1">0</div><div class="l">% SLA objetivo</div></div>
+  </div>
+</section>
+
+<!-- ============ CONSIGNA ============ -->
+<section class="sec wrap" id="consigna">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 01</span><h2 class="sec-title">Instrucciones generales</h2></div>
+  <div class="objetivo rv">
+    <span class="tag">OBJETIVO DE LA CÁTEDRA</span>
+    Relevar, dimensionar y presupuestar el <strong>sistema de software</strong>, la <strong>infraestructura de hardware local y de red</strong>, los <strong>periféricos</strong> y la <strong>seguridad</strong> necesarios para entregar el negocio <strong>operando («llave en mano»)</strong>. No alcanza con listar equipos: hay que <strong>justificar cada decisión técnica</strong> según la carga de trabajo del negocio.
+  </div>
+
+  <div class="ledger rv">
+    <div class="lrow"><div class="lnum">01</div><div class="ltitle">Análisis Funcional</div><div class="ldesc">Casos de uso principales, procesos de negocio e interactividad de usuarios. ¿Quién usa el sistema, para qué y en qué orden?</div></div>
+    <div class="lrow"><div class="lnum">02</div><div class="ltitle">Análisis No Funcional</div><div class="ldesc">Métrica de disponibilidad, tiempos de respuesta, políticas de backup, tolerancia a fallos y seguridad física y lógica. Todo con números medibles.</div></div>
+    <div class="lrow"><div class="lnum">03</div><div class="ltitle">Especificación Técnica</div><div class="ldesc">Selección detallada y catalogada por marcas, modelos, especificaciones y licencias. Cada ítem con su ficha y su justificación.</div></div>
+    <div class="lrow"><div class="lnum">04</div><div class="ltitle">Topología y Planta</div><div class="ldesc">Diagrama topológico de red y ubicación física de cada componente del catálogo sobre el plano del local.</div></div>
+    <div class="lrow"><div class="lnum">05</div><div class="ltitle">Presupuesto «Llave en Mano»</div><div class="ldesc">Listado comparativo de equipamiento, licenciamiento de software y costos operativos estimados para entregar el negocio en funcionamiento.</div></div>
+  </div>
+
+  <div class="reglas rv">
+    <div class="regla"><b>FUENTES VERIFICABLES</b>Todo equipo cotizado debe existir: datasheet, ficha del fabricante o precio publicado con fecha de consulta.</div>
+    <div class="regla"><b>JUSTIFICAR SIEMPRE</b>Nunca «porque es mejor»: explicar por qué ese equipo soporta la carga prevista y qué alternativa se descartó.</div>
+    <div class="regla"><b>FORMATO PROFESIONAL</b>El dossier se presenta como si fuera para un cliente real: carátula, índice, tablas, diagramas y conclusiones.</div>
+    <div class="regla"><b>DEFENSA ORAL</b>Cualquier integrante debe poder explicar cualquier parte del trabajo. El equipo responde como unidad.</div>
+  </div>
+</section>
+
+<!-- ============ MÉTODO ============ -->
+<section class="sec wrap" id="metodo">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 02</span><h2 class="sec-title">Recorrido metodológico sugerido</h2></div>
+  <p class="sec-intro rv">Un proyecto «llave en mano» no se encara de golpe. Esta es la <b>secuencia de seis fases</b> que recomienda la cátedra: cada fase produce un entregable que alimenta a la siguiente. Recorré el circuito completo antes de empezar a cotizar.</p>
+  <div class="pipeline rv">
+    <div class="fase"><div class="fdot">F1</div><h4>Relevamiento</h4><p>Entrevistas al «cliente», plano del local, inventario de procesos y de usuarios.</p><span class="fout">▸ Acta de relevamiento</span></div>
+    <div class="fase"><div class="fdot">F2</div><h4>Modelo funcional</h4><p>Actores, roles, casos de uso y diagrama de flujo de trabajo del negocio.</p><span class="fout">▸ Entregable 01</span></div>
+    <div class="fase"><div class="fdot">F3</div><h4>Req. no funcionales</h4><p>Métricas concretas: disponibilidad %, tiempos en segundos, política de backups, normas IP.</p><span class="fout">▸ Entregable 02</span></div>
+    <div class="fase"><div class="fdot">F4</div><h4>Catálogo</h4><p>Búsqueda de datasheets, comparación de al menos 2 opciones por ítem y selección justificada.</p><span class="fout">▸ Entregable 03</span></div>
+    <div class="fase"><div class="fdot">F5</div><h4>Topología y planta</h4><p>Interconexión de equipos, cableado, ubicación de AP, cámaras y puntos de venta sobre el plano.</p><span class="fout">▸ Entregable 04</span></div>
+    <div class="fase"><div class="fdot">F6</div><h4>Presupuesto y cierre</h4><p>Costo total llave en mano, costos operativos, conclusiones y ensayo de defensa.</p><span class="fout">▸ Entregable 05 + defensa</span></div>
+  </div>
+</section>
+
+<!-- ============ PROYECTOS ============ -->
+<section class="sec wrap" id="proyectos">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 03</span><h2 class="sec-title">Proyectos por equipo</h2></div>
+  <p class="sec-intro rv">Cinco propuestas integrales. Dentro de cada equipo, la cátedra sugiere repartir <b>roles rotativos</b> — todos deben poder defender el trabajo completo:</p>
+  <div class="roles rv">
+    <span class="rol">◈ COORDINADOR/A DE PROYECTO</span><span class="rol">◈ ANALISTA FUNCIONAL</span><span class="rol">◈ ESPECIALISTA EN REDES</span><span class="rol">◈ ESPECIALISTA EN HARDWARE</span><span class="rol">◈ DOCUMENTALISTA / PRESUPUESTISTA</span>
+  </div>
+  <div class="tabs rv" id="teamTabs"></div>
+  <div id="teamPanelHost"></div>
+</section>
+
+<!-- ============ CONCEPTOS ============ -->
+<section class="sec wrap" id="conceptos">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 04</span><h2 class="sec-title">Base de conceptos clave</h2></div>
+  <p class="sec-intro rv">El vocabulario técnico que el dossier debe usar con precisión. Cada concepto incluye <b>cómo aparece en tu trabajo práctico</b>. Buscá por término o filtrá por categoría.</p>
+  <div class="g-tools rv">
+    <input class="g-search" id="gSearch" type="search" placeholder="▸ buscar concepto… (ej: RAID, PoE, DICOM)" autocomplete="off">
+    <div class="g-chips" id="gChips"></div>
+  </div>
+  <div class="g-grid rv" id="gGrid"></div>
+</section>
+
+<!-- ============ HERRAMIENTAS ============ -->
+<section class="sec wrap" id="herramientas">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 05</span><h2 class="sec-title">Caja de herramientas del analista</h2></div>
+  <p class="sec-intro rv">Tres calculadoras para <b>dimensionar con números y no con intuición</b>, más la ficha de catálogo que la cátedra exige para cada componente. Usalas durante la fase F4.</p>
+
+  <div class="tools">
+    <!-- Herramienta 1: disponibilidad -->
+    <div class="tool rv" style="--tc:var(--cyan)">
+      <div class="tool-head"><span class="tn">01</span><h4>Calculadora de disponibilidad</h4></div>
+      <p class="td">¿Qué significa realmente «99,9 %»? Mové el objetivo de SLA y mirá cuántas horas de caída se toleran por año y por mes.</p>
+      <label class="tlabel">Objetivo de disponibilidad (SLA)</label>
+      <input type="range" class="tin" id="avSlider" min="0" max="5" step="1" value="2">
+      <div class="preset-btns" id="avPresets"></div>
+      <div class="tout">
+        <div class="tbig" id="avName">—</div>
+        <div class="tout-line"><span>Caída máxima anual</span><b id="avYear">—</b></div>
+        <div class="tout-line"><span>Caída máxima mensual</span><b id="avMonth">—</b></div>
+        <div class="tout-line"><span>¿Alcanza para el proyecto?</span><b id="avUse">—</b></div>
+      </div>
+      <p class="tnote">Regla de cátedra: el requisito no funcional de disponibilidad debe escribirse con número y consecuencia. Ej.: «99,9 % ⇒ máximo 8,8 h de caída anual, fuera del horario pico».</p>
+    </div>
+
+    <!-- Herramienta 2: dimensionado de red -->
+    <div class="tool rv" style="--tc:var(--green)">
+      <div class="tool-head"><span class="tn">02</span><h4>Dimensionador de red y energía</h4></div>
+      <p class="td">Ingresá los datos del local y obtené una primera estimación de access points, puertos de switch, presupuesto PoE y UPS.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem">
+        <div><label class="tlabel">Superficie (m²)</label><input class="tin" type="number" id="nArea" value="120" min="10"></div>
+        <div><label class="tlabel">PC / POS / cajas</label><input class="tin" type="number" id="nPcs" value="4" min="0"></div>
+        <div><label class="tlabel">Cámaras IP</label><input class="tin" type="number" id="nCams" value="0" min="0"></div>
+        <div><label class="tlabel">Impresoras / otros</label><input class="tin" type="number" id="nOth" value="1" min="0"></div>
+      </div>
+      <label class="tcheck"><input type="checkbox" id="nServer" checked> Hay servidor local (se suma al cálculo)</label>
+      <label class="tcheck"><input type="checkbox" id="nRack"> Galpón con racks metálicos / muchos obstáculos</label>
+      <div class="tout">
+        <div class="tout-line"><span>Access points sugeridos</span><b id="rAP">—</b></div>
+        <div class="tout-line"><span>Puertos de switch necesarios</span><b id="rPorts">—</b></div>
+        <div class="tout-line"><span>Presupuesto PoE mínimo</span><b id="rPoe">—</b></div>
+        <div class="tout-line"><span>UPS mínima recomendada</span><b id="rUps">—</b></div>
+      </div>
+      <p class="tnote">Valores de referencia didáctica: ~150 m² por AP en oficina (120 m² con obstáculos), cámara IP ≈ 8 W, AP ≈ 13 W, margen de seguridad del 20 %. En el dossier hay que validar con la ficha del fabricante.</p>
+    </div>
+
+    <!-- Herramienta 3: presupuesto -->
+    <div class="tool wide rv" style="--tc:var(--amber)">
+      <div class="tool-head"><span class="tn">03</span><h4>Armador de presupuesto «llave en mano»</h4></div>
+      <p class="td">Cargá los ítems cotizados por el equipo. La calculadora suma equipamiento, aplica IVA, imprevistos y obtiene el total. <b>Recordá: instalación y configuración también se cobran.</b></p>
+      <table class="btable">
+        <thead><tr><th style="width:44%">Concepto</th><th style="width:12%">Cantidad</th><th style="width:24%">Precio unitario (ARS)</th><th class="num" style="width:16%">Subtotal</th><th></th></tr></thead>
+        <tbody id="bBody"></tbody>
+      </table>
+      <div class="bactions">
+        <button class="btn dark" id="bAdd">+ Agregar ítem</button>
+        <button class="btn dark" id="bReset">↺ Restaurar ejemplo</button>
+        <button class="btn" onclick="window.print()">⎙ Imprimir presupuesto</button>
+      </div>
+      <div class="bsums">
+        <div class="bcontrols">
+          <label class="tcheck" style="--tc:var(--amber)"><input type="checkbox" id="bIva" checked> Aplicar IVA 21 %</label>
+          <label class="tlabel">Imprevistos / contingencia</label>
+          <select class="tin" id="bImp"><option value="0">0 %</option><option value="5">5 %</option><option value="10" selected>10 %</option><option value="15">15 %</option></select>
+        </div>
+        <div class="btotals">
+          <div><span>Subtotal equipamiento y servicios</span><b class="mono" id="bSub">$ 0</b></div>
+          <div><span>Imprevistos</span><b class="mono" id="bImpV">$ 0</b></div>
+          <div><span>IVA 21 %</span><b class="mono" id="bIvaV">$ 0</b></div>
+          <div class="big"><span>TOTAL LLAVE EN MANO</span><span class="mono" id="bTot">$ 0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ficha de catálogo -->
+    <div class="tool wide rv" style="--tc:var(--violet)">
+      <div class="tool-head"><span class="tn">04</span><h4>Ficha de catálogo — formato obligatorio</h4></div>
+      <p class="td">Cada componente del Entregable 03 se documenta con esta ficha. Copiala y completala por cada equipo, licencia o servicio cotizado.</p>
+      <pre class="tpl" id="tplText">════════ FICHA DE COMPONENTE · TP MODELOS Y SISTEMAS · EEST N°1 ════════
+ÍTEM / CATEGORÍA   : ....................................................
+MARCA Y MODELO     : ....................................................
+ESPECIFICACIONES   : CPU / RAM / Almacenamiento ........................
+                     Conectividad y puertos .............................
+                     Normas / certificaciones (IP, 802.11, RAID...) .....
+LICENCIA / GARANTÍA: Tipo de licencia · plazo de garantía ...............
+PRECIO Y FUENTE    : $ ............ (fuente + fecha de consulta) ........
+JUSTIFICACIÓN      : ¿Por qué este equipo soporta la carga prevista? ...
+                     ....................................................
+ALTERNATIVA DESCARTADA: ...................... Motivo: ...................</pre>
+      <div class="bactions"><button class="btn dark" id="tplCopy">⧉ Copiar plantilla</button><span class="mono" id="tplMsg" style="font-size:.7rem;color:var(--green);align-self:center"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EVALUACIÓN ============ -->
+<section class="sec wrap" id="evaluacion">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 06</span><h2 class="sec-title">Matriz de evaluación</h2></div>
+  <p class="sec-intro rv">Así se corrige el trabajo. Lean la matriz <b>antes</b> de empezar: cada fila es un criterio con su nivel de exigencia esperado.</p>
+  <div class="rubrica rv">
+    <table>
+      <thead><tr><th>Criterio</th><th>Detalle esperado en la entrega</th></tr></thead>
+      <tbody>
+        <tr><td>Análisis Funcional</td><td>Definición clara de los usuarios, roles del sistema, casos de uso principales y diagramas de flujo de trabajo.</td></tr>
+        <tr><td>Análisis No Funcional</td><td>Definición explícita de requerimientos de rendimiento, disponibilidad, respaldo de datos (backups), ancho de banda y seguridad física.</td></tr>
+        <tr><td>Dimensionamiento de Hardware</td><td>Justificación técnica de la elección de cada equipo del catálogo (procesador, RAM, almacenamiento, conexiones) según el volumen de carga previsto.</td></tr>
+        <tr><td>Arquitectura y Topología</td><td>Diagrama de cómo se interconectan los equipos de cómputo, red, periféricos y POS dentro del plano del local.</td></tr>
+        <tr><td>Presupuesto «Llave en Mano»</td><td>Listado comparativo de equipamiento, licenciamiento de software y costos operativos estimados para entregar el negocio en funcionamiento.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="autoeval rv" id="autoeval">
+    <h3>Autoevaluación del equipo</h3>
+    <p class="sub">Puntuá cada criterio del 1 al 5 con honestidad técnica. Es un ensayo general antes de entregar: donde el puntaje sea bajo, ahí hay que seguir trabajando.</p>
+    <div id="critHost"></div>
+    <div class="eval-result">
+      <div class="eval-score"><div class="sc" id="evScore">0</div><div class="mx">/ 25 PUNTOS</div></div>
+      <div>
+        <div class="eval-bar"><i id="evBar"></i></div>
+        <div class="eval-verdict" id="evVerdict">—</div>
+        <ul class="tips-out" id="evTips"></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BITÁCORA ============ -->
+<section class="sec wrap" id="bitacora">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 07</span><h2 class="sec-title">Bitácora de entrega</h2></div>
+  <p class="sec-intro rv">Marcá cada punto a medida que el equipo lo resuelve. El avance <b>queda guardado en este navegador</b>: pueden cerrar y volver cuando quieran.</p>
+  <div class="bitacora rv">
+    <div class="chk-list" id="chkHost"></div>
+    <aside class="bit-side">
+      <div class="ring">
+        <svg width="150" height="150" viewBox="0 0 150 150">
+          <circle cx="75" cy="75" r="64" fill="none" stroke="#1f3846" stroke-width="10"/>
+          <circle id="ringFg" cx="75" cy="75" r="64" fill="none" stroke="#5fe38a" stroke-width="10" stroke-linecap="round" stroke-dasharray="402" stroke-dashoffset="402" style="transition:stroke-dashoffset .6s ease"/>
+        </svg>
+        <div class="pct"><b id="ringPct">0%</b><span>AVANCE</span></div>
+      </div>
+      <p class="bit-msg" id="bitMsg"></p>
+      <button class="btn btn-ghost" id="bitReset" style="width:100%">↺ Reiniciar bitácora</button>
+    </aside>
+  </div>
+</section>
+
+<!-- ============ PLAN ============ -->
+<section class="sec wrap" id="plan">
+  <div class="sec-head rv"><span class="sec-kicker">SEC / 08</span><h2 class="sec-title">Plan de trabajo y consejos</h2></div>
+  <div class="timeline rv">
+    <div class="tl-item"><span class="tl-w">SEMANA 01</span><h5>Relevamiento</h5><p>División de roles, entrevistas, plano del local.</p><span class="tl-tag">▸ Acta + cronograma</span></div>
+    <div class="tl-item"><span class="tl-w">SEMANA 02</span><h5>Funcional</h5><p>Actores, casos de uso, flujos de trabajo.</p><span class="tl-tag">▸ Entrega parcial 01</span></div>
+    <div class="tl-item"><span class="tl-w">SEMANA 03</span><h5>No funcional</h5><p>Métricas, backups, seguridad, disponibilidad.</p><span class="tl-tag">▸ Entrega parcial 02</span></div>
+    <div class="tl-item"><span class="tl-w">SEMANA 04</span><h5>Catálogo</h5><p>Datasheets, comparativas, fichas justificadas.</p><span class="tl-tag">▸ Entrega parcial 03</span></div>
+    <div class="tl-item"><span class="tl-w">SEMANA 05</span><h5>Topología + $</h5><p>Diagrama sobre plano y presupuesto final.</p><span class="tl-tag">▸ Entregables 04 y 05</span></div>
+    <div class="tl-item"><span class="tl-w">SEMANA 06</span><h5>Defensa</h5><p>Ensayo de defensa oral y cierre del dossier.</p><span class="tl-tag">▸ Entrega llave en mano</span></div>
+  </div>
+
+  <div class="tips2 rv">
+    <div class="col no"><h4>✕ Errores que se pagan caro</h4><ul>
+      <li>Escribir «servidor potente» sin marca, modelo ni especificaciones.</li>
+      <li>Presupuestar sin IVA, sin instalación ni mano de obra.</li>
+      <li>Copiar un catálogo de internet sin justificar ninguna elección.</li>
+      <li>Olvidarse del cableado, las licencias y los costos operativos.</li>
+      <li>Dibujar la topología desconectada del plano del local.</li>
+      <li>Justificar con «es el mejor» sin comparar alternativas.</li>
+    </ul></div>
+    <div class="col si"><h4>✓ Lo que distingue a un gran dossier</h4><ul>
+      <li>Cada equipo citado con fuente y fecha de consulta.</li>
+      <li>Métricas no funcionales con números: segundos, %, watts, metros.</li>
+      <li>Una alternativa descartada y explicada por cada ítem crítico.</li>
+      <li>Topología que muestra cableado, VLAN y ubicación de AP y cámaras.</li>
+      <li>Presupuesto con subtotales, imprevistos y costo operativo anual.</li>
+      <li>Conclusiones: qué riesgo queda abierto y cómo se mitigaría.</li>
+    </ul></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <h4 class="disp">Modelos y Sistemas</h4>
+        <p>Material de cátedra del Trabajo Práctico Integrador «Sistemas Llave en Mano». Elaborado para acompañar el relevamiento, dimensionamiento y presupuesto de infraestructura tecnológica real.</p>
+      </div>
+      <div class="mono" style="font-size:.68rem;letter-spacing:.14em;color:var(--mut);line-height:2.2;text-align:right">
+        EEST N°1 — MUÑIZ<br>7° AÑO · 4° DIVISIÓN<br>PROF. OMAR A. BAZAR
+      </div>
+    </div>
+    <div class="foot-meta">
+      <span>◈ 5 EQUIPOS · 5 NEGOCIOS · 1 DOSSIER PROFESIONAL</span>
+      <span>USO ÁULICO — CICLO LECTIVO <span id="year"></span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ================================================================
+   DATOS DE LA CÁTEDRA
+================================================================ */
+const TEAMS=[
+{key:'E1',icon:'🛒',name:'Supermercado de Barrio',sub:'3 cajas de cobro · pesaje de perecederos',acc:'#ffb02e',
+ consigna:'Diseñar la infraestructura completa para la apertura de una sucursal comercial con cobro intensivo, balanzas y productos perecederos.',
+ metrics:[['< 3 s','por ticket'],['OFFLINE','cajas resilientes'],['x3','puestos de cobro']],
+ func:[['Venta minorista en línea de caja','cobro rápido con lector multidireccional y terminal de tarjetas.'],
+  ['Gestión de inventario','altas, bajas, stock mínimo y reposición de mercadería.'],
+  ['Pesaje de fiambres y verduras','etiquetado en góndola y pesaje directo en línea de caja.'],
+  ['Actualización masiva de precios','cambios centralizados que bajan a cajas y balanzas.'],
+  ['Arqueo de caja diario','apertura, cierre y control de diferencias por cajero.']],
+ anf:[['Redundancia en el punto de cobro','si cae el servidor central, las cajas deben operar offline temporalmente y sincronizar al volver.'],
+  ['Tiempo de procesamiento por ticket','inferior a 3 segundos, incluso en hora pico.'],
+  ['Continuidad eléctrica','UPS para servidor, red y al menos una caja.'],
+  ['Etiquetado confiable','etiquetas resistentes a frío y humedad para perecederos.']],
+ catalog:[
+  {cat:'Servidores y red',items:[
+   ['Servidor local (BD + aplicaciones)','Xeon E / Ryzen Pro · 32 GB RAM · SSD RAID 1'],
+   ['Switch administrable','VLAN para cajas / administración / depósito'],
+   ['Router con balanceo','doble WAN: si cae un enlace, sigue la venta electrónica'],
+   ['UPS 1500 VA o superior','servidor + red: autonomía mínima 15 min a plena carga']]},
+  {cat:'Puntos de venta (x3)',items:[
+   ['Terminal TPV táctil o Mini PC','fanless · SSD · montaje VESA · puertos USB/RJ11'],
+   ['Cajón portamonedas','conexión RJ11 a la impresora térmica'],
+   ['Escáner multidireccional','lectura omnidireccional: agiliza la cola'],
+   ['Impresora térmica de tickets','rollo 80 mm · corte automático'],
+   ['Terminal de tarjetas (POS financiero)','conectividad IP/WiFi · cifrado extremo a extremo']]},
+  {cat:'Periféricos especializados',items:[
+   ['Balanza etiquetadora de góndola','imprime etiqueta con precio/kg y código interno'],
+   ['Balanza conectada a línea de caja','interfaz RS-232/USB hacia el software TPV'],
+   ['Handheld industrial','control de stock y recepción en depósito']]},
+  {cat:'Software y licencias',items:[
+   ['S.O. de servidor','Linux Server o Windows Server según el POS elegido'],
+   ['Motor de base de datos','PostgreSQL / SQL Server con respaldo diario'],
+   ['Sistema POS','módulos de venta, inventario y precios centralizados'],
+   ['Antivirus empresarial','una licencia por endpoint, gestión centralizada']]}],
+ preguntas:['¿Cómo sincroniza una caja los tickets emitidos en modo offline cuando vuelve el servidor?',
+  'Si en hora pico pasan 60 clientes por hora por caja, ¿el hardware elegido sostiene < 3 s por ticket?',
+  '¿Qué pasa con los precios guardados en las balanzas cuando se actualiza la lista central?'],
+ critico:'El pesaje integra la operación: si las balanzas no dialogan con el sistema, se forman colas y hay errores de precio. Y sin redundancia offline, una caída del servidor detiene la facturación completa.',
+ entrega:['Caso de uso «Cobrar con balanza en caja» resuelto','Esquema de sincronización offline/online documentado','Comparativa de 2 modelos de TPV con justificación']},
+
+{key:'E2',icon:'🏥',name:'Centro Médico',sub:'Diagnóstico por imágenes · 4 consultorios',acc:'#3fd0e0',
+ consigna:'Diseñar la arquitectura tecnológica de un centro de atención con recepción, 4 consultorios médicos y sala de digitalización de estudios.',
+ metrics:[['99,9 %','disponibilidad'],['RAID','almacenamiento'],['LEY','datos sensibles']],
+ func:[['Recepción y asignación de turnos','agenda por especialidad, profesional y equipo de diagnóstico.'],
+  ['Historia clínica electrónica','registro único del paciente, accesible según rol y permisos.'],
+  ['Integración de imágenes médicas','captura, almacenamiento y visualización de estudios.'],
+  ['Facturación a obras sociales','nomenclador, débitos y cierre mensual.']],
+ anf:[['Alta confidencialidad de datos','normativa de protección de datos de salud (Ley 25.326): acceso por rol y auditoría.'],
+  ['Almacenamiento redundante y veloz','arreglo RAID para imágenes voluminosas: un estudio puede ocupar cientos de MB.'],
+  ['Disponibilidad 99,9 %','la agenda y la HCE no pueden caerse en horario de atención.'],
+  ['Backup verificado','copias programadas con prueba de restauración periódica.']],
+ catalog:[
+  {cat:'Servidores y almacenamiento',items:[
+   ['Servidor de aplicaciones y BD','perfil equilibrado CPU/RAM para HIS'],
+   ['NAS/SAN con arreglo RAID','RAID 5/6 o 10 según volumen: tolera la falla de un disco'],
+   ['Servidor de backup','rotación de copias: 3-2-1, una copia fuera del edificio']]},
+  {cat:'Redes y seguridad',items:[
+   ['Firewall perimetral','reglas estrictas entre red interna e Internet'],
+   ['Access Points con redes aisladas','SSID privada para médicos · SSID de invitados para pacientes'],
+   ['Control biométrico de acceso','huella digital para la sala de servidores']]},
+  {cat:'Puestos de trabajo (x6)',items:[
+   ['PC de escritorio / workstation','monitores de alta resolución para lectura de estudios'],
+   ['Impresoras láser','recetas, órdenes e informes'],
+   ['Lectores de credenciales / DNI','identificación rápida del paciente en recepción']]},
+  {cat:'Periféricos especializados',items:[
+   ['Dispensador de tickets de turnos','organiza la cola de recepción'],
+   ['Pantalla / digital signage','llamado de turnos en sala de espera']]},
+  {cat:'Software y licencias',items:[
+   ['Sistema de gestión hospitalaria','HIS/RIS: turnos, HCE y facturación'],
+   ['Visualizador DICOM','estándar universal de imagen médica'],
+   ['S.O. y motor de base de datos relacional','con cifrado de datos en reposo']]}],
+ preguntas:['¿Por qué la red de pacientes debe estar aislada de la red médica?',
+  '¿Qué es DICOM y cuánto puede ocupar una resonancia magnética? ¿Cómo impacta en el RAID?',
+  '¿Qué diferencia hay entre NAS y SAN y cuál conviene en este centro?',
+  '¿Qué RTO y RPO proponen para la historia clínica?'],
+ critico:'Las imágenes médicas son el mayor consumidor de almacenamiento del proyecto: hay que dimensionar el crecimiento anual en TB y elegir un RAID que tolere la falla de un disco sin perder estudios.',
+ entrega:['Política de backup 3-2-1 con RTO/RPO definidos','Cálculo de almacenamiento proyectado a 3 años','Matriz de accesos por rol a la HCE']},
+
+{key:'E3',icon:'📦',name:'Centro Logístico',sub:'Depósito de 1500 m² · picking en tiempo real',acc:'#5fe38a',
+ consigna:'Implementar el equipamiento tecnológico de un centro de almacenamiento y despacho de mercadería de 1500 m².',
+ metrics:[['100 %','cobertura WiFi'],['IP65+','equipos rugerizados'],['1500 m²','de galpón']],
+ func:[['Recepción de proveedores','control de remitos e ingreso al stock.'],
+  ['Rotulado de palets','etiquetas de identificación por ubicación.'],
+  ['Picking de pedidos','recorrido optimizado con captura por handheld.'],
+  ['Control de stock en tiempo real','inventario permanente, diferencias al instante.'],
+  ['Despacho con transporte','verificación de carga y comprobantes.']],
+ anf:[['Cobertura inalámbrica 100 %','en todo el galpón, incluidos pasillos entre racks.'],
+  ['Resistencia de equipos móviles','caídas, polvo y humedad: certificación IP y grado militar.'],
+  ['Tolerancia a fallos eléctricos','UPS y circuitos separados para red y servidores.'],
+  ['Seguridad física','videovigilancia y sensores sobre mercadería de valor.']],
+ catalog:[
+  {cat:'Redes',items:[
+   ['Access points industriales en altura','montaje en techo, plan de canales sin solapamiento'],
+   ['Switch PoE','alimenta AP y cámaras por el mismo cable de red'],
+   ['UPS y rack de piso','gabinete cerrado con organización de patch panel']]},
+  {cat:'Movilidad y captura',items:[
+   ['Handhelds industriales','lector código de barras/QR · batería de turno completo'],
+   ['Tablets rugerizadas','para montacargas: soporte vehicular y vibración'],
+   ['Etiquetadoras de transferencia térmica','etiquetas duraderas para palets (no térmica directa)']]},
+  {cat:'Seguridad física e IoT',items:[
+   ['Cámaras IP + NVR','videovigilancia con grabación centralizada'],
+   ['Sensores de movimiento','zonas de mercadería de alto valor'],
+   ['Sensores IoT de temperatura/humedad','si la mercadería lo exige: alertas automáticas']]},
+  {cat:'Software y licencias',items:[
+   ['Sistema WMS','recepción, almacenamiento, picking y despacho'],
+   ['Base de datos centralizada','stock único en tiempo real'],
+   ['Licencias de comunicación de endpoints','gestión y seguridad de los dispositivos móviles']]}],
+ preguntas:['¿Cuántos AP hacen falta para 1500 m² con racks metálicos y cómo se ubican en altura?',
+  '¿Por qué los AP se alimentan por PoE y se montan en altura?',
+  '¿Cuándo conviene QR en lugar de código de barras tradicional?',
+  '¿Por qué la etiqueta de un palet exige transferencia térmica y no térmica directa?'],
+ critico:'Los racks metálicos rebotan y absorben señal: la cobertura no se resuelve «poniendo más AP», sino planificando altura, canales y potencia. El site survey es parte del entregable.',
+ entrega:['Plano de cobertura WiFi con ubicación de AP','Ficha de handheld con certificación IP y altura de caída','Flujo completo recepción → picking → despacho']},
+
+{key:'E4',icon:'🍽️',name:'Restaurante & Bar',sub:'20 mesas · salón, barra y cocina',acc:'#ff7a59',
+ consigna:'Implementar la solución tecnológica para un local gastronómico con salón para 20 mesas, barra y cocina.',
+ metrics:[['< 1 s','comanda a cocina'],['x20','mesas en salón'],['KDS','o comanda impresa']],
+ func:[['Comandero móvil para mozos','toma de pedidos en la mesa desde tablet o smartphone.'],
+  ['Recepción de pedidos de delivery','integración con apps y atención telefónica.'],
+  ['Impresión automática de comandas','en cocina y barra, con alerta sonora de pedido nuevo.'],
+  ['Cobro y liquidación de caja','cierre por mozo y por turno.']],
+ anf:[['Tolerancia al ambiente de cocina','calor, grasa y humedad: impresoras y pantallas aptas.'],
+  ['Comanda en menos de 1 segundo','desde que el mozo confirma hasta que suena en cocina.'],
+  ['Interfaz táctil simplificada','cero curva de aprendizaje para personal rotativo.'],
+  ['Red dedicada para operación','el WiFi de clientes jamás compite con las comandas.']],
+ catalog:[
+  {cat:'Puntos de operación',items:[
+   ['TPV táctil en barra / caja principal','resistente a salpicaduras · fácil limpieza'],
+   ['Impresoras térmicas de comanda','cocina y barra · buzzer de pedido nuevo'],
+   ['Cajón portamonedas','integrado al cierre de caja']]},
+  {cat:'Dispositivos móviles para mozos',items:[
+   ['Tablets o smartphones corporativos','dedicados: solo app de pedidos, sin uso personal'],
+   ['Fundas antideslizantes / soportes','ambiente de salón con bandejas']]},
+  {cat:'Redes y servidor',items:[
+   ['Mini PC servidor local o nube','si es nube: plan B ante caída de Internet'],
+   ['Router + AP exclusivo para comandas','QoS: prioridad total al tráfico de operación'],
+   ['AP secundario para clientes','red de invitados aislada']]},
+  {cat:'Especializados',items:[
+   ['Kiosco de autogestión','pedidos takeaway sin cola'],
+   ['Pantalla / monitor en cocina','KDS: reemplaza o complementa el papel']]},
+  {cat:'Software y licencias',items:[
+   ['Software gastronómico','comandas, stock de insumos y escandallo de recetas'],
+   ['S.O. móvil y de escritorio','licencias de los dispositivos de mozos']]}],
+ preguntas:['¿Por qué conviene separar el AP de comandas del WiFi de clientes?',
+  '¿Qué es un KDS y qué mejora frente a la comanda de papel?',
+  '¿Cómo se protege una impresora térmica de la grasa y el vapor de cocina?',
+  'Si se corta Internet, ¿el local puede seguir vendiendo en salón?'],
+ critico:'Un segundo de demora en la comanda parece poco, pero en hora pico genera platos fuera de orden y quejas. La red de operación tiene prioridad absoluta sobre el WiFi de clientes.',
+ entrega:['Flujo de comanda mesa → cocina con tiempos','Comparativa KDS vs impresión térmica','Plan B de operación sin Internet']},
+
+{key:'E5',icon:'🏦',name:'Sucursal Bancaria',sub:'Atención comercial · zona ATM 24 hs',acc:'#c9a2ff',
+ consigna:'Montar el equipamiento tecnológico de una oficina de atención comercial con cajas, ejecutivos de cuentas y zona de cajeros automáticos 24 hs.',
+ metrics:[['0 min','caída de gateway'],['VLAN','segmentación total'],['24 hs','ATM operativos']],
+ func:[['Gestión de filas y turnos','dispensador, pantalla de llamado y boxes dinámicos.'],
+  ['Apertura de cuentas en boxes','validación de identidad y firma de documentación.'],
+  ['Depósitos y extracciones en caja','operaciones con trazabilidad completa.'],
+  ['Autogestión de clientes','ATM y terminales de consulta.'],
+  ['Monitoreo de seguridad','videovigilancia y control de accesos auditado.']],
+ anf:[['Máxima seguridad lógica','cifrado punto a punto y aislamiento por VLAN.'],
+  ['Máxima seguridad física','auditoría de accesos: quién, dónde y cuándo.'],
+  ['Cero tiempo de inactividad','en servidores locales y gateway: enlaces redundantes.'],
+  ['Endurecimiento de sistemas','hardening de S.O.: solo servicios imprescindibles.']],
+ catalog:[
+  {cat:'Servidores y comunicaciones',items:[
+   ['Servidor de aplicaciones','perfil transaccional, disco de alta performance'],
+   ['Router de alta disponibilidad','doble enlace redundante con failover automático'],
+   ['Firewall','inspección de tráfico entre VLAN y hacia la casa central'],
+   ['UPS de alta capacidad','autonomía para cierre seguro de operaciones'],
+   ['Patch panel y rack','cableado certificado y organizado']]},
+  {cat:'Atención y cajas',items:[
+   ['PCs de escritorio','ejecutivos de cuenta y puestos de caja'],
+   ['Lectores biométricos','validación de identidad por huella digital'],
+   ['Escáner de documentos con OCR','digitalización de DNI, contratos y comprobantes'],
+   ['Impresoras láser','chequeras y documentación oficial']]},
+  {cat:'Especializados y seguridad',items:[
+   ['ATM / cajeros automáticos','operación 24 hs con monitoreo remoto'],
+   ['Dispensador de tickets de turnos','integrado al gestor de colas'],
+   ['Pantalla digital signage','llamado de turnos por número y box'],
+   ['Cámaras IP con DVR/NVR','cobertura de salón, cajas y perímetro ATM'],
+   ['Control de acceso con cerradura electromagnética','sala de tesoro: acceso auditado']]},
+  {cat:'Software y licencias',items:[
+   ['Sistema bancario / core financiero','conecta la sucursal con la casa central'],
+   ['Gestor de colas','turnos, derivación y métricas de atención'],
+   ['Software de biometría','plantillas de huella cifradas'],
+   ['S.O. Server con hardening','documentación de cada servicio deshabilitado']]}],
+ preguntas:['¿Por qué se segmenta la red en VLAN y qué tráfico viaja en cada una?',
+  '¿Qué es el hardening de un sistema operativo y cómo se documenta?',
+  '¿Qué diferencia hay entre DVR y NVR?',
+  '¿Cómo garantiza un ATM la disponibilidad 24 hs ante cortes de energía y de enlace?'],
+ critico:'En la sucursal bancaria la seguridad no es un adicional: es el producto. Cada componente debe justificar cifrado, segmentación o auditoría. Un error de diseño acá es un riesgo operativo y reputacional.',
+ entrega:['Tabla de VLAN con tráfico permitido','Política de accesos físicos auditados','Esquema de redundancia de enlace con failover']}
+];
+
+const GLOSSARY=[
+['SLA','DISPONIBILIDAD','#ffb02e','Acuerdo de nivel de servicio: compromiso medible de disponibilidad y tiempos de respuesta entre proveedor y cliente.','Citá un % de SLA y qué pasa si no se cumple.'],
+['99,9 % — «tres nueves»','DISPONIBILIDAD','#ffb02e','Nivel de disponibilidad que admite como máximo ~8,8 horas de caída por año.','Verificalo en la calculadora de disponibilidad y escribilo en tu ANF.'],
+['RTO','DISPONIBILIDAD','#ffb02e','Recovery Time Objective: tiempo máximo aceptable que el sistema puede estar caído tras una falla.','Definí un RTO por servicio: cajas, agenda, stock.'],
+['RPO','DISPONIBILIDAD','#ffb02e','Recovery Point Objective: antigüedad máxima aceptable de los datos recuperados (marca tu último backup).','Se define junto con la frecuencia de backup.'],
+['Backup 3-2-1','DISPONIBILIDAD','#ffb02e','Regla de oro: 3 copias de los datos, en 2 soportes distintos, y 1 copia fuera del sitio.','Es la columna vertebral de tu política de respaldos.'],
+['Failover / redundancia','DISPONIBILIDAD','#ffb02e','Conmutación automática a un equipo o enlace de respaldo cuando falla el principal.','Proponelo en servidores y enlaces de centro médico y banco.'],
+['RAID','ALMACENAMIENTO','#3fd0e0','Conjunto de discos que trabaja en arreglo para ganar redundancia y/o rendimiento (0, 1, 5, 6, 10).','Elegí un nivel y justificá cuántos discos y qué tolera.'],
+['NAS','ALMACENAMIENTO','#3fd0e0','Almacenamiento conectado a red: ideal para archivos compartidos, imágenes y backups.','Gran candidato para el centro médico (imágenes DICOM).'],
+['SAN','ALMACENAMIENTO','#3fd0e0','Red de almacenamiento de alto rendimiento a nivel de bloques, para cargas pesadas.','Justificala solo donde haya demanda real: core bancario.'],
+['SSD vs HDD','ALMACENAMIENTO','#3fd0e0','SSD: velocidad y resistencia a golpes. HDD: menor costo por TB. Muchas soluciones los combinan.','Sistema en SSD, datos voluminosos en HDD/NAS.'],
+['VLAN','REDES','#5fe38a','Segmentación lógica de una red física en zonas aisladas: cajas, cámaras, invitados, administración.','Dibujá tus VLAN en la topología y qué tráfico permite cada una.'],
+['PoE','REDES','#5fe38a','Power over Ethernet: alimenta AP y cámaras por el propio cable de red.','Menos enchufes y montaje de AP en altura más simple.'],
+['Switch administrable','REDES','#5fe38a','Permite VLAN, QoS y monitoreo. El no administrable solo conecta dispositivos.','Administrable en todos los proyectos: el presupuesto lo agradece poco y vale la pena.'],
+['Access Point / WiFi 6','REDES','#5fe38a','Punto de acceso inalámbrico; WiFi 6 mejora el rendimiento con muchos dispositivos simultáneos.','Depósito y restaurante: planificá cantidad y ubicación.'],
+['SSID de invitados','REDES','#5fe38a','Red WiFi aislada para clientes que nunca toca el tráfico interno del negocio.','Obligatoria en restaurante y centro médico.'],
+['Ancho de banda vs latencia','REDES','#5fe38a','Ancho de banda: cuánta capacidad. Latencia: cuánto tarda. Una venta sufre más la latencia.','El ticket < 3 s depende de las dos cosas.'],
+['UPS / SAI','ENERGÍA','#ff7a59','Batería con estabilización que mantiene equipos encendidos ante cortes y protege de variaciones.','Dimensionala en VA: usá la calculadora de red.'],
+['Autonomía de UPS','ENERGÍA','#ff7a59','Minutos que la UPS sostiene la carga conectada: depende del consumo total.','Definí autonomía mínima por rol: servidor 15 min, caja 10 min.'],
+['Estabilizador vs UPS','ENERGÍA','#ff7a59','El estabilizador corrige tensión; la UPS además sostiene con batería.','Un estabilizador no reemplaza una UPS: no lo pongas como tal.'],
+['Firewall perimetral','SEGURIDAD','#c9a2ff','Filtra el tráfico entre la red interna e Internet según reglas de seguridad.','Obligatorio en centro médico y sucursal bancaria.'],
+['Antivirus empresarial / EDR','SEGURIDAD','#c9a2ff','Protección de endpoints con consola de gestión centralizada.','Cotizá una licencia por equipo, con renovación anual.'],
+['Hardening','SEGURIDAD','#c9a2ff','Endurecimiento: quitar servicios, puertos y usuarios innecesarios para reducir superficie de ataque.','Documentá qué servicios quedan deshabilitados en el banco.'],
+['Cifrado extremo a extremo','SEGURIDAD','#c9a2ff','Los datos viajan cifrados desde el origen hasta el destino, sin puntos legibles intermedios.','ATM, terminales de tarjetas y enlaces con casa central.'],
+['Biometría','SEGURIDAD','#c9a2ff','Autenticación por huella o rostro: no depende de claves ni tarjetas físicas.','Sala de servidores del centro médico y validación en cajas del banco.'],
+['Control de acceso con auditoría','SEGURIDAD','#c9a2ff','Registro de quién, cuándo y dónde entró: cerraduras inteligentes, electromagnéticas, biométricas.','Tesoro y sala técnica del banco: acceso nominal y auditado.'],
+['Certificación IP','ENTORNO Y CAPTURA','#ffd76a','IP65: protegido contra polvo y chorros de agua. Cuanto mayor el número, más resistencia.','Depósito y cocina lo exigen: buscalo en la ficha del equipo.'],
+['Rugerizado / MIL-STD-810','ENTORNO Y CAPTURA','#ffd76a','Equipos ensayados contra caídas, vibración y temperaturas extremas.','Handhelds y tablets de montacargas: citá la altura de caída soportada.'],
+['Código de barras vs QR','ENTORNO Y CAPTURA','#ffd76a','Barras: económico y lectura lineal. QR: más datos y tolerancia a daño parcial.','Picking de depósito: justificá cuál usás y por qué.'],
+['Térmica directa vs transferencia','ENTORNO Y CAPTURA','#ffd76a','Térmica directa: papel termosensible que se borra. Transferencia: ribbon, etiqueta duradera.','Palets de depósito = transferencia térmica, siempre.'],
+['OCR','ENTORNO Y CAPTURA','#ffd76a','Reconocimiento óptico de caracteres: convierte documentos escaneados en texto procesable.','Banco: escaneo de documentos y verificación de datos.'],
+['POS / TPV','SOFTWARE','#63b3ff','Punto de venta: hardware táctil + software de venta, caja e inventario.','Supermercado x3 y restaurante: compará dos modelos.'],
+['HIS / RIS / PACS','SOFTWARE','#63b3ff','Sistema de información hospitalaria / radiología / archivo de imágenes médicas.','Son el corazón del proyecto de centro médico.'],
+['DICOM','SOFTWARE','#63b3ff','Estándar universal de imagen médica: garantiza que equipos de distintas marcas se entiendan.','Citá compatibilidad DICOM en el visualizador.'],
+['WMS','SOFTWARE','#63b3ff','Warehouse Management System: recepción, almacenamiento, picking y despacho.','Es el sistema central del depósito logístico.'],
+['Core bancario','SOFTWARE','#63b3ff','Sistema transaccional central de la entidad; la sucursal opera conectada a él.','Describí qué pasa si se corta el enlace con la central.'],
+['KDS','SOFTWARE','#63b3ff','Kitchen Display System: pantalla de comandas que organiza y temporiza pedidos en cocina.','Comparalo contra comanda impresa en el restaurante.'],
+['TCO','PRESUPUESTO','#7ee0c3','Total Cost of Ownership: costo total de propiedad = compra + operación + mantenimiento durante la vida útil.','Mostrá el costo del sistema a 3 años, no solo la compra.'],
+['CAPEX / OPEX','PRESUPUESTO','#7ee0c3','CAPEX: inversión única (equipos). OPEX: gasto recurrente (licencias, Internet, soporte).','Separá ambos en la tabla final del presupuesto.']
+];
+
+const CRITERIA=[
+{n:'Análisis Funcional',t:'Usuarios, roles y casos de uso',tip:'Detallen actores, flujos principales y al menos un diagrama de casos de uso.'},
+{n:'Análisis No Funcional',t:'Métricas y políticas',tip:'Cada requerimiento necesita número: %, segundos, IP, frecuencia de backup.'},
+{n:'Dimensionamiento de Hardware',t:'Catálogo justificado',tip:'Cada ítem: marca, modelo, CPU/RAM/almacenamiento y justificación según carga.'},
+{n:'Arquitectura y Topología',t:'Red sobre plano',tip:'Muestren la interconexión sobre el plano e identifiquen cableado, AP y cámaras.'},
+{n:'Presupuesto Llave en Mano',t:'Costos completos',tip:'Separen hardware, licencias, instalación y costos operativos; incluyan comparativa.'}
+];
+
+const CHECKLIST=[
+'Carátula con integrantes, roles y proyecto asignado',
+'Acta de relevamiento: procesos, usuarios y plano del local',
+'Actores y roles del sistema definidos',
+'Mínimo 5 casos de uso principales redactados',
+'Diagrama de flujo de trabajo del negocio',
+'Requerimientos no funcionales con métricas medibles',
+'Política de backup y plan de continuidad definidos',
+'Medidas de seguridad física y lógica documentadas',
+'Catálogo completo: marca, modelo y especificaciones',
+'Ficha de catálogo + justificación por cada equipo',
+'Alternativa evaluada y descartada en ítems críticos',
+'Diagrama topológico de red con VLAN e interconexiones',
+'Plano del local con ubicación física de cada componente',
+'Presupuesto con IVA, imprevistos e instalación',
+'Costos operativos estimados (licencias, Internet, soporte)',
+'Fuentes y datasheets citados con fecha de consulta',
+'Defensa oral ensayada: todos explican todo'
+];
+
+/* ================================================================
+   UTILIDADES
+================================================================ */
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const fmtARS=new Intl.NumberFormat('es-AR',{style:'currency',currency:'ARS',maximumFractionDigits:0});
+const fmtN=new Intl.NumberFormat('es-AR');
+
+/* cinta superior */
+(()=>{const words=['CASOS DE USO','REQ. NO FUNCIONALES','RAID 5','PoE','VLAN','SLA 99,9 %','UPS','FIREWALL','WMS','DICOM','POS','BACKUP 3-2-1','BIOMETRÍA','WiFi 6','RTO / RPO','TCO','CATÁLOGO JUSTIFICADO','TOPOLOGÍA DE RED','PRESUPUESTO LLAVE EN MANO'];
+const html=words.map(w=>`<span>▸ <b>${w}</b></span>`).join('');
+$('#tickerTrack').innerHTML=html+html;})();
+
+/* typing hero */
+(()=>{const lines=['cargando consigna… OK','5 equipos · 5 negocios reales · 1 dossier profesional','estado: CONSIGNA PUBLICADA'];
+const el=$('#typed');let li=0,ci=0,del=false;
+(function step(){const t=lines[li];
+ if(!del){el.textContent=t.slice(0,++ci);if(ci===t.length){del=true;return setTimeout(step,2200)}}
+ else{el.textContent=t.slice(0,--ci);if(ci===0){del=false;li=(li+1)%lines.length}}
+ setTimeout(step,del?28:60);})();})();
+
+/* reveal + contadores */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+ if(e.isIntersecting){e.target.classList.add('in');
+  e.target.querySelectorAll('[data-count]').forEach(runCount);
+  if(e.target.dataset.count)runCount(e.target);
+  io.unobserve(e.target);}
+}),{threshold:.12});
+$$('.rv').forEach(el=>io.observe(el));
+function runCount(el){if(el.dataset.done)return;el.dataset.done=1;
+ const target=parseFloat(el.dataset.count),dec=+(el.dataset.dec||0),pad=+(el.dataset.pad||0),t0=performance.now(),dur=1400;
+ (function f(t){const p=Math.min(1,(t-t0)/dur),v=target*(1-Math.pow(1-p,3));
+  let s=v.toFixed(dec);if(pad)s=s.padStart(pad,'0');el.textContent=s;
+  if(p<1)requestAnimationFrame(f);})(t0);}
+
+/* barra de progreso + scrollspy */
+addEventListener('scroll',()=>{const h=document.documentElement;
+ $('#pbar').style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';},{passive:true});
+const spy=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){
+ $$('#navLinks a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+e.target.id));}}),
+ {rootMargin:'-40% 0px -55%'});
+$$('main section, section.hero').forEach(s=>spy.observe(s));
+
+/* ================================================================
+   PROYECTOS POR EQUIPO
+================================================================ */
+(()=>{const tabs=$('#teamTabs'),host=$('#teamPanelHost');
+ TEAMS.forEach((t,i)=>{const b=document.createElement('button');
+  b.className='tab'+(i===0?' on':'');
+  b.style.background='';
+  b.innerHTML=`<span class="tdot" style="background:${t.acc}"></span>${t.key} · ${t.name}`;
+  b.onclick=()=>{ $$('.tab').forEach(x=>{x.classList.remove('on');x.style.background='';x.style.color='';});
+   b.classList.add('on');b.style.background=t.acc;b.style.color='#0b161e';render(i);};
+  tabs.appendChild(b);});
+ function render(i){const t=TEAMS[i];
+  host.innerHTML=`
+  <article class="team-panel" style="--acc:${t.acc}">
+   <div class="tp-head">
+    <div class="tp-ico">${t.icon}</div>
+    <div><h3 style="color:${t.acc}">Equipo ${t.key} — ${t.name}</h3>
+     <p class="cons">${t.consigna}</p></div>
+    <div class="tp-metrics">${t.metrics.map(m=>`<div class="tpm"><b>${m[0]}</b><span>${m[1]}</span></div>`).join('')}</div>
+   </div>
+   <div class="tp-grid">
+    <div class="tp-box af"><h4>▸ Análisis funcional</h4><ul>
+     ${t.func.map(f=>`<li><b>${f[0]}.</b> ${f[1]}</li>`).join('')}</ul></div>
+    <div class="tp-box anf"><h4>◈ Análisis no funcional</h4><ul>
+     ${t.anf.map(f=>`<li><b>${f[0]}:</b> <em>${f[1]}</em></li>`).join('')}</ul></div>
+   </div>
+   <div class="catalogo"><h4 style="color:${t.acc}">Hardware y software a investigar</h4>
+    ${t.catalog.map(c=>`<h4>${c.cat}</h4>${c.items.map(it=>`<div class="cat-item"><b>${it[0]}</b><span>${it[1]}</span></div>`).join('')}`).join('')}
+   </div>
+   <div class="callouts">
+    <div class="callout preg"><h5>✎ Preguntas guía de investigación</h5><ol>${t.preguntas.map(p=>`<li>${p}</li>`).join('')}</ol></div>
+    <div class="callout crit"><h5>⚠ Punto crítico del proyecto</h5><p>${t.critico}</p></div>
+   </div>
+   <div class="callout" style="margin-top:1.2rem;border-color:rgba(95,227,138,.35);background:rgba(95,227,138,.04)">
+    <h5 style="color:var(--green)">✓ No puede faltar en esta entrega</h5>
+    <p>${t.entrega.map(e=>'▸ '+e).join(' &nbsp;·&nbsp; ')}</p></div>
+  </article>`;}
+ const b0=tabs.children[0];b0.style.background=TEAMS[0].acc;b0.style.color='#0b161e';render(0);})();
+
+/* ================================================================
+   GLOSARIO
+================================================================ */
+(()=>{const grid=$('#gGrid'),chips=$('#gChips'),search=$('#gSearch');
+ const cats=['TODOS',...new Set(GLOSSARY.map(g=>g[1]))];
+ const catColor={};GLOSSARY.forEach(g=>catColor[g[1]]=g[2]);
+ let cat='TODOS';
+ chips.innerHTML=cats.map((c,i)=>`<button class="chip${i===0?' on':''}" data-c="${c}">${c}</button>`).join('');
+ chips.onclick=e=>{const b=e.target.closest('.chip');if(!b)return;
+  cat=b.dataset.c;$$('.chip').forEach(x=>x.classList.toggle('on',x===b));b.style.background=cat==='TODOS'?'var(--cyan)':catColor[cat];b.style.color='#0b161e';draw();
+  $$('.chip').forEach(x=>{if(x!==b){x.style.background='';x.style.color='';}});};
+ search.oninput=draw;
+ function draw(){const q=search.value.trim().toLowerCase();
+  const list=GLOSSARY.filter(g=>(cat==='TODOS'||g[1]===cat)&&(!q||(g[0]+' '+g[3]).toLowerCase().includes(q)));
+  grid.innerHTML=list.length?list.map(g=>`
+   <div class="g-card" style="--gc:${g[2]}">
+    <span class="g-cat">${g[1]}</span><h4>${g[0]}</h4>
+    <p>${g[3]}</p><div class="tip"><b>EN TU TP ▸ </b>${g[4]}</div></div>`).join('')
+   :`<div class="g-empty">// sin resultados — probá con otro término (RAID, PoE, SLA, DICOM…)</div>`;}
+ draw();})();
+
+/* ================================================================
+   HERRAMIENTA 1 — DISPONIBILIDAD
+================================================================ */
+(()=>{const PRE=[['99 %','dos nueves'],['99,5 %','dos y medio'],['99,9 %','tres nueves'],['99,95 %','tres y medio'],['99,99 %','cuatro nueves'],['99,999 %','cinco nueves']];
+ const VAL=[99,99.5,99.9,99.95,99.99,99.999];
+ const USE=['Insuficiente para cobrar: cada día hay horas de caída.','Básico: solo si la caída no detiene la operación.','Bien para comercio: cajero, POS y depósito.','Exigente: recomendado para el centro médico.','Muy exigente: estándar de sistemas hospitalarios/bancarios.','Nivel telecom/banco: exige redundancia total.'];
+ const host=$('#avPresets');host.innerHTML=PRE.map((p,i)=>`<button data-i="${i}">${p[0]}</button>`).join('');
+ host.onclick=e=>{const b=e.target.closest('button');if(b){$('#avSlider').value=b.dataset.i;calc();}};
+ $('#avSlider').oninput=calc;
+ function fmtH(h){return h>=1?(h.toLocaleString('es-AR',{maximumFractionDigits:1})+' h'):(h*60).toLocaleString('es-AR',{maximumFractionDigits:0})+' min';}
+ function calc(){const i=+$('#avSlider').value,p=VAL[i],year=8760*(1-p/100);
+  $('#avName').textContent=PRE[i][1].toUpperCase()+' — '+PRE[i][0];
+  $('#avYear').textContent=fmtH(year);$('#avMonth').textContent=fmtH(year/12);$('#avUse').textContent=USE[i];}
+ calc();})();
+
+/* ================================================================
+   HERRAMIENTA 2 — RED Y ENERGÍA
+================================================================ */
+(()=>{const ids=['nArea','nPcs','nCams','nOth','nServer','nRack'];
+ ids.forEach(id=>$('#'+id).addEventListener('input',calc));
+ function calc(){const area=+$('#nArea').value||0,pcs=+$('#nPcs').value||0,cams=+$('#nCams').value||0,oth=+$('#nOth').value||0,
+  srv=$('#nServer').checked,rack=$('#nRack').checked;
+  const perAP=rack?120:150,aps=Math.max(1,Math.ceil(area/perAP));
+  const raw=pcs+cams+oth+aps+2,ports=Math.ceil(raw*1.2);
+  const std=[8,16,24,48].find(x=>x>=ports)||(Math.ceil(ports/48)*48);
+  const poeW=Math.ceil((cams*8+aps*13)*1.2);
+  const watts=(srv?300:0)+pcs*80+oth*25+aps*13+cams*8+40+15;
+  const va=Math.ceil(watts*1.6/50)*50;
+  $('#rAP').textContent=aps+(rack?' (por obstáculos)':'');
+  $('#rPorts').textContent=`${ports} → switch de ${std} puertos`;
+  $('#rPoe').textContent=(cams+aps>0)?`≈ ${poeW} W` : 'Sin PoE necesario';
+  $('#rUps').textContent=`≈ ${fmtN.format(va)} VA`;}
+ calc();})();
+
+/* ================================================================
+   HERRAMIENTA 3 — PRESUPUESTO
+================================================================ */
+const Budget=(()=>{const DEF=[['Servidor local de aplicaciones',1,1850000],['UPS 1500 VA',1,420000],['Terminal POS táctil',3,650000],['Licencia sistema de gestión (anual)',1,380000],['Instalación, cableado y configuración',1,600000]];
+ let rows=[];const body=$('#bBody');
+ function render(){body.innerHTML=rows.map((r,i)=>`<tr>
+   <td><input value="${r[0]}" data-i="${i}" data-f="0" placeholder="Concepto…"></td>
+   <td class="num"><input value="${r[1]}" data-i="${i}" data-f="1" type="number" min="0"></td>
+   <td class="num"><input value="${r[2]}" data-i="${i}" data-f="2" type="number" min="0" step="1000"></td>
+   <td class="num mono" style="font-size:.8rem;color:var(--amber)" id="bs${i}"></td>
+   <td><button class="bdel" data-del="${i}" title="Quitar">✕</button></td></tr>`).join('');calc();}
+ body.addEventListener('input',e=>{const i=e.target.dataset.i,f=e.target.dataset.f;if(i===undefined)return;
+  rows[i][f]=f==='0'?e.target.value:Math.max(0,+e.target.value||0);calc();});
+ body.addEventListener('click',e=>{const d=e.target.dataset.del;if(d!==undefined){rows.splice(+d,1);render();}});
+ $('#bAdd').onclick=()=>{rows.push(['Nuevo ítem',1,0]);render();
+  const inp=body.querySelectorAll('tr:last-child input')[0];inp.focus();inp.select();};
+ $('#bReset').onclick=()=>{rows=DEF.map(r=>[...r]);render();};
+ $('#bIva').onchange=$('#bImp').onchange=calc;
+ function calc(){let sub=0;rows.forEach((r,i)=>{const s=(+r[1]||0)*(+r[2]||0);sub+=s;
+   const c=$('#bs'+i);if(c)c.textContent=fmtARS.format(s);});
+  const imp=sub*(+$('#bImp').value/100),iva=$('#bIva').checked?(sub+imp)*.21:0;
+  $('#bSub').textContent=fmtARS.format(sub);$('#bImpV').textContent=fmtARS.format(imp);
+  $('#bIvaV').textContent=fmtARS.format(iva);$('#bTot').textContent=fmtARS.format(sub+imp+iva);}
+ rows=DEF.map(r=>[...r]);render();})();
+
+/* copiar plantilla */
+$('#tplCopy').onclick=()=>{const t=$('#tplText').textContent;
+ (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>flash('✓ copiada al portapapeles')).catch(()=>{
+  const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();flash('✓ copiada');});
+ function flash(m){const el=$('#tplMsg');el.textContent=m;setTimeout(()=>el.textContent='',2500);}};
+
+/* ================================================================
+   AUTOEVALUACIÓN
+================================================================ */
+(()=>{const host=$('#critHost'),levels=CRITERIA.map(()=>0);
+ host.innerHTML=CRITERIA.map((c,i)=>`<div class="crit-row">
+   <div><div class="cn">${c.n}</div><div class="ct">${c.t}</div></div>
+   <div class="lvls" data-c="${i}">${[1,2,3,4,5].map(v=>`<button class="lv" data-v="${v}">${v}</button>`).join('')}</div></div>`).join('');
+ host.addEventListener('click',e=>{const b=e.target.closest('.lv');if(!b)return;
+  const ci=+b.parentElement.dataset.c,v=+b.dataset.v;levels[ci]=levels[ci]===v?0:v;paint();});
+ function paint(){let total=0;
+  $$('.lvls').forEach((g,i)=>{g.querySelectorAll('.lv').forEach(btn=>btn.classList.toggle('fill',+btn.dataset.v<=levels[i]));total+=levels[i];});
+  $('#evScore').textContent=total;$('#evBar').style.width=(total/25*100)+'%';
+  const V=[[0,'A REARMAR LA ENTREGA','var(--coral)'],[10,'EN PROCESO — SIGAN PULIENDO','var(--gold)'],[16,'BUENO — CASI LISTO','var(--amber)'],[21,'MUY BUENO — LISTO PARA ENTREGAR','var(--green)']];
+  const v=V.slice().reverse().find(x=>total>=x[0])||V[0];
+  const vd=$('#evVerdict');vd.textContent=v[1];vd.style.color=v[2];
+  const tips=$('#evTips');tips.innerHTML=levels.map((l,i)=>l>0&&l<4?`<li><b>${CRITERIA[i].n}:</b> ${CRITERIA[i].tip}</li>`:'').join('')||'<li style="display:none"></li>';
+  if(total===25)tips.innerHTML='<li style="color:var(--green)">Impecable: el dossier está a nivel de consultoría profesional. ¡A defenderlo!</li>';
+  if(total===0)tips.innerHTML='<li>Marquen un nivel en cada criterio para ver el diagnóstico del equipo.</li>';}
+ paint();})();
+
+/* ================================================================
+   BITÁCORA (localStorage)
+================================================================ */
+(()=>{const KEY='eest1_ms74_bitacora';const host=$('#chkHost');
+ let saved=[];try{saved=JSON.parse(localStorage.getItem(KEY))||[]}catch(e){}
+ host.innerHTML=CHECKLIST.map((c,i)=>`<div class="chk${saved[i]?' done':''}" data-i="${i}">
+   <div class="box">${saved[i]?'✓':''}</div><div class="txt">${c}</div></div>`).join('');
+ host.onclick=e=>{const el=e.target.closest('.chk');if(!el)return;const i=+el.dataset.i;
+  saved[i]=!saved[i];el.classList.toggle('done',saved[i]);el.querySelector('.box').textContent=saved[i]?'✓':'';
+  localStorage.setItem(KEY,JSON.stringify(saved));paint();};
+ $('#bitReset').onclick=()=>{if(confirm('¿Reiniciar la bitácora del equipo?')){saved=CHECKLIST.map(()=>false);
+  localStorage.setItem(KEY,JSON.stringify(saved));
+  $$('.chk').forEach(el=>{el.classList.remove('done');el.querySelector('.box').textContent='';});paint();}};
+ function paint(){const done=saved.filter(Boolean).length,pct=Math.round(done/CHECKLIST.length*100);
+  $('#ringPct').textContent=pct+'%';$('#ringFg').style.strokeDashoffset=402-(402*pct/100);
+  $('#ringFg').style.stroke=pct===100?'#5fe38a':pct>=50?'#ffb02e':'#ff7a59';
+  $('#bitMsg').textContent=pct===100?'¡Dossier completo! Ensayen la defensa y entreguen.':
+   pct>=70?'Último tramo: revisen comparativas, fuentes y presupuesto.':
+   pct>=35?'Buen ritmo. No avanzan al catálogo sin cerrar el análisis.':
+   pct>0?'Arrancaron bien: sostengan el ritmo semanal.':'Todavía en cero: comiencen por el acta de relevamiento.';}
+ paint();})();
+
+$('#year').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
