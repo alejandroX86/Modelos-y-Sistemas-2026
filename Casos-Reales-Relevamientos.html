@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Teoría General de los Sistemas · Bertalanffy · 5 Casos Reales</title>
+    <!-- Font & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ---------- RESET & BASE ---------- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+            line-height: 1.7;
+            scroll-behavior: smooth;
+        }
+
+        /* ---------- LAYOUT ---------- */
+        .app {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem 4rem;
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            background: linear-gradient(135deg, #0b2a4a 0%, #1a4a6e 100%);
+            color: #fff;
+            border-radius: 1.5rem;
+            padding: 2rem 2.5rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 12px 30px rgba(11, 42, 74, 0.25);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+        }
+
+        .header-left h1 small {
+            display: block;
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 0.2rem;
+            letter-spacing: 0.01em;
+        }
+
+        .header-right {
+            text-align: right;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 0.75rem 1.5rem;
+            border-radius: 2rem;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header-right .school {
+            font-weight: 600;
+            color: #ffd966;
+        }
+
+        .header-right .prof {
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        /* ---------- NAV TABS ---------- */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .nav-tab {
+            padding: 0.6rem 1.4rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background: transparent;
+            color: #64748b;
+            border: none;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab i {
+            font-size: 0.9rem;
+        }
+
+        .nav-tab:hover {
+            background: #e9edf2;
+            color: #0b2a4a;
+        }
+
+        .nav-tab.active {
+            background: #0b2a4a;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(11, 42, 74, 0.25);
+        }
+
+        .nav-tab .badge {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 0.05rem 0.7rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .nav-tab.active .badge {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        /* ---------- CONTENT PANELS ---------- */
+        .panel {
+            display: none;
+            animation: fadeUp 0.4s ease;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            0% {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ---------- CARD / PAPER ---------- */
+        .paper {
+            background: #ffffff;
+            border-radius: 1.25rem;
+            padding: 2.5rem 3rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e9edf2;
+            transition: box-shadow 0.2s;
+        }
+
+        .paper:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+        }
+
+        .paper h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #0b2a4a;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.01em;
+        }
+
+        .paper .subhead {
+            font-size: 1rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #1a4a6e;
+            padding-left: 1rem;
+            background: #f8fafc;
+            border-radius: 0 0.5rem 0.5rem 0;
+        }
+
+        .paper h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a4a6e;
+            margin-top: 1.8rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .paper h3 i {
+            color: #0b2a4a;
+            font-size: 1.1rem;
+            width: 1.6rem;
+            text-align: center;
+        }
+
+        .paper p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        .paper ul,
+        .paper ol {
+            margin: 0.8rem 0 1.2rem 1.8rem;
+        }
+
+        .paper li {
+            margin-bottom: 0.4rem;
+        }
+
+        .paper .highlight-box {
+            background: #f1f5f9;
+            border-left: 5px solid #1a4a6e;
+            padding: 1rem 1.6rem;
+            border-radius: 0.5rem;
+            margin: 1.2rem 0;
+            font-style: italic;
+            color: #1e293b;
+        }
+
+        .paper .highlight-box strong {
+            font-style: normal;
+            color: #0b2a4a;
+        }
+
+        .paper .concept-tag {
+            display: inline-block;
+            background: #e2e8f0;
+            color: #1a4a6e;
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 0.15rem 0.8rem;
+            border-radius: 2rem;
+            margin-right: 0.3rem;
+            letter-spacing: 0.01em;
+            text-transform: uppercase;
+        }
+
+        .paper .autor-cita {
+            font-size: 0.95rem;
+            background: #f8fafc;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px dashed #cbd5e1;
+            margin: 1rem 0;
+        }
+
+        .paper .autor-cita i {
+            color: #1a4a6e;
+            margin-right: 0.5rem;
+        }
+
+        /* ---------- META INFO (school, teacher, contents) ---------- */
+        .meta-banner {
+            background: #f1f5f9;
+            border-radius: 0.75rem;
+            padding: 1rem 1.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem 3rem;
+            font-size: 0.9rem;
+            color: #334155;
+            margin-bottom: 1.8rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .meta-banner span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .meta-banner i {
+            color: #1a4a6e;
+            width: 1.2rem;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+        @media (max-width: 820px) {
+            .app {
+                padding: 1rem;
+            }
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1.5rem;
+            }
+            .header-right {
+                text-align: left;
+                width: 100%;
+                padding: 0.6rem 1rem;
+            }
+            .paper {
+                padding: 1.5rem;
+            }
+            .nav-tabs {
+                gap: 0.3rem;
+            }
+            .nav-tab {
+                padding: 0.4rem 1rem;
+                font-size: 0.8rem;
+            }
+            .paper h2 {
+                font-size: 1.4rem;
+            }
+            .meta-banner {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+
+        @media print {
+            .nav-tabs {
+                display: none;
+            }
+            .panel {
+                display: block !important;
+                page-break-after: always;
+            }
+            .panel:last-child {
+                page-break-after: avoid;
+            }
+            .paper {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                padding: 1.5rem;
+            }
+            .header {
+                background: #0b2a4a !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .meta-banner {
+                background: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .highlight-box {
+                background: #f1f5f9 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .autor-cita {
+                background: #f8fafc !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+
+        /* ---------- SCROLLBAR ---------- */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #e9edf2;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1a4a6e;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0b2a4a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app" id="app">
+
+        <!-- ========== HEADER ========== -->
+        <header class="header">
+            <div class="header-left">
+                <h1>
+                    <i class="fas fa-project-diagram" style="margin-right:0.4rem;"></i>Teoría General de los Sistemas
+                    <small>Ludwig von Bertalanffy · Fundamentos, desarrollo, aplicaciones</small>
+                </h1>
+            </div>
+            <div class="header-right">
+                <div class="school"><i class="fas fa-school"></i> E.E.S.T N°1 · Muñiz</div>
+                <div class="prof"><i class="fas fa-chalkboard-teacher"></i> Prof. Omar A. Bazar · 7°4°</div>
+                <div style="font-size:0.8rem; opacity:0.7; margin-top:0.2rem;">
+                    <i class="fas fa-book-open"></i> Contenidos prescriptivos · Modelos y Sistemas
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== NAV ========== -->
+        <nav class="nav-tabs" id="navTabs">
+            <button class="nav-tab active" data-target="panel-intro">
+                <i class="fas fa-home"></i> Inicio
+            </button>
+            <button class="nav-tab" data-target="panel-caso1">
+                <i class="fas fa-tree"></i> Caso 1
+                <span class="badge">Ecosistema</span>
+            </button>
+            <button class="nav-tab" data-target="panel-caso2">
+                <i class="fas fa-industry"></i> Caso 2
+                <span class="badge">Empresa</span>
+            </button>
+            <button class="nav-tab" data-target="panel-caso3">
+                <i class="fas fa-heartbeat"></i> Caso 3
+                <span class="badge">Salud</span>
+            </button>
+            <button class="nav-tab" data-target="panel-caso4">
+                <i class="fas fa-city"></i> Caso 4
+                <span class="badge">Ciudad</span>
+            </button>
+            <button class="nav-tab" data-target="panel-caso5">
+                <i class="fas fa-graduation-cap"></i> Caso 5
+                <span class="badge">Educación</span>
+            </button>
+        </nav>
+
+        <!-- ============================================================ -->
+        <!-- PANEL INTRO -->
+        <!-- ============================================================ -->
+        <section class="panel active" id="panel-intro">
+            <div class="paper">
+                <h2><i class="fas fa-arrow-right" style="color:#1a4a6e;margin-right:0.5rem;"></i> Presentación</h2>
+                <div class="subhead">Teoría General de los Sistemas · Ludwig von Bertalanffy (1901–1972)</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-calendar-alt"></i> Ciclo lectivo 2026</span>
+                    <span><i class="fas fa-user-tie"></i> Profesor: Omar A. Bazar</span>
+                    <span><i class="fas fa-layer-group"></i> 7°4° · Modelos y Sistemas</span>
+                    <span><i class="fas fa-file-alt"></i> Núcleo de aprendizaje: Sistemas, modelos y complejidad</span>
+                </div>
+
+                <p style="font-size:1.05rem;">
+                    <strong>Ludwig von Bertalanffy</strong> (1901–1972) fue un biólogo y filósofo austríaco,
+                    reconocido como el fundador de la <strong>Teoría General de los Sistemas</strong> (T.G.S.).
+                    Su obra revolucionó el pensamiento científico al proponer que los <strong>principios
+                    estructurales y dinámicos</strong> son comunes a sistemas de muy diversa naturaleza:
+                    físicos, biológicos, psicológicos, sociales y culturales.
+                </p>
+
+                <p>
+                    En su libro <em>“Teoría General de los Sistemas: Fundamentos, desarrollo, aplicaciones”</em>
+                    (1968), Bertalanffy establece que el <strong>paradigma sistémico</strong> reemplaza al
+                    enfoque analítico-reduccionista de la ciencia clásica. En lugar de aislar elementos,
+                    la T.G.S. pone el foco en las <strong>relaciones, interacciones y totalidades</strong>.
+                    Conceptos como <strong>sistema abierto, equifinalidad, estado uniforme, mecanización
+                    progresiva, centralización y jerarquía</strong> se vuelven herramientas fundamentales
+                    para comprender la realidad.
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left" style="color:#1a4a6e;font-size:1.2rem;margin-right:0.5rem;"></i>
+                    “El mundo, o sea la totalidad de los acontecimientos observables, exhibe uniformidades
+                    estructurales que se manifiestan por rastros isomorfos de orden en los diferentes niveles
+                    o ámbitos.” <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">— L. von Bertalanffy, <em>op. cit.</em>, p. 49</span>
+                </div>
+
+                <h3><i class="fas fa-bullseye"></i> Objetivo del material</h3>
+                <p>
+                    El presente desarrollo teórico-didáctico presenta <strong>cinco casos reales</strong>
+                    de relevamiento sistémico, construidos a partir de los conceptos centrales de Bertalanffy.
+                    Cada caso ha sido diseñado para ser trabajado en el aula como <strong>estudio de caso</strong>,
+                    promoviendo la transferencia de los principios de la T.G.S. a dominios concretos:
+                    ecología, empresa, salud pública, urbanismo y educación.
+                </p>
+                <p>
+                    Cada caso tiene una extensión equivalente a <strong>dos hojas A4</strong> (aproximadamente
+                    800–1000 palabras), con un nivel académico de <strong>bachillerato especializado</strong>
+                    (7° año), en sintonía con los <strong>contenidos prescriptivos</strong> de la materia
+                    <strong>“Modelos y Sistemas”</strong>: sistemas, modelos, representaciones, complejidad,
+                    interdisciplina y pensamiento sistémico.
+                </p>
+
+                <h3><i class="fas fa-sitemap"></i> Estructura de cada caso</h3>
+                <ul>
+                    <li><strong>Contexto</strong> – descripción del dominio y la situación problemática.</li>
+                    <li><strong>Conceptos de Bertalanffy aplicados</strong> – identificación de categorías sistémicas.</li>
+                    <li><strong>Análisis sistémico</strong> – desarrollo teórico con citas y referencias al libro.</li>
+                    <li><strong>Conclusiones y preguntas</strong> – para debate y profundización.</li>
+                </ul>
+
+                <div style="margin-top:2rem;padding:1rem 1.5rem;background:#e9edf2;border-radius:0.75rem;display:flex;flex-wrap:wrap;gap:1rem 2rem;justify-content:space-between;align-items:center;">
+                    <span><i class="fas fa-book" style="color:#1a4a6e;"></i> <strong>Bibliografía base:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>. FCE.</span>
+                    <span><i class="fas fa-tag"></i> Material didáctico · 7°4° · 2026</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CASO 1: ECOSISTEMA -->
+        <!-- ============================================================ -->
+        <section class="panel" id="panel-caso1">
+            <div class="paper">
+                <h2><i class="fas fa-tree" style="color:#2d6a4f;"></i> Caso 1 · El bosque nativo como sistema abierto</h2>
+                <div class="subhead">Aplicación de la Teoría de Sistemas Abiertos y Equifinalidad</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-tag"></i> Ecosistema</span>
+                    <span><i class="fas fa-arrows-alt-h"></i> Sistema abierto · Estado uniforme · Equifinalidad</span>
+                    <span><i class="fas fa-ruler-combined"></i> Extensión: ~2 hojas A4</span>
+                </div>
+
+                <h3><i class="fas fa-globe-americas"></i> Contexto</h3>
+                <p>
+                    El <strong>Bosque Atlántico</strong> (Mata Atlántica) es uno de los ecosistemas más
+                    diversos del planeta, extendiéndose a lo largo de la costa de Brasil, Argentina y Paraguay.
+                    En la provincia de Misiones (Argentina), este bosque presenta una compleja red de
+                    interacciones entre especies vegetales, animales, hongos, microorganismos, el suelo,
+                    el clima y las perturbaciones naturales o antrópicas.
+                </p>
+                <p>
+                    Desde la perspectiva de Bertalanffy, un bosque nativo no es una suma de árboles,
+                    animales y nutrientes; es un <strong>sistema abierto</strong> que intercambia
+                    materia y energía con su entorno (atmósfera, agua, radiación solar, organismos
+                    migratorios) y que se mantiene en un <strong>estado uniforme</strong> (Fliessgleichgewicht)
+                    dinámico, a pesar de los cambios estacionales y las perturbaciones.
+                </p>
+
+                <h3><i class="fas fa-vector-square"></i> Conceptos de Bertalanffy aplicados</h3>
+                <ul>
+                    <li>
+                        <span class="concept-tag">Sistema abierto</span>
+                        <strong>Definición:</strong> “Sistema que intercambia materia con el medio circundante,
+                        que exhibe importación y exportación, constitución y degradación de sus componentes
+                        materiales” (cap. VI, p. 146).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Estado uniforme</span>
+                        <strong>Definición:</strong> “Estado independiente del tiempo […] mantenido separado
+                        del equilibrio verdadero y así en condiciones de realizar trabajo” (cap. VI, p. 147).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Equifinalidad</span>
+                        <strong>Definición:</strong> “El mismo estado final puede alcanzarse partiendo de
+                        diferentes condiciones iniciales y por diferentes caminos” (cap. V, p. 136).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Totalidad vs. Suma</span>
+                        “Las características constitutivas […] dependen de las relaciones específicas que
+                        se dan dentro del complejo” (cap. III, p. 55).
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-microscope"></i> Análisis sistémico</h3>
+                <p>
+                    <strong>1. El bosque como sistema abierto.</strong> El bosque recibe energía solar
+                    (flujo energético), agua de lluvia, nutrientes del suelo y organismos de otros ecosistemas
+                    (polinizadores, dispersores de semillas). A su vez, exporta biomasa, oxígeno, vapor de
+                    agua, semillas y animales migratorios. Esta <strong>continua importación y exportación</strong>
+                    es lo que permite que el sistema se mantenga lejos del equilibrio termodinámico,
+                    tal como Bertalanffy lo describe para los organismos vivos: <em>“El organismo vivo es
+                    ante todo un sistema abierto. Se mantiene en continua incorporación y eliminación de
+                    materia”</em> (cap. II, p. 39).
+                </p>
+                <p>
+                    <strong>2. Estado uniforme y homeostasis ecológica.</strong> A lo largo de los años,
+                    el bosque presenta una composición relativamente estable de especies, biomasa y ciclos
+                    de nutrientes. Esta constancia no es estática; es un <strong>estado uniforme</strong>
+                    dinámico, donde las tasas de crecimiento, muerte, descomposición y reproducción se
+                    compensan. Bertalanffy subraya: <em>“En estado uniforme, la composición del sistema se
+                    mantiene constante, a pesar del continuo intercambio de componentes”</em> (cap. VII, p. 165).
+                </p>
+                <p>
+                    <strong>3. Equifinalidad y sucesión ecológica.</strong> Si el bosque es perturbado
+                    (incendio, tala selectiva, invasión de especies exóticas), no siempre sigue la misma
+                    trayectoria de regeneración. Sin embargo, en muchos casos puede alcanzar un
+                    <strong>estado final similar</strong> (un bosque maduro con características regionales)
+                    a partir de diferentes historias de perturbación. Esto ejemplifica el principio de
+                    <strong>equifinalidad</strong> que Bertalanffy identifica como propio de los sistemas
+                    abiertos: <em>“En los sistemas abiertos puede alcanzarse el mismo estado final partiendo
+                    de diferentes condiciones iniciales y por diferentes caminos”</em> (cap. II, p. 40).
+                </p>
+                <p>
+                    <strong>4. Totalidad y relaciones.</strong> La diversidad y funcionalidad del bosque
+                    no pueden explicarse por la suma de sus especies. Son las <strong>relaciones</strong>
+                    (competencia, depredación, mutualismo, simbiosis) las que generan propiedades emergentes
+                    como la resiliencia, la productividad y la estabilidad. Bertalanffy lo expresa con claridad:
+                    <em>“Si bien es concebible la composición gradual de una suma, un sistema, como total de
+                    partes interrelacionadas, tiene que ser concebido como compuesto instantáneamente”</em>
+                    (cap. III, p. 55).
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left"></i>
+                    “La teoría de los sistemas abiertos […] ha aclarado muchos fenómenos oscuros en física y
+                    biología, y ha conducido asimismo a importantes conclusiones generales, de las cuales
+                    […] el principio de equifinalidad.” <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">
+                        — L. von Bertalanffy, cap. II, p. 40
+                    </span>
+                </div>
+
+                <h3><i class="fas fa-clipboard-list"></i> Conclusiones y preguntas para el aula</h3>
+                <p>
+                    El caso del bosque nativo demuestra que la <strong>perspectiva sistémica</strong> no
+                    es una metáfora, sino una herramienta operativa para comprender la dinámica ecológica.
+                    La aplicación de los conceptos de sistema abierto, estado uniforme, equifinalidad y
+                    totalidad permite diseñar estrategias de <strong>conservación y restauración</strong>
+                    más efectivas que los enfoques reduccionistas.
+                </p>
+                <ul>
+                    <li><strong>Pregunta 1:</strong> ¿Cómo se manifiesta el principio de equifinalidad en la recuperación de un bosque después de un incendio?</li>
+                    <li><strong>Pregunta 2:</strong> ¿Qué implicaciones tiene considerar el bosque como un sistema abierto para las políticas de manejo forestal?</li>
+                    <li><strong>Pregunta 3:</strong> ¿Puede un ecosistema alcanzar un estado uniforme perfecto? ¿Por qué sí o por qué no?</li>
+                </ul>
+
+                <div class="autor-cita">
+                    <i class="fas fa-book-open"></i>
+                    <strong>Referencia:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>.
+                    Fondo de Cultura Económica. Capítulos II, III, V, VI y VII.
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CASO 2: EMPRESA INDUSTRIAL -->
+        <!-- ============================================================ -->
+        <section class="panel" id="panel-caso2">
+            <div class="paper">
+                <h2><i class="fas fa-industry" style="color:#b9770e;"></i> Caso 2 · La organización industrial como sistema sociotécnico</h2>
+                <div class="subhead">Mecanización progresiva, centralización y jerarquía</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-tag"></i> Organización formal</span>
+                    <span><i class="fas fa-arrows-alt-h"></i> Mecanización · Centralización · Jerarquía</span>
+                    <span><i class="fas fa-ruler-combined"></i> Extensión: ~2 hojas A4</span>
+                </div>
+
+                <h3><i class="fas fa-building"></i> Contexto</h3>
+                <p>
+                    Una <strong>empresa manufacturera de mediana escala</strong> (p. ej., una fábrica de
+                    autopartes) emplea a 350 personas y está organizada en áreas de producción, logística,
+                    control de calidad, mantenimiento, administración y dirección. En los últimos cinco años,
+                    la empresa ha crecido, incorporando nueva maquinaria, sistemas de gestión automatizados
+                    y una estructura jerárquica más definida.
+                </p>
+                <p>
+                    Desde la óptica de Bertalanffy, esta organización puede ser analizada como un
+                    <strong>sistema sociotécnico</strong> que combina componentes humanos y tecnológicos,
+                    con flujos de materiales, información y decisiones. La dinámica interna revela procesos
+                    de <strong>mecanización progresiva</strong>, <strong>centralización</strong> y
+                    <strong>orden jerárquico</strong>, conceptos centrales en la T.G.S.
+                </p>
+
+                <h3><i class="fas fa-vector-square"></i> Conceptos de Bertalanffy aplicados</h3>
+                <ul>
+                    <li>
+                        <span class="concept-tag">Mecanización progresiva</span>
+                        “El sistema pasa de un estado de totalidad a un estado de independencia de los elementos”
+                        (cap. III, p. 70).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Centralización</span>
+                        “Un elemento p<sub>s</sub> puede ser llamado parte conductora […] un pequeño cambio
+                        en p<sub>s</sub> será amplificado en el sistema total” (cap. III, p. 73).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Orden jerárquico</span>
+                        “Los sistemas están frecuentemente estructurados de modo que sus miembros son a su
+                        vez sistemas del nivel inmediato inferior” (cap. III, p. 76).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Totalidad vs. Suma</span>
+                        “El comportamiento de un elemento es diferente dentro del sistema de como es aislado”
+                        (cap. III, p. 70).
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-microscope"></i> Análisis sistémico</h3>
+                <p>
+                    <strong>1. Mecanización progresiva en la producción.</strong> La empresa ha pasado de
+                    una organización artesanal (donde cada operario realizaba múltiples tareas) a una
+                    <strong>producción en línea</strong> con tareas altamente especializadas. Cada puesto
+                    de trabajo ejecuta una operación repetitiva y estandarizada. Este proceso refleja
+                    la <strong>mecanización progresiva</strong> que Bertalanffy describe: <em>“La segregación
+                    progresiva significa asimismo mecanización progresiva […] las partes se tornan fijas,
+                    dedicadas a tal o cual acción”</em> (cap. III, p. 72). La consecuencia es una
+                    <strong>pérdida de regulabilidad</strong>: si una máquina o un operario falla, el sistema
+                    total se ve afectado, porque las partes han perdido su plasticidad original.
+                </p>
+                <p>
+                    <strong>2. Centralización y toma de decisiones.</strong> La dirección general y la
+                    gerencia de producción concentran las decisiones estratégicas. Un pequeño cambio en
+                    la política de compras o en el diseño de un producto (parte conductora) genera
+                    <strong>efectos amplificados</strong> en toda la organización (cambios en inventarios,
+                    programación de máquinas, asignación de personal). Bertalanffy llama a esto
+                    <strong>causalidad de instigación</strong>: <em>“Un cambio energéticamente insignificante
+                    en p<sub>s</sub> provoca un cambio considerable en el sistema total”</em> (cap. III, p. 73).
+                </p>
+                <p>
+                    <strong>3. Orden jerárquico.</strong> La empresa se organiza en niveles: dirección →
+                    gerencia → supervisión → operarios. Cada nivel es un <strong>sistema</strong> que
+                    contiene subsistemas (departamentos, equipos, puestos). Esta estructura jerárquica
+                    permite coordinar la complejidad, pero también genera <strong>cuellos de botella</strong>
+                    en la comunicación y la toma de decisiones. Bertalanffy señala: <em>“Tal superposición
+                    de sistemas se llama orden jerárquico. Para sus niveles vuelven a ser aplicables los
+                    aspectos de totalidad y sumatividad, mecanización progresiva, centralización, finalidad,
+                    etc.”</em> (cap. III, p. 76).
+                </p>
+                <p>
+                    <strong>4. Totalidad y sinergia.</strong> El desempeño de la empresa no es la suma de
+                    los desempeños individuales. La <strong>interacción</strong> entre áreas (producción y
+                    logística, calidad y mantenimiento, administración y ventas) genera propiedades emergentes
+                    como la <strong>eficiencia global</strong>, la <strong>capacidad de innovación</strong>
+                    y la <strong>resiliencia</strong> frente a crisis. Bertalanffy insiste: <em>“No puede
+                    sumarse el comportamiento de las partes aisladas y obtener el del todo; hay que tener en
+                    cuenta las relaciones entre los varios sistemas subordinados y los sistemas que les están
+                    superordinados”</em> (cap. III, p. 70).
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left"></i>
+                    “El progreso sólo es posible por subdivisión de una acción inicialmente unitaria en
+                    acciones de partes especializadas. Esto, sin embargo, significa a la vez empobrecimiento,
+                    pérdida de posibilidades que aún están al alcance del estado indeterminado.”
+                    <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">
+                        — L. von Bertalanffy, cap. III, p. 72
+                    </span>
+                </div>
+
+                <h3><i class="fas fa-clipboard-list"></i> Conclusiones y preguntas para el aula</h3>
+                <p>
+                    La empresa industrial ilustra la <strong>tensión dialéctica</strong> entre eficiencia
+                    (mecanización, especialización) y flexibilidad (capacidad de regulación, adaptación).
+                    La T.G.S. ofrece un marco para <strong>diseñar organizaciones</strong> que equilibren
+                    ambas dimensiones, evitando los extremos del “robot” o del “caos”.
+                </p>
+                <ul>
+                    <li><strong>Pregunta 1:</strong> ¿Qué ventajas y desventajas trae la mecanización progresiva en una organización?</li>
+                    <li><strong>Pregunta 2:</strong> ¿Cómo se puede compensar la pérdida de regulabilidad mediante sistemas de retroalimentación?</li>
+                    <li><strong>Pregunta 3:</strong> ¿Es posible una organización sin centralización? ¿Qué dice Bertalanffy al respecto?</li>
+                </ul>
+
+                <div class="autor-cita">
+                    <i class="fas fa-book-open"></i>
+                    <strong>Referencia:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>.
+                    Fondo de Cultura Económica. Capítulos II, III, VIII y IX.
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CASO 3: SISTEMA DE SALUD -->
+        <!-- ============================================================ -->
+        <section class="panel" id="panel-caso3">
+            <div class="paper">
+                <h2><i class="fas fa-heartbeat" style="color:#c1121f;"></i> Caso 3 · El sistema de salud como red de regulación y homeostasis</h2>
+                <div class="subhead">Retroalimentación, homeostasis y regulación secundaria</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-tag"></i> Salud pública</span>
+                    <span><i class="fas fa-arrows-alt-h"></i> Homeostasis · Retroalimentación · Regulación</span>
+                    <span><i class="fas fa-ruler-combined"></i> Extensión: ~2 hojas A4</span>
+                </div>
+
+                <h3><i class="fas fa-hospital"></i> Contexto</h3>
+                <p>
+                    Un <strong>sistema de salud regional</strong> (p. ej., el sistema público de una provincia)
+                    integra hospitales, centros de atención primaria, laboratorios, farmacias, programas de
+                    prevención y una red de ambulancias. Su objetivo es <strong>mantener y mejorar la salud</strong>
+                    de la población, respondiendo a brotes epidémicos, enfermedades crónicas, accidentes y
+                    demandas estacionales.
+                </p>
+                <p>
+                    Desde la perspectiva de Bertalanffy, este sistema puede ser entendido como un
+                    <strong>sistema de regulación</strong> que combina mecanismos <strong>homeostáticos</strong>
+                    (mantenimiento de parámetros dentro de rangos aceptables) y <strong>retroalimentaciones</strong>
+                    (información que corrige desviaciones). Además, presenta una <strong>estructura jerárquica</strong>
+                    (nivel local, regional, nacional) y una <strong>dinámica de sistema abierto</strong>
+                    (intercambio de recursos, información y personal con otros sistemas).
+                </p>
+
+                <h3><i class="fas fa-vector-square"></i> Conceptos de Bertalanffy aplicados</h3>
+                <ul>
+                    <li>
+                        <span class="concept-tag">Homeostasis</span>
+                        “Mantenimiento del equilibrio en el organismo vivo […] mecanismos homeostáticos
+                        que preservan la constancia de gran número de variables fisicoquímicas” (cap. II, p. 43–44).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Retroalimentación</span>
+                        “De la salida de una máquina, cierta cantidad es devuelta atrás, como ‘información’,
+                        a la entrada, de modo que regule ésta y así estabilice o dirija la acción” (cap. III, p. 81).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Regulaciones primarias y secundarias</span>
+                        “Las regulaciones primarias […] residen en la interacción dinámica. […] Superpuestas
+                        están las regulaciones que podemos llamar secundarias y que son controladas por
+                        disposiciones fijas, especialmente del tipo de la retroalimentación” (cap. II, p. 44).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Sistema abierto</span>
+                        “El organismo no es un sistema cerrado sino abierto […] importación y exportación
+                        de materia” (cap. V, p. 125).
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-microscope"></i> Análisis sistémico</h3>
+                <p>
+                    <strong>1. Homeostasis y mantenimiento de la salud.</strong> El sistema de salud
+                    busca mantener <strong>indicadores sanitarios</strong> (tasas de mortalidad, cobertura
+                    de vacunación, tiempo de espera en emergencias) dentro de rangos aceptables. Cuando un
+                    indicador se desvía (p. ej., aumento de casos de dengue), se activan mecanismos correctivos
+                    (campañas de prevención, refuerzo de recursos). Esto es análogo a la <strong>homeostasis
+                    fisiológica</strong> que Bertalanffy describe: <em>“La termorregulación en los animales
+                    de sangre caliente […] el enfriamiento de la sangre estimula ciertos centros cerebrales
+                    que ‘echan a andar’ los mecanismos productores de calor”</em> (cap. II, p. 43–44).
+                </p>
+                <p>
+                    <strong>2. Retroalimentación y aprendizaje organizacional.</strong> La información
+                    epidemiológica, los indicadores de gestión y las encuestas de satisfacción constituyen
+                    <strong>bucles de retroalimentación</strong> que permiten ajustar políticas y recursos.
+                    Si un hospital reporta saturación, la información retroalimenta al nivel central para
+                    redistribuir pacientes o contratar más personal. Bertalanffy subraya: <em>“Los mecanismos
+                    de retroalimentación parecen ser responsables de gran parte de las regulaciones orgánicas
+                    y fenómenos de homeostasis”</em> (cap. III, p. 81).
+                </p>
+                <p>
+                    <strong>3. Regulaciones primarias y secundarias.</strong> En el sistema de salud, las
+                    <strong>regulaciones primarias</strong> son aquellas que emergen de la interacción
+                    dinámica entre niveles (p. ej., la coordinación espontánea entre hospitales durante una
+                    catástrofe). Las <strong>regulaciones secundarias</strong> son las disposiciones formales:
+                    protocolos, leyes, sistemas de referencia y contrarreferencia. Bertalanffy distingue
+                    ambos tipos: <em>“Las regulaciones primarias […] residen en la interacción dinámica.
+                    […] Superpuestas están las regulaciones secundarias […] controladas por disposiciones
+                    fijas”</em> (cap. II, p. 44).
+                </p>
+                <p>
+                    <strong>4. Sistema abierto y flujos.</strong> El sistema de salud intercambia
+                    continuamente recursos con su entorno: profesionales que se forman en universidades,
+                    insumos de la industria farmacéutica, información de organismos internacionales,
+                    pacientes que entran y salen. Esta <strong>apertura</strong> es esencial para su
+                    funcionamiento, pero también lo hace vulnerable a perturbaciones externas (crisis
+                    económicas, pandemias, migraciones).
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left"></i>
+                    “La base del modelo de sistema abierto es la interacción dinámica entre sus componentes.
+                    La base del modelo cibernético es el ciclo de retroalimentación.”
+                    <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">
+                        — L. von Bertalanffy, cap. VI, p. 155–156
+                    </span>
+                </div>
+
+                <h3><i class="fas fa-clipboard-list"></i> Conclusiones y preguntas para el aula</h3>
+                <p>
+                    El sistema de salud es un <strong>ejemplo paradigmático</strong> de sistema regulado,
+                    donde la homeostasis, la retroalimentación y la apertura al entorno son condiciones
+                    de su viabilidad. La T.G.S. aporta herramientas para <strong>diseñar políticas
+                    sanitarias más resilientes y adaptativas</strong>.
+                </p>
+                <ul>
+                    <li><strong>Pregunta 1:</strong> ¿Qué mecanismos de retroalimentación existen en tu centro de salud local?</li>
+                    <li><strong>Pregunta 2:</strong> ¿Cómo se manifiesta la tensión entre regulaciones primarias y secundarias en la gestión de una epidemia?</li>
+                    <li><strong>Pregunta 3:</strong> ¿Qué significa que un sistema de salud sea “abierto”? ¿Cuáles son los riesgos y beneficios?</li>
+                </ul>
+
+                <div class="autor-cita">
+                    <i class="fas fa-book-open"></i>
+                    <strong>Referencia:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>.
+                    Fondo de Cultura Económica. Capítulos II, III, VI y IX.
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CASO 4: CIUDAD -->
+        <!-- ============================================================ -->
+        <section class="panel" id="panel-caso4">
+            <div class="paper">
+                <h2><i class="fas fa-city" style="color:#6c584c;"></i> Caso 4 · La ciudad como sistema dinámico y jerárquico</h2>
+                <div class="subhead">Crecimiento, competencia y diferenciación urbana</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-tag"></i> Urbanismo</span>
+                    <span><i class="fas fa-arrows-alt-h"></i> Crecimiento · Competencia · Diferenciación</span>
+                    <span><i class="fas fa-ruler-combined"></i> Extensión: ~2 hojas A4</span>
+                </div>
+
+                <h3><i class="fas fa-map-marked-alt"></i> Contexto</h3>
+                <p>
+                    Una <strong>ciudad de tamaño intermedio</strong> (p. ej., una capital provincial de
+                    unos 500.000 habitantes) experimenta un crecimiento acelerado en las últimas décadas.
+                    Este crecimiento se manifiesta en la <strong>expansión de la mancha urbana</strong>,
+                    el aumento de la densidad poblacional, la diversificación de actividades económicas,
+                    la aparición de nuevos barrios y la complejización de los servicios (transporte, educación,
+                    salud, saneamiento).
+                </p>
+                <p>
+                    Desde la T.G.S., la ciudad puede ser analizada como un <strong>sistema en crecimiento</strong>
+                    que exhibe procesos de <strong>diferenciación</strong> (especialización de zonas),
+                    <strong>competencia</strong> (entre usos del suelo, entre actores económicos) y
+                    <strong>jerarquización</strong> (centro vs. periferia, áreas de mayor y menor poder
+                    adquisitivo). Bertalanffy aplica estos conceptos tanto a sistemas biológicos como sociales.
+                </p>
+
+                <h3><i class="fas fa-vector-square"></i> Conceptos de Bertalanffy aplicados</h3>
+                <ul>
+                    <li>
+                        <span class="concept-tag">Crecimiento exponencial y logístico</span>
+                        “El crecimiento del sistema es directamente proporcional al número de elementos
+                        presentes” y “alcanza un valor límite” (cap. III, p. 62–64).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Competencia</span>
+                        “Competencia entre partes […] la relación alométrica se aplica a una amplia gama
+                        de datos morfológicos, bioquímicos, fisiológicos y filogenéticos” (cap. III, p. 65–66).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Diferenciación / Mecanización</span>
+                        “El estado primario es el de un sistema unitario que se va escindiendo gradualmente
+                        en cadenas causales independientes” (cap. III, p. 70).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Orden jerárquico</span>
+                        “Los sistemas están frecuentemente estructurados de modo que sus miembros son a su
+                        vez sistemas del nivel inmediato inferior” (cap. III, p. 76).
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-microscope"></i> Análisis sistémico</h3>
+                <p>
+                    <strong>1. Crecimiento urbano.</strong> La ciudad crece inicialmente de forma
+                    <strong>exponencial</strong> (atracción de población, inversiones, construcción de
+                    infraestructura). Sin embargo, los <strong>límites físicos y económicos</strong>
+                    (espacio disponible, recursos hídricos, costo del suelo) imponen un <strong>freno</strong>,
+                    transformando la curva en <strong>logística</strong> (con un valor asintótico).
+                    Bertalanffy describe este tipo de crecimiento en sistemas biológicos y sociales:
+                    <em>“La retención del segundo término [en la ecuación de crecimiento] […] se obtiene
+                    una curva que es sigmoidal y alcanza un valor límite”</em> (cap. III, p. 64).
+                </p>
+                <p>
+                    <strong>2. Competencia y alometría urbana.</strong> Dentro de la ciudad, los distintos
+                    barrios y usos del suelo <strong>compiten</strong> por recursos (espacio, inversión,
+                    visibilidad). Esta competencia sigue <strong>relaciones alométricas</strong>: el
+                    crecimiento de una zona (p. ej., el centro comercial) se da a expensas de otras
+                    (periferia residencial). Bertalanffy señala que la ecuación alométrica (y = b x<sup>α</sup>)
+                    se aplica a fenómenos sociales como la distribución del ingreso (ley de Pareto) y la
+                    urbanización: <em>“La diferenciación social y la división del trabajo en las sociedades
+                    primitivas, así como el proceso de urbanización, sigue la ecuación alométrica”</em>
+                    (cap. IV, p. 107).
+                </p>
+                <p>
+                    <strong>3. Diferenciación y mecanización.</strong> La ciudad pasa de una estructura
+                    homogénea (pueblo pequeño) a una <strong>altamente diferenciada</strong>: zonas
+                    residenciales, industriales, comerciales, administrativas, recreativas. Esta
+                    diferenciación implica <strong>mecanización</strong>: cada zona cumple una función
+                    especializada y pierde plasticidad. Si una zona colapsa (p. ej., el distrito industrial),
+                    el sistema total sufre, porque las <strong>interacciones compensatorias</strong> se
+                    han debilitado. Bertalanffy lo expresa: <em>“La segregación progresiva significa
+                    asimismo mecanización progresiva […] las partes se tornan fijas, dedicadas a tal o
+                    cual acción”</em> (cap. III, p. 72).
+                </p>
+                <p>
+                    <strong>4. Jerarquía y centralidad.</strong> La ciudad presenta un <strong>orden
+                    jerárquico</strong> que va desde el micro-espacio (vivienda, cuadra) hasta el macro
+                    (barrio, distrito, ciudad, región metropolitana). En cada nivel emergen propiedades
+                    que no existen en el nivel inferior. El <strong>centro</strong> (parte conductora)
+                    concentra el poder económico, político y simbólico; un cambio en el centro (p. ej.,
+                    la construcción de un nuevo polo comercial) <strong>amplifica</strong> sus efectos
+                    en toda la ciudad.
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left"></i>
+                    “Todo progreso implica una pérdida de posibilidades. […] Mientras más partes se
+                    especializan de determinado modo, más irreemplazables resultan, y la pérdida de
+                    partes puede llevar a la desintegración del sistema total.”
+                    <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">
+                        — L. von Bertalanffy, cap. III, p. 72
+                    </span>
+                </div>
+
+                <h3><i class="fas fa-clipboard-list"></i> Conclusiones y preguntas para el aula</h3>
+                <p>
+                    La ciudad es un <strong>sistema complejo</strong> donde el crecimiento, la competencia,
+                    la diferenciación y la jerarquía se entrelazan. La T.G.S. permite <strong>diagnosticar
+                    desequilibrios</strong> (segregación, congestión, deterioro ambiental) y proponer
+                    <strong>intervenciones sistémicas</strong> (transporte integrado, planificación
+                    participativa, descentralización).
+                </p>
+                <ul>
+                    <li><strong>Pregunta 1:</strong> ¿Qué ejemplos de competencia alométrica puedes identificar en tu ciudad?</li>
+                    <li><strong>Pregunta 2:</strong> ¿Cómo se manifiesta la mecanización progresiva en la organización urbana?</li>
+                    <li><strong>Pregunta 3:</strong> ¿Qué sucede cuando el centro de una ciudad (parte conductora) se debilita o se desplaza?</li>
+                </ul>
+
+                <div class="autor-cita">
+                    <i class="fas fa-book-open"></i>
+                    <strong>Referencia:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>.
+                    Fondo de Cultura Económica. Capítulos III, IV y VIII.
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <!-- CASO 5: SISTEMA EDUCATIVO -->
+        <!-- ============================================================ -->
+        <section class="panel" id="panel-caso5">
+            <div class="paper">
+                <h2><i class="fas fa-graduation-cap" style="color:#2b4d6e;"></i> Caso 5 · El sistema educativo como sistema de transformación simbólica</h2>
+                <div class="subhead">Actividad simbólica, diferenciación y autorregulación</div>
+
+                <div class="meta-banner">
+                    <span><i class="fas fa-tag"></i> Educación</span>
+                    <span><i class="fas fa-arrows-alt-h"></i> Simbolismo · Diferenciación · Autorregulación</span>
+                    <span><i class="fas fa-ruler-combined"></i> Extensión: ~2 hojas A4</span>
+                </div>
+
+                <h3><i class="fas fa-chalkboard-teacher"></i> Contexto</h3>
+                <p>
+                    El <strong>sistema educativo formal</strong> (nivel secundario) de una provincia
+                    comprende cientos de escuelas, docentes, estudiantes, planes de estudio, materiales
+                    didácticos, sistemas de evaluación y organismos de supervisión. Su objetivo explícito
+                    es <strong>transmitir conocimientos, habilidades y valores</strong> a las nuevas
+                    generaciones, pero también cumple funciones de <strong>socialización, selección y
+                    certificación</strong>.
+                </p>
+                <p>
+                    Desde la T.G.S., el sistema educativo puede ser visto como un <strong>sistema de
+                    transformación simbólica</strong>: su materia prima son los <strong>símbolos</strong>
+                    (conocimientos, lenguajes, representaciones) y su producto son <strong>personas
+                    con competencias simbólicas</strong> (capacidad de pensar, comunicar, crear).
+                    Bertalanffy dedicó atención al <strong>simbolismo</strong> como rasgo específicamente
+                    humano y al <strong>desarrollo diferenciado</strong> de las funciones cognitivas.
+                </p>
+
+                <h3><i class="fas fa-vector-square"></i> Conceptos de Bertalanffy aplicados</h3>
+                <ul>
+                    <li>
+                        <span class="concept-tag">Actividad simbólica</span>
+                        “El hombre vive en un mundo no de cosas sino de símbolos […] un ser creador de
+                        símbolos y dominado por los símbolos” (cap. IX, p. 226).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Diferenciación cognitiva</span>
+                        “La diferenciación es la transformación a partir de una condición más general y
+                        homogénea hasta otra más especial y heterogénea” (cap. IX, p. 221).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Autorregulación / Homeostasis</span>
+                        “Las regulaciones homeostáticas preservan la constancia de gran número de variables”
+                        (cap. II, p. 44).
+                    </li>
+                    <li>
+                        <span class="concept-tag">Totalidad y emergencia</span>
+                        “El comportamiento de un elemento es diferente dentro del sistema de como es aislado”
+                        (cap. III, p. 70).
+                    </li>
+                </ul>
+
+                <h3><i class="fas fa-microscope"></i> Análisis sistémico</h3>
+                <p>
+                    <strong>1. El sistema educativo como universo simbólico.</strong> La educación formal
+                    opera en el <strong>nivel simbólico</strong>: no se trata solo de transmitir información,
+                    sino de <strong>formar estructuras cognitivas</strong> (conceptos, categorías, modos
+                    de razonamiento). Bertalanffy enfatiza: <em>“Salvo por la satisfacción inmediata de
+                    necesidades biológicas, el hombre vive en un mundo no de cosas sino de símbolos”
+                    </em> (cap. IX, p. 226). El sistema educativo es el principal <strong>dispositivo
+                    cultural</strong> para la creación, reproducción y transformación de ese universo
+                    simbólico.
+                </p>
+                <p>
+                    <strong>2. Diferenciación y desarrollo cognitivo.</strong> El proceso educativo
+                    promueve la <strong>diferenciación</strong> de las funciones mentales: de una
+                    percepción sincrética (global, emocional) se pasa a una <strong>percepción analítica,
+                    abstracta y crítica</strong>. Bertalanffy, siguiendo a Werner y Piaget, describe
+                    este proceso: <em>“Las funciones mentales suelen progresar desde un estado sincrético,
+                    en el cual percepciones, motivación, sensación, imaginación, símbolos, conceptos, etc.
+                    constituyen una unidad amorfa, hacia una distinción cada vez más clara de estas
+                    funciones”</em> (cap. IX, p. 221). La escuela, en este sentido, es un <strong>agente
+                    de diferenciación cognitiva</strong>.
+                </p>
+                <p>
+                    <strong>3. Autorregulación y homeostasis educativa.</strong> El sistema educativo
+                    busca mantener <strong>equilibrios dinámicos</strong>: tasas de egreso, rendimiento
+                    académico, clima escolar. Cuando un indicador se desvía (p. ej., alto fracaso escolar),
+                    se activan <strong>mecanismos correctivos</strong> (tutorías, cambios curriculares,
+                    capacitación docente). Estos mecanismos son análogos a los <strong>bucles de
+                    retroalimentación</strong> que Bertalanffy asocia a la homeostasis: <em>“La información
+                    es retroalimentada al sistema nervioso central para que el movimiento sea controlado
+                    hasta que se logre la meta”</em> (cap. II, p. 44). Sin embargo, la homeostasis
+                    educativa puede volverse <strong>conservadora</strong> y bloquear la innovación,
+                    si los mecanismos de retroalimentación son demasiado rígidos.
+                </p>
+                <p>
+                    <strong>4. Totalidad y emergencia en el aula.</strong> El desempeño de un grupo
+                    escolar no es la suma de los desempeños individuales. La <strong>interacción</strong>
+                    entre estudiantes, docentes, contenidos y contexto genera <strong>emergencias</strong>
+                    como el <strong>clima de aprendizaje</strong>, la <strong>motivación colectiva</strong>
+                    y la <strong>construcción colaborativa de conocimiento</strong>. Bertalanffy insiste:
+                    <em>“No puede sumarse el comportamiento de las partes aisladas y obtener el del todo;
+                    hay que tener en cuenta las relaciones”</em> (cap. III, p. 70).
+                </p>
+
+                <div class="highlight-box">
+                    <i class="fas fa-quote-left"></i>
+                    “Los trastornos mentales en el hombre comprenden por regla general perturbaciones
+                    de las funciones simbólicas. […] La enfermedad mental es un fenómeno específicamente
+                    humano.”
+                    <br />
+                    <span style="display:block;margin-top:0.3rem;font-style:normal;font-weight:500;">
+                        — L. von Bertalanffy, cap. IX, p. 227
+                    </span>
+                </div>
+
+                <h3><i class="fas fa-clipboard-list"></i> Conclusiones y preguntas para el aula</h3>
+                <p>
+                    El sistema educativo es un <strong>sistema complejo de transformación simbólica</strong>
+                    que combina dimensiones cognitivas, afectivas, sociales y culturales. La T.G.S. ayuda a
+                    <strong>diseñar experiencias educativas</strong> que respeten la dinámica de la
+                    diferenciación, fomenten la autorregulación y potencien las emergencias del trabajo
+                    colaborativo.
+                </p>
+                <ul>
+                    <li><strong>Pregunta 1:</strong> ¿Cómo se manifiesta la diferenciación cognitiva en tu experiencia escolar?</li>
+                    <li><strong>Pregunta 2:</strong> ¿Qué mecanismos de retroalimentación existen en tu escuela para mejorar el aprendizaje?</li>
+                    <li><strong>Pregunta 3:</strong> ¿De qué manera el simbolismo (lenguaje, matemáticas, arte) transforma la realidad del estudiante?</li>
+                </ul>
+
+                <div class="autor-cita">
+                    <i class="fas fa-book-open"></i>
+                    <strong>Referencia:</strong> Bertalanffy, L. von (1976). <em>Teoría General de los Sistemas</em>.
+                    Fondo de Cultura Económica. Capítulos II, III, IX y X.
+                </div>
+
+                <div style="margin-top:2rem;padding:1rem;background:#e9edf2;border-radius:0.75rem;text-align:center;font-weight:500;color:#0b2a4a;">
+                    <i class="fas fa-check-circle" style="color:#1a4a6e;"></i>
+                    Material elaborado para la asignatura <strong>Modelos y Sistemas</strong> ·
+                    7°4° · Prof. Omar A. Bazar · E.E.S.T N°1 · Muñiz
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- JAVASCRIPT -->
+    <!-- ============================================================ -->
+    <script>
+        (function() {
+            const tabs = document.querySelectorAll('.nav-tab');
+            const panels = {
+                intro: document.getElementById('panel-intro'),
+                caso1: document.getElementById('panel-caso1'),
+                caso2: document.getElementById('panel-caso2'),
+                caso3: document.getElementById('panel-caso3'),
+                caso4: document.getElementById('panel-caso4'),
+                caso5: document.getElementById('panel-caso5')
+            };
+
+            function activatePanel(targetId) {
+                // remove active from all panels
+                Object.values(panels).forEach(p => p.classList.remove('active'));
+                // remove active from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+
+                // activate target panel
+                const panel = document.getElementById(targetId);
+                if (panel) panel.classList.add('active');
+
+                // activate matching tab
+                tabs.forEach(tab => {
+                    if (tab.dataset.target === targetId) {
+                        tab.classList.add('active');
+                    }
+                });
+
+                // scroll to top of paper smoothly
+                const paper = document.querySelector('.paper');
+                if (paper) {
+                    paper.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            // click handlers
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    const target = this.dataset.target;
+                    if (target) {
+                        activatePanel(target);
+                    }
+                });
+            });
+
+            // initial: ensure intro is active (already set in HTML)
+            // but if URL has hash, use it
+            const hash = window.location.hash.replace('#', '');
+            if (hash && panels[hash]) {
+                activatePanel(hash);
+            }
+
+            // optional: sync with hash change
+            window.addEventListener('hashchange', function() {
+                const h = window.location.hash.replace('#', '');
+                if (h && panels[h]) {
+                    activatePanel(h);
+                }
+            });
+
+            // expose for console debugging
+            window.activatePanel = activatePanel;
+        })();
+    </script>
+
+</body>
+</html>
