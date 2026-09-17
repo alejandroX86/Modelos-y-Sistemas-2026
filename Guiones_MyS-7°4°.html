@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guiones de Práctica – Analista Funcional | E.E.S.T N°1 Muñiz</title>
+<style>
+  :root{
+    --azul:#1e3a8a;
+    --azul-claro:#2563eb;
+    --azul-bg:#eff6ff;
+    --verde:#047857;
+    --verde-bg:#ecfdf5;
+    --gris:#64748b;
+    --gris-bg:#f1f5f9;
+    --borde:#e2e8f0;
+    --texto:#0f172a;
+    --sombra:0 1px 3px rgba(15,23,42,.08), 0 8px 24px rgba(15,23,42,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+    background:#f8fafc;
+    color:var(--texto);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* ---------- HEADER ---------- */
+  header.hero{
+    background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 55%,#0ea5e9 100%);
+    color:#fff;
+    padding:28px 24px 34px;
+    box-shadow:0 4px 20px rgba(30,58,138,.25);
+  }
+  .hero-inner{max-width:1400px;margin:0 auto}
+  .escuela{
+    display:inline-block;
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-weight:700;
+    background:rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.3);
+    padding:5px 12px;
+    border-radius:999px;
+    margin-bottom:14px;
+  }
+  header.hero h1{
+    font-size:clamp(1.4rem,3.2vw,2.1rem);
+    font-weight:800;
+    letter-spacing:-.02em;
+    line-height:1.2;
+  }
+  header.hero h2{
+    font-size:clamp(.85rem,1.6vw,1rem);
+    font-weight:500;
+    opacity:.92;
+    margin-top:8px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .chip{
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.25);
+    padding:4px 11px;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:600;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .layout{
+    max-width:1400px;
+    margin:0 auto;
+    padding:24px;
+    display:grid;
+    grid-template-columns:290px minmax(0,1fr);
+    gap:24px;
+    align-items:start;
+  }
+
+  /* ---------- SIDEBAR ---------- */
+  aside{
+    position:sticky;
+    top:20px;
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:16px;
+    box-shadow:var(--sombra);
+    overflow:hidden;
+  }
+  .aside-head{
+    padding:16px 18px;
+    border-bottom:1px solid var(--borde);
+    background:#fbfdff;
+  }
+  .aside-head h3{
+    font-size:.72rem;
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    color:var(--gris);
+    font-weight:800;
+  }
+  .progreso-wrap{margin-top:12px}
+  .progreso-barra{
+    height:9px;
+    background:#e2e8f0;
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progreso-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#22c55e,#0ea5e9);
+    border-radius:999px;
+    transition:width .35s ease;
+  }
+  .progreso-txt{
+    font-size:.75rem;
+    color:var(--gris);
+    font-weight:700;
+    margin-top:6px;
+    display:block;
+  }
+  nav ul{list-style:none;padding:8px;max-height:60vh;overflow-y:auto}
+  nav li{margin-bottom:4px}
+  .nav-btn{
+    width:100%;
+    text-align:left;
+    background:transparent;
+    border:none;
+    border-radius:10px;
+    padding:10px 12px;
+    cursor:pointer;
+    font-family:inherit;
+    font-size:.84rem;
+    color:#334155;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    transition:background .16s, color .16s;
+    line-height:1.35;
+  }
+  .nav-btn:hover{background:var(--gris-bg)}
+  .nav-btn.activo{background:var(--azul-bg);color:var(--azul);font-weight:700}
+  .nav-num{
+    flex:0 0 24px;
+    height:24px;
+    border-radius:7px;
+    background:#e2e8f0;
+    color:#475569;
+    font-size:.72rem;
+    font-weight:800;
+    display:grid;
+    place-items:center;
+    margin-top:1px;
+  }
+  .nav-btn.activo .nav-num{background:var(--azul-claro);color:#fff}
+  .nav-btn.hecho .nav-num{background:#22c55e;color:#fff}
+  .nav-btn.hecho .nav-num::after{content:"✓"}
+  .nav-btn.hecho .nav-num span{display:none}
+  .aside-foot{padding:12px;border-top:1px solid var(--borde);display:grid;gap:8px}
+
+  /* ---------- BOTONES ---------- */
+  .btn{
+    font-family:inherit;
+    font-size:.8rem;
+    font-weight:700;
+    padding:9px 14px;
+    border-radius:10px;
+    border:1px solid var(--borde);
+    background:#fff;
+    color:#334155;
+    cursor:pointer;
+    transition:.16s;
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    justify-content:center;
+  }
+  .btn:hover{background:var(--gris-bg);border-color:#cbd5e1}
+  .btn-primario{background:var(--azul-claro);border-color:var(--azul-claro);color:#fff}
+  .btn-primario:hover{background:#1d4ed8;border-color:#1d4ed8}
+  .btn-peligro{color:#b91c1c;border-color:#fecaca;background:#fff}
+  .btn-peligro:hover{background:#fef2f2}
+
+  /* ---------- CONTENIDO ---------- */
+  main{min-width:0}
+  .panel{
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:16px;
+    box-shadow:var(--sombra);
+    overflow:hidden;
+  }
+  .panel-head{
+    padding:22px 24px;
+    border-bottom:1px solid var(--borde);
+    background:linear-gradient(180deg,#ffffff,#f8fbff);
+  }
+  .panel-head .etiqueta{
+    font-size:.7rem;
+    font-weight:800;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--azul-claro);
+  }
+  .panel-head h2{
+    font-size:clamp(1.1rem,2.3vw,1.5rem);
+    font-weight:800;
+    letter-spacing:-.015em;
+    margin-top:6px;
+    line-height:1.25;
+  }
+  .panel-head .contexto{
+    color:var(--gris);
+    font-size:.88rem;
+    margin-top:6px;
+  }
+  .roles{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .rol{
+    font-size:.76rem;
+    font-weight:700;
+    padding:5px 12px;
+    border-radius:999px;
+    border:1px solid;
+  }
+  .rol-af{background:var(--azul-bg);border-color:#bfdbfe;color:var(--azul)}
+  .rol-ent{background:var(--verde-bg);border-color:#a7f3d0;color:var(--verde)}
+
+  .barra-herramientas{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    padding:14px 24px;
+    background:#f8fafc;
+    border-bottom:1px solid var(--borde);
+  }
+  .toggle{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:.8rem;
+    font-weight:700;
+    color:#334155;
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:10px;
+    padding:8px 12px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .toggle input{accent-color:var(--azul-claro);width:15px;height:15px;cursor:pointer}
+  .toggle.activo{background:var(--azul-bg);border-color:#bfdbfe;color:var(--azul)}
+
+  .dialogo{padding:24px}
+  .turno{
+    display:grid;
+    grid-template-columns:110px minmax(0,1fr);
+    gap:16px;
+    padding:16px;
+    border-radius:12px;
+    border-left:4px solid;
+    margin-bottom:14px;
+    transition:.2s;
+  }
+  .turno.af{border-color:var(--azul-claro);background:var(--azul-bg)}
+  .turno.ent{border-color:#10b981;background:var(--verde-bg)}
+  .quien{
+    font-size:.76rem;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    padding-top:2px;
+  }
+  .turno.af .quien{color:var(--azul)}
+  .turno.ent .quien{color:var(--verde)}
+  .quien small{
+    display:block;
+    text-transform:none;
+    letter-spacing:0;
+    font-weight:600;
+    font-size:.72rem;
+    color:var(--gris);
+    margin-top:3px;
+  }
+  .texto{font-size:.95rem}
+  .texto p + p{margin-top:8px}
+  .texto ol{margin:8px 0 0 20px;font-size:.92rem}
+  .texto li{margin-bottom:4px}
+  .texto strong{color:#0f172a}
+
+  /* Modo práctica */
+  .turno.oculto .texto{
+    filter:blur(6px);
+    user-select:none;
+    pointer-events:none;
+    transition:filter .2s;
+  }
+  .turno.oculto{position:relative;cursor:pointer}
+  .turno.oculto::after{
+    content:"👁  Clic para revelar";
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    font-size:.78rem;
+    font-weight:800;
+    color:#475569;
+    background:rgba(255,255,255,.35);
+    border-radius:12px;
+    letter-spacing:.04em;
+  }
+  .turno.oculto:hover::after{background:rgba(255,255,255,.15);color:var(--azul-claro)}
+
+  /* Requisitos */
+  .seccion{
+    margin:24px 0 0;
+    padding:20px 24px;
+    border-top:1px solid var(--borde);
+    background:#fcfdff;
+  }
+  .seccion h3{
+    font-size:.95rem;
+    font-weight:800;
+    color:var(--azul);
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:12px;
+  }
+  .seccion h3::before{
+    content:"";
+    width:5px;height:20px;
+    border-radius:3px;
+    background:var(--azul-claro);
+  }
+  .lista-req{list-style:none;display:grid;gap:8px}
+  .lista-req li{
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:10px;
+    padding:11px 14px;
+    font-size:.9rem;
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+  }
+  .lista-req li::before{
+    content:"▸";
+    color:var(--azul-claro);
+    font-weight:900;
+    line-height:1.5;
+  }
+  .no-func{
+    margin-top:12px;
+    padding:11px 14px;
+    border-radius:10px;
+    background:#fffbeb;
+    border:1px dashed #fcd34d;
+    font-size:.86rem;
+    color:#92400e;
+  }
+  .no-func b{color:#78350f}
+
+  .marcar{
+    margin:26px 0 0;
+    padding:18px 24px 24px;
+    border-top:1px solid var(--borde);
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    align-items:center;
+    justify-content:space-between;
+    background:#f8fafc;
+  }
+  .chk-grande{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+    font-size:.88rem;
+    color:#334155;
+    cursor:pointer;
+    background:#fff;
+    border:1px solid var(--borde);
+    padding:10px 16px;
+    border-radius:12px;
+  }
+  .chk-grande input{width:18px;height:18px;accent-color:#22c55e;cursor:pointer}
+  .chk-grande.hecho{background:#ecfdf5;border-color:#a7f3d0;color:var(--verde)}
+
+  /* ---------- SECCIÓN FINAL ---------- */
+  .final{
+    max-width:1400px;
+    margin:0 auto 40px;
+    padding:0 24px;
+  }
+  .final .panel{padding:24px}
+  .final h2{
+    font-size:1.15rem;
+    font-weight:800;
+    color:var(--azul);
+    margin-bottom:6px;
+  }
+  .final p.sub{color:var(--gris);font-size:.88rem;margin-bottom:16px}
+  .skills{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:10px;
+  }
+  .skill{
+    display:flex;
+    gap:11px;
+    align-items:flex-start;
+    background:#f8fafc;
+    border:1px solid var(--borde);
+    border-radius:11px;
+    padding:12px 14px;
+    font-size:.88rem;
+    cursor:pointer;
+    transition:.16s;
+  }
+  .skill:hover{border-color:#bfdbfe;background:var(--azul-bg)}
+  .skill input{width:17px;height:17px;margin-top:2px;accent-color:var(--azul-claro);cursor:pointer;flex:0 0 auto}
+  .skill.marcada{background:#ecfdf5;border-color:#a7f3d0}
+  .skill.marcada span{text-decoration:line-through;color:var(--gris)}
+
+  footer.creditos{
+    text-align:center;
+    padding:22px;
+    font-size:.78rem;
+    color:var(--gris);
+    border-top:1px solid var(--borde);
+    background:#fff;
+  }
+  footer.creditos b{color:var(--azul)}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:980px){
+    .layout{grid-template-columns:1fr;padding:16px;gap:16px}
+    aside{position:static}
+    nav ul{max-height:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  }
+  @media (max-width:600px){
+    .turno{grid-template-columns:1fr;gap:8px}
+    .dialogo{padding:16px}
+    .panel-head,.seccion,.barra-herramientas,.marcar{padding-left:16px;padding-right:16px}
+    nav ul{grid-template-columns:1fr}
+  }
+
+  /* ---------- IMPRESIÓN ---------- */
+  @media print{
+    header.hero{background:#1e3a8a !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    aside,.barra-herramientas,.marcar,.aside-foot,.final{display:none !important}
+    .layout{display:block;padding:0}
+    .panel{border:none;box-shadow:none}
+    .turno{break-inside:avoid;page-break-inside:avoid}
+    .turno.oculto .texto{filter:none}
+    .turno.oculto::after{display:none}
+    body{background:#fff}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <span class="escuela">E.E.S.T N°1 Muñiz</span>
+    <h1>Guiones de Práctica — Analista Funcional</h1>
+    <h2>Carrera: Modelos y Sistemas &nbsp;·&nbsp; Profesor: Omar A. Bazar</h2>
+    <div class="chips">
+      <span class="chip">🎧 Escucha activa</span>
+      <span class="chip">❓ Preguntas de descubrimiento</span>
+      <span class="chip">🔄 Procesos y flujos</span>
+      <span class="chip">🚧 Cuellos de botella</span>
+      <span class="chip">📋 Requisitos funcionales y no funcionales</span>
+      <span class="chip">✅ Validación de información</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside>
+    <div class="aside-head">
+      <h3>Guiones disponibles</h3>
+      <div class="progreso-wrap">
+        <div class="progreso-barra"><div class="progreso-fill" id="progresoFill"></div></div>
+        <span class="progreso-txt" id="progresoTxt">0 de 7 practicados</span>
+      </div>
+    </div>
+    <nav><ul id="menu"></ul></nav>
+    <div class="aside-foot">
+      <button class="btn btn-primario" id="btnImprimir">🖨 Imprimir guion actual</button>
+      <button class="btn btn-peligro" id="btnReset">↺ Reiniciar progreso</button>
+    </div>
+  </aside>
+
+  <!-- ================= CONTENIDO ================= -->
+  <main>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="etiqueta" id="etiqueta">Guion 1</div>
+        <h2 id="titulo"></h2>
+        <div class="contexto" id="contexto"></div>
+        <div class="roles" id="roles"></div>
+      </div>
+
+      <div class="barra-herramientas">
+        <label class="toggle" id="tgAF">
+          <input type="checkbox" id="chkAF"> Ocultar Analista Funcional
+        </label>
+        <label class="toggle" id="tgENT">
+          <input type="checkbox" id="chkENT"> Ocultar Entrevistado
+        </label>
+        <button class="btn" id="btnMostrarTodo">👁 Mostrar todo</button>
+        <button class="btn" id="btnOcultarTodo">🙈 Ocultar todo</button>
+      </div>
+
+      <div class="dialogo" id="dialogo"></div>
+
+      <div class="seccion">
+        <h3>Requisitos detectados</h3>
+        <ul class="lista-req" id="requisitos"></ul>
+        <div class="no-func" id="noFuncional"></div>
+      </div>
+
+      <div class="marcar">
+        <label class="chk-grande" id="lblHecho">
+          <input type="checkbox" id="chkHecho">
+          Marcar este guion como practicado
+        </label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="btnAnterior">← Anterior</button>
+          <button class="btn btn-primario" id="btnSiguiente">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ================= SECCIÓN FINAL ================= -->
+<section class="final">
+  <div class="panel">
+    <h2>Conclusión para estudiantes</h2>
+    <p class="sub">Estos guiones son herramientas ideales para practicar. Marcá cada habilidad a medida que la dominás.</p>
+    <div class="skills" id="skills"></div>
+  </div>
+</section>
+
+<footer class="creditos">
+  <b>E.E.S.T N°1 Muñiz</b> · Carrera <b>Modelos y Sistemas</b> · Profesor <b>Omar A. Bazar</b><br>
+  Material de práctica — Análisis funcional y relevamiento de requisitos.
+</footer>
+
+<script>
+/* ============================================================
+   DATOS DE LOS GUIONES
+   ============================================================ */
+const GUIONES = [
+  {
+    id: "g1",
+    numero: 1,
+    titulo: "Analista Funcional y Gerente de Operaciones",
+    contexto: "Empresa de logística — proceso de planificación y seguimiento de entregas.",
+    af: "Lucía (Analista Funcional)",
+    ent: "Gerente de Operaciones",
+    turnos: [
+      { r:"af",  t:"Buenos días, muchas gracias por aceptar la entrevista. Mi nombre es Lucía, soy analista funcional del proyecto de mejora del sistema de gestión de rutas. El objetivo de esta reunión es entender cómo funciona actualmente el proceso de planificación y seguimiento de entregas, para poder proponer una solución que optimice tiempos y reduzca errores. ¿Podría describirme paso a paso cómo se asignan las rutas diariamente?" },
+      { r:"ent", t:"Claro. Cada mañana, alrededor de las 6:00, el supervisor recibe los pedidos del día desde el sistema de ventas. Los exporta a una planilla de Excel, donde los organiza por zona geográfica: norte, sur, este, oeste. Luego, revisa la disponibilidad de vehículos y conductores, y empieza a armar las rutas manualmente." },
+      { r:"af",  t:"Entiendo. ¿Cómo deciden qué conductor va a qué zona?" },
+      { r:"ent", t:"Depende de varios factores: experiencia del conductor en esa zona, tipo de vehículo (camión grande para carga pesada, furgón para paquetes pequeños), y horas disponibles. También tratamos de equilibrar la carga de trabajo." },
+      { r:"af",  t:"¿Y cómo se comunica esa información al conductor?" },
+      { r:"ent", t:"Se imprime un listado con los destinos, direcciones y número de paquetes. A veces se entrega en mano, a veces por WhatsApp. No siempre llega a tiempo." },
+      { r:"af",  t:"¿Qué pasa si hay un cambio de último momento? Por ejemplo, un pedido urgente o un vehículo descompuesto." },
+      { r:"ent", t:"Ahí es donde más problemas tenemos. Hay que rehacer toda la ruta, y a veces no alcanza el tiempo. Además, no tenemos forma de rastrear en tiempo real dónde está cada vehículo, así que no sabemos si podemos redirigir a alguien cercano." },
+      { r:"af",  t:"¿Tienen alguna forma de medir el desempeño? ¿Por ejemplo, cumplimiento de tiempos, cantidad de entregas por conductor?" },
+      { r:"ent", t:"Sí, pero es manual. Al final del día, los conductores entregan un informe firmado con lo entregado y lo devuelto. Eso lo cargamos a otra planilla. Pero muchas veces llega tarde o con datos incompletos." },
+      { r:"af",  t:"¿Qué consecuencias tiene esto en la operación?" },
+      { r:"ent", t:"Retrasos en entregas, reclamos de clientes, sobrecarga de trabajo en administración, y errores en facturación. Necesitamos un sistema que automatice la asignación de rutas, considere restricciones reales y permita el seguimiento en tiempo real." },
+      { r:"af",  t:"Perfecto. Entonces, resumiendo, necesito un sistema que: <ol><li>Reciba los pedidos automáticamente.</li><li>Proponga rutas optimizadas según zona, vehículo y conductor.</li><li>Permita ajustes dinámicos.</li><li>Ofrezca seguimiento GPS.</li><li>Genere informes automáticos de cumplimiento.</li></ol>¿Estoy en lo cierto?" },
+      { r:"ent", t:"Exactamente. Y que sea fácil de usar para el supervisor. No queremos algo muy técnico." },
+      { r:"af",  t:"Muy claro. Gracias. Esta información es clave para definir los requisitos funcionales del sistema." }
+    ],
+    requisitos: [
+      "Recepción automática de pedidos desde el sistema de ventas.",
+      "Propuesta de rutas optimizadas según zona, tipo de vehículo y conductor.",
+      "Ajustes dinámicos ante cambios de último momento (pedidos urgentes, vehículos fuera de servicio).",
+      "Seguimiento GPS en tiempo real de cada vehículo.",
+      "Generación automática de informes de cumplimiento y desempeño por conductor."
+    ],
+    noFuncional: "Usabilidad: la interfaz debe ser sencilla y no técnica, pensada para el supervisor de operaciones."
+  },
+
+  {
+    id: "g2",
+    numero: 2,
+    titulo: "Analista Funcional y Dueño de una Pyme",
+    contexto: "Cafetería con sistema manual — desde que el cliente pide hasta que se atiende el pedido.",
+    af: "Martín (Analista Funcional)",
+    ent: "Dueño de la cafetería",
+    turnos: [
+      { r:"af",  t:"Hola, soy Martín, analista funcional. Estoy trabajando en un proyecto para modernizar el sistema de gestión de su cafetería. Quisiera entender cómo funciona el proceso desde que un cliente pide hasta que se atiende el pedido." },
+      { r:"ent", t:"Hola. Todo es muy artesanal. El cliente se acerca al mostrador, pide lo que quiere, y anotamos en un bloque con lápiz. Luego, llevamos esa nota a la cocina o barra, y cuando está listo, lo llamamos." },
+      { r:"af",  t:"¿Cómo saben los empleados qué preparar primero?" },
+      { r:"ent", t:"Por orden de llegada, pero no siempre se respeta. Si hay dos personas anotando, a veces se pisan. Y si se borra una nota, no sabemos qué era." },
+      { r:"af",  t:"¿Y el control de insumos? ¿Cómo saben cuándo comprar más café, leche o pan?" },
+      { r:"ent", t:"Al final del día, hacemos una revisión visual. “¿Quedó poco café? Vamos a comprar”. Pero muchas veces nos quedamos sin algo importante porque no lo vimos venir." },
+      { r:"af",  t:"¿Tienen registro de ventas diarias?" },
+      { r:"ent", t:"Solo en la caja. Pero no sabemos qué se vendió más, ni cuánto ganamos por producto. Por ejemplo, no sé si el café con leche da más ganancia que el té." },
+      { r:"af",  t:"¿Qué problemas les genera este sistema?" },
+      { r:"ent", t:"Errores en pedidos, pérdida de tiempo, falta de insumos en momentos clave, y no poder tomar decisiones basadas en datos. Además, en temporada alta, colapsamos." },
+      { r:"af",  t:"¿Qué les gustaría tener en un nuevo sistema?" },
+      { r:"ent", t:"Que el mozo tome el pedido en una tablet, que vaya directo a la cocina, que se vea si falta algo, y que al final del día me diga qué se vendió, cuánto gané y qué tengo que comprar." },
+      { r:"af",  t:"¿Y qué los clientes pueden pedir desde una app o QR?" },
+      { r:"ent", t:"Eso sería un plus, pero lo principal es que funcione bien dentro del local. Que no se pierdan pedidos y que sepamos lo que pasa en tiempo real." },
+      { r:"af",  t:"Muy bien. Entonces, necesito:<ol><li>Un sistema de pedidos digitales (tableta o TPV).</li><li>Integración con cocina (impresión o pantalla).</li><li>Control de inventario automático.</li><li>Informes de ventas por producto.</li><li>Alertas de reposición.</li></ol>¿Algo más?" },
+      { r:"ent", t:"Que sea económico y fácil de usar. No queremos capacitaciones largas." },
+      { r:"af",  t:"Tomado. Este será el punto de partida para el análisis funcional." }
+    ],
+    requisitos: [
+      "Sistema de pedidos digitales (tablet o TPV) para el salón.",
+      "Integración con cocina/barra mediante impresión o pantalla.",
+      "Control de inventario automático de insumos.",
+      "Informes de ventas por producto y rentabilidad.",
+      "Alertas de reposición de insumos."
+    ],
+    noFuncional: "Costo accesible y facilidad de uso: sin capacitaciones extensas para el personal."
+  },
+
+  {
+    id: "g3",
+    numero: 3,
+    titulo: "Analista Funcional y Supervisor de Producción",
+    contexto: "Fábrica de muebles — control de órdenes de trabajo desde que llega el pedido hasta la entrega.",
+    af: "Ana (Analista Funcional)",
+    ent: "Supervisor de Producción",
+    turnos: [
+      { r:"af",  t:"Hola, soy Ana. Estoy relevando el proceso de producción para diseñar un sistema que mejore el control de órdenes de trabajo. ¿Podría explicarme cómo se inicia y sigue un pedido desde que llega hasta que se entrega?" },
+      { r:"ent", t:"Claro. Cuando llega un pedido, lo registramos en un formulario físico. Luego, el ingeniero de producción diseña el plan: qué madera usar, cuántas piezas, tiempos estimados. Después, se imprime una orden de trabajo que va al taller." },
+      { r:"af",  t:"¿Cómo se asigna a los operarios?" },
+      { r:"ent", t:"Yo la entrego en mano. Les digo: “Hoy hacen 5 mesas modelo A”. Pero no hay un registro claro de quién hace qué." },
+      { r:"af",  t:"¿Cómo se controla el avance?" },
+      { r:"ent", t:"Tenemos un tablero con imanes. Cada imán representa una orden. Lo movemos de “corte” a “lijado”, “ensamblado”, “acabado”, etc. Pero no siempre se actualiza, y a veces no coincide con lo que pasa en el piso." },
+      { r:"af",  t:"¿Qué pasa si hay un problema? Por ejemplo, falta madera." },
+      { r:"ent", t:"Lo anotamos en un papel, pero no se comunica bien. A veces empiezan a fabricar y no tienen el material. Se pierde tiempo." },
+      { r:"af",  t:"¿Tienen datos de tiempos reales por etapa?" },
+      { r:"ent", t:"No. Solo estimaciones. No sabemos si una etapa lleva más de lo previsto, ni por qué." },
+      { r:"af",  t:"¿Qué necesitarían para mejorar?" },
+      { r:"ent", t:"Un sistema donde cada operario marca el inicio y fin de su tarea con una tablet o terminal. Que se vea en tiempo real el estado de cada orden. Que alerte si falta material o si hay retrasos. Y que genere informes para ver cuellos de botella." },
+      { r:"af",  t:"¿Y que se integre con compras e inventario?" },
+      { r:"ent", t:"Ideal. Así, cuando baja la madera, ya se genera una alerta para comprar más." },
+      { r:"af",  t:"Muy claro. Entonces, los requisitos clave son:<ol><li>Registro digital de órdenes de trabajo.</li><li>Seguimiento por etapas con marcación de tiempos.</li><li>Alertas por faltantes o retrasos.</li><li>Informes de productividad.</li><li>Integración con inventario.</li></ol>¿Estoy resumiendo bien?" },
+      { r:"ent", t:"Sí, exacto. Eso nos cambiaría la operación." }
+    ],
+    requisitos: [
+      "Registro digital de órdenes de trabajo (reemplazo del formulario físico).",
+      "Seguimiento por etapas con marcación de inicio y fin de tarea por operario.",
+      "Alertas automáticas por faltantes de material o retrasos.",
+      "Informes de productividad y detección de cuellos de botella.",
+      "Integración con compras e inventario."
+    ],
+    noFuncional: "Trazabilidad: visibilidad en tiempo real del estado de cada orden en el piso de producción."
+  },
+
+  {
+    id: "g4",
+    numero: 4,
+    titulo: "Analista Funcional y Usuario Final",
+    contexto: "Clínica médica — empleado administrativo, proceso de agendamiento de turnos.",
+    af: "Diego (Analista Funcional)",
+    ent: "Empleado administrativo",
+    turnos: [
+      { r:"af",  t:"Hola, soy Diego. Estoy trabajando en el proyecto de modernización del sistema de turnos. Quiero entender cómo funciona hoy el proceso de agendamiento." },
+      { r:"ent", t:"Hola. Atendemos llamadas. Anotamos el nombre, DNI, obra social, especialidad y hora en un cuaderno. Luego, al final del día, pasamos todo a una planilla de Excel." },
+      { r:"af",  t:"¿Cómo saben si un médico ya tiene turno a esa hora?" },
+      { r:"ent", t:"Tenemos una agenda impresa por cada médico. Pero no está actualizada en tiempo real. A veces anotamos un turno y otro empleado ya lo había dado. Doble turno." },
+      { r:"af",  t:"¿Y si el paciente quiere cambiar o cancelar?" },
+      { r:"ent", t:"Buscamos en el cuaderno, tachamos, reescribimos… si no está el cuaderno, no podemos hacer nada. Y si el cambio fue por teléfono, a veces no se registra bien." },
+      { r:"af",  t:"¿Qué consecuencias tiene?" },
+      { r:"ent", t:"Confusión, pacientes que llegan y no tienen turno, reclamos, pérdida de tiempo. Y terminamos trabajando horas extras para corregir." },
+      { r:"af",  t:"¿Tienen control de ausentismo o justificaciones?" },
+      { r:"ent", t:"No. Solo sabemos quién vino por la ficha que firma. Pero no tenemos estadísticas." },
+      { r:"af",  t:"¿Qué les gustaría tener?" },
+      { r:"ent", t:"Un sistema donde podamos ver el calendario de cada médico en la pantalla, con colores por disponibilidad. Que al asignar un turno, se bloquee automáticamente. Que el paciente pueda agendar online, pero que nosotros podamos gestionar todo desde aquí." },
+      { r:"af",  t:"¿Y que genere recordatorios por SMS o correo?" },
+      { r:"ent", t:"¡Eso sería genial! Ahorraríamos muchas llamadas." },
+      { r:"af",  t:"Muy bien. Entonces, necesito:<ol><li>Calendario digital por médico.</li><li>Disponibilidad en tiempo real.</li><li>Bloqueo automático de turnos.</li><li>Registro de ausencias.</li><li>Comunicación automática (SMS / correo electrónico).</li><li>Interfaz sencilla para el personal.</li></ol>¿Algo más?" },
+      { r:"ent", t:"Que se pueda imprimir el turno y que guarde el historial del paciente." },
+      { r:"af",  t:"Perfecto. Esta información es fundamental para el diseño del sistema." }
+    ],
+    requisitos: [
+      "Calendario digital por cada médico con vista de disponibilidad.",
+      "Disponibilidad y ocupación en tiempo real (evitar doble turno).",
+      "Bloqueo automático del turno al ser asignado.",
+      "Registro de ausencias y justificaciones con estadísticas.",
+      "Comunicación automática de recordatorios por SMS y correo electrónico.",
+      "Interfaz sencilla para el personal administrativo.",
+      "Impresión del turno y guardado del historial del paciente."
+    ],
+    noFuncional: "Confiabilidad de datos: una única fuente de verdad para evitar superposición de turnos."
+  },
+
+  {
+    id: "g5",
+    numero: 5,
+    titulo: "Analista Funcional y Recursos Humanos",
+    contexto: "Gestión de asistencia y licencias del personal.",
+    af: "Camila (Analista Funcional)",
+    ent: "Responsable de RR.HH.",
+    turnos: [
+      { r:"af",  t:"Hola, soy Camila. Estoy relevando el proceso de gestión de asistencia y licencias. ¿Cómo lo manejan actualmente?" },
+      { r:"ent", t:"Usamos una hoja de firmas. Cada empleado firma al entrar y salir. Luego, una persona lo carga a Excel. Las licencias se piden por correo o en persona, y las registramos en otra planilla." },
+      { r:"af",  t:"¿Qué problemas tienen con este sistema?" },
+      { r:"ent", t:"Muchos. Firmas ilegibles, empleados que olvidan firmar, duplicados, errores al cargar. Además, no tenemos visibilidad en tiempo real. No sabemos quién está ausente hasta que alguien lo dice." },
+      { r:"af",  t:"¿Y las licencias?" },
+      { r:"ent", t:"A veces se aprueban, pero no se registran. O se piden, pero no se justifican. Luego, en la liquidación, hay diferencias. Ya tuvimos problemas legales." },
+      { r:"af",  t:"¿Tienen políticas claras de días disponibles por tipo de licencia?" },
+      { r:"ent", t:"Sí, pero no se aplican automáticamente. Todo es manual." },
+      { r:"af",  t:"¿Qué necesitarían?" },
+      { r:"ent", t:"Un sistema donde los empleados marquen con tarjeta, huella o app. Que registre automáticamente las entradas y salidas. Que se solicite permiso o licencia online, con aprobación digital. Y que calcule automáticamente los días disponibles." },
+      { r:"af",  t:"¿Y que genere informes para la liquidación?" },
+      { r:"ent", t:"Exacto. Y que alerte si alguien supera los límites o tiene muchas ausencias." },
+      { r:"af",  t:"Entonces, los requisitos son:<ol><li>Registro automático de asistencia (biométrico o digital).</li><li>Gestión de licencias online con flujo de aprobación.</li><li>Cálculo automático de días disponibles.</li><li>Integración con nómina.</li><li>Alertas y reportes.</li></ol>¿Estoy en lo cierto?" },
+      { r:"ent", t:"Sí, y que sea accesible desde celulares. Muchos trabajan en obra y no tienen PC." },
+      { r:"af",  t:"Tomado. Gracias por la información tan completa." }
+    ],
+    requisitos: [
+      "Registro automático de asistencia (biométrico, tarjeta o app móvil).",
+      "Gestión de licencias online con flujo de aprobación digital.",
+      "Cálculo automático de días disponibles según tipo de licencia.",
+      "Integración con el sistema de nómina / liquidación de haberes.",
+      "Alertas por exceso de ausencias y reportes para liquidación."
+    ],
+    noFuncional: "Accesibilidad multiplataforma: debe funcionar desde celulares, ya que parte del personal trabaja en obra sin PC."
+  },
+
+  {
+    id: "g6",
+    numero: 6,
+    titulo: "Analista Funcional y Jefe de Ventas",
+    contexto: "Proceso de ventas y seguimiento de metas mensuales.",
+    af: "Juan (Analista Funcional)",
+    ent: "Jefe de Ventas",
+    turnos: [
+      { r:"af",  t:"Hola, soy Juan. Estoy relevando el proceso de ventas y seguimiento de metas. ¿Cómo hacen el control actualmente?" },
+      { r:"ent", t:"Tenemos un sistema básico de facturación, pero muchas ventas en efectivo no se cargan inmediatamente. Los vendedores anotan en papel y luego lo pasan." },
+      { r:"af",  t:"¿Cómo saben si un vendedor cumplió su meta mensual?" },
+      { r:"ent", t:"Hacemos un cierre con la contabilidad. Pero hay desfasajes. A veces un vendedor dice que vendió $50.000, pero el sistema muestra $40.000. No sabemos qué pasó." },
+      { r:"af",  t:"¿Tienen control por producto?" },
+      { r:"ent", t:"No. No sabemos qué se vende más, ni cuál da más ganancia. Y no podemos recompensar a los que más venden con datos reales." },
+      { r:"af",  t:"¿Qué necesitan?" },
+      { r:"ent", t:"Un sistema POS que registre todo al momento, que muestre en tiempo real las ventas por vendedor, por producto, y que compare con la meta. Queremos tableros visuales en la oficina." },
+      { r:"af",  t:"¿Y que permita premiar en tiempo real?" },
+      { r:"ent", t:"Sí, eso motiva al equipo. Además, que se integre con inventario, para no vender algo que no tenemos." },
+      { r:"af",  t:"Muy bien. Entonces, necesito:<ol><li>Sistema POS integrado.</li><li>Seguimiento en tiempo real de ventas por vendedor.</li><li>Informes diarios y semanales.</li><li>Tableros de control (dashboards).</li><li>Integración con inventario.</li></ol>¿Algo más?" },
+      { r:"ent", t:"Que sea rápido. En temporada alta, no se puede colgar." },
+      { r:"af",  t:"Requisito no funcional clave: rendimiento y disponibilidad." }
+    ],
+    requisitos: [
+      "Sistema POS integrado que registre todas las ventas al momento (incluido efectivo).",
+      "Seguimiento en tiempo real de ventas por vendedor y por producto.",
+      "Informes diarios y semanales de ventas y ganancia.",
+      "Tableros de control (dashboards) visuales para la oficina.",
+      "Integración con inventario para no vender productos sin stock.",
+      "Comparación automática de ventas contra la meta mensual."
+    ],
+    noFuncional: "Rendimiento y disponibilidad: el sistema no puede caerse ni ralentizarse en temporada alta."
+  },
+
+  {
+    id: "g7",
+    numero: 7,
+    titulo: "Analista Funcional y Encargado de Almacén",
+    contexto: "Distribuidora de alimentos — control de ingreso y salida de productos.",
+    af: "Laura (Analista Funcional)",
+    ent: "Encargado de Almacén",
+    turnos: [
+      { r:"af",  t:"Hola, soy Laura. Estoy trabajando en el sistema de gestión de stock. ¿Cómo controlan el ingreso y salida de productos?" },
+      { r:"ent", t:"Cuando llega un camión, revisamos el remito y firmamos. Luego, anotamos en un registro físico qué entró. Cuando hay venta, hacemos una nota de entrega." },
+      { r:"af",  t:"¿Tienen control de stock en tiempo real?" },
+      { r:"ent", t:"No. Solo cuando hacemos inventario físico, una vez al mes. A veces vendemos algo que ya no tenemos. O no sabemos que se está por terminar." },
+      { r:"af",  t:"¿Qué pasa si un producto está vencido?" },
+      { r:"ent", t:"Lo detectamos en el inventario, pero a veces ya fue vendido. Es un problema grande." },
+      { r:"af",  t:"¿Qué necesitan?" },
+      { r:"ent", t:"Un sistema que escanee el código de barra al entrar y salir. Que actualice el stock automáticamente. Que tenga alertas de mínimos y vencimientos. Y que nos diga cuántos movimos por día." },
+      { r:"af",  t:"¿Y que genere órdenes de compra automáticas?" },
+      { r:"ent", t:"Eso sería ideal. Así no se nos queda nada." },
+      { r:"af",  t:"Entonces, los requisitos son:<ol><li>Gestión con código de barras.</li><li>Actualización en tiempo real del stock.</li><li>Alertas de mínimos y vencimientos.</li><li>Historial de movimientos.</li><li>Integración con compras.</li></ol>¿Estoy resumiendo bien?" },
+      { r:"ent", t:"Sí, y que sea fácil de usar. Aquí entran muchas personas, no todos saben de tecnología." },
+      { r:"af",  t:"Perfecto. Gracias por su tiempo y claridad." }
+    ],
+    requisitos: [
+      "Gestión de stock mediante lectura de código de barras en ingresos y egresos.",
+      "Actualización automática del stock en tiempo real.",
+      "Alertas de stock mínimo y de vencimientos de productos.",
+      "Historial de movimientos (entradas, salidas, ajustes).",
+      "Integración con el módulo de compras y generación de órdenes de compra automáticas."
+    ],
+    noFuncional: "Facilidad de uso: el sistema será operado por muchas personas con distintos niveles de alfabetización tecnológica."
+  }
+];
+
+const SKILLS = [
+  "Escucha activa",
+  "Formulación de preguntas de descubrimiento",
+  "Identificación de procesos y actores",
+  "Detección de problemas y necesidades reales",
+  "Detección de cuellos de botella",
+  "Recolección de requisitos funcionales y no funcionales",
+  "Validación de información con el usuario"
+];
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const LS_KEY = "eest1_guiones_progreso_v1";
+const LS_SKILLS = "eest1_guiones_skills_v1";
+let estado = cargar();
+let skills = cargarSkills();
+let actual = 0;
+
+function cargar(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function guardar(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(estado)); }catch(e){}
+}
+function cargarSkills(){
+  try{
+    const raw = localStorage.getItem(LS_SKILLS);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function guardarSkills(){
+  try{ localStorage.setItem(LS_SKILLS, JSON.stringify(skills)); }catch(e){}
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+const menuEl      = document.getElementById("menu");
+const dialogoEl   = document.getElementById("dialogo");
+const tituloEl    = document.getElementById("titulo");
+const contextoEl  = document.getElementById("contexto");
+const etiquetaEl  = document.getElementById("etiqueta");
+const rolesEl     = document.getElementById("roles");
+const reqEl       = document.getElementById("requisitos");
+const noFuncEl    = document.getElementById("noFuncional");
+const chkHecho    = document.getElementById("chkHecho");
+const lblHecho    = document.getElementById("lblHecho");
+const chkAF       = document.getElementById("chkAF");
+const chkENT      = document.getElementById("chkENT");
+const tgAF        = document.getElementById("tgAF");
+const tgENT       = document.getElementById("tgENT");
+const progFill    = document.getElementById("progresoFill");
+const progTxt     = document.getElementById("progresoTxt");
+
+/* --- Menú lateral --- */
+function renderMenu(){
+  menuEl.innerHTML = "";
+  GUIONES.forEach((g, i) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.className = "nav-btn" + (i === actual ? " activo" : "") + (estado[g.id] ? " hecho" : "");
+    btn.innerHTML = `<span class="nav-num"><span>${g.numero}</span></span><span>${g.titulo}</span>`;
+    btn.addEventListener("click", () => { actual = i; renderTodo(); window.scrollTo({top:0, behavior:"smooth"}); });
+    li.appendChild(btn);
+    menuEl.appendChild(li);
+  });
+  actualizarProgreso();
+}
+
+function actualizarProgreso(){
+  const total = GUIONES.length;
+  const hechos = GUIONES.filter(g => estado[g.id]).length;
+  progFill.style.width = (hechos / total * 100) + "%";
+  progTxt.textContent = hechos + " de " + total + " practicados";
+}
+
+/* --- Guion actual --- */
+function renderGuion(){
+  const g = GUIONES[actual];
+
+  etiquetaEl.textContent = "Guion " + g.numero;
+  tituloEl.textContent = g.titulo;
+  contextoEl.textContent = g.contexto;
+  rolesEl.innerHTML =
+    `<span class="rol rol-af">🔵 ${g.af}</span>` +
+    `<span class="rol rol-ent">🟢 ${g.ent}</span>`;
+
+  dialogoEl.innerHTML = "";
+  g.turnos.forEach((t, idx) => {
+    const div = document.createElement("div");
+    div.className = "turno " + (t.r === "af" ? "af" : "ent");
+    const quien = t.r === "af" ? g.af : g.ent;
+    const nombre = quien.split("(")[0].trim();
+    const rolTxt = t.r === "af" ? "Analista Funcional" : "Entrevistado";
+    div.innerHTML = `<div class="quien">${nombre}<small>${rolTxt}</small></div><div class="texto">${t.t}</div>`;
+    div.dataset.turno = idx;
+    div.dataset.rol = t.r;
+    div.addEventListener("click", () => {
+      if (div.classList.contains("oculto")) div.classList.remove("oculto");
+    });
+    dialogoEl.appendChild(div);
+  });
+
+  // Requisitos
+  reqEl.innerHTML = g.requisitos.map(r => `<li>${r}</li>`).join("");
+  noFuncEl.innerHTML = `<b>Requisito no funcional:</b> ${g.noFuncional}`;
+
+  // Checkbox "practicado"
+  chkHecho.checked = !!estado[g.id];
+  lblHecho.classList.toggle("hecho", chkHecho.checked);
+
+  aplicarModoPractica();
+}
+
+/* --- Modo práctica --- */
+function aplicarModoPractica(){
+  const ocultarAF  = chkAF.checked;
+  const ocultarENT = chkENT.checked;
+  tgAF.classList.toggle("activo", ocultarAF);
+  tgENT.classList.toggle("activo", ocultarENT);
+
+  document.querySelectorAll("#dialogo .turno").forEach(div => {
+    const rol = div.dataset.rol;
+    let debeOcultar = false;
+    if (rol === "af"  && ocultarAF)  debeOcultar = true;
+    if (rol === "ent" && ocultarENT) debeOcultar = true;
+    div.classList.toggle("oculto", debeOcultar);
+  });
+}
+
+/* --- Skills --- */
+function renderSkills(){
+  const cont = document.getElementById("skills");
+  cont.innerHTML = "";
+  SKILLS.forEach((s, i) => {
+    const label = document.createElement("label");
+    label.className = "skill" + (skills[i] ? " marcada" : "");
+    label.innerHTML = `<input type="checkbox" data-i="${i}" ${skills[i] ? "checked" : ""}><span>${s}</span>`;
+    label.querySelector("input").addEventListener("change", (e) => {
+      skills[i] = e.target.checked;
+      label.classList.toggle("marcada", e.target.checked);
+      guardarSkills();
+    });
+    cont.appendChild(label);
+  });
+}
+
+/* ============================================================
+   EVENTOS
+   ============================================================ */
+chkHecho.addEventListener("change", () => {
+  const g = GUIONES[actual];
+  estado[g.id] = chkHecho.checked;
+  guardar();
+  lblHecho.classList.toggle("hecho", chkHecho.checked);
+  renderMenu();
+});
+
+chkAF.addEventListener("change", aplicarModoPractica);
+chkENT.addEventListener("change", aplicarModoPractica);
+
+document.getElementById("btnMostrarTodo").addEventListener("click", () => {
+  document.querySelectorAll("#dialogo .turno").forEach(d => d.classList.remove("oculto"));
+});
+
+document.getElementById("btnOcultarTodo").addEventListener("click", () => {
+  document.querySelectorAll("#dialogo .turno").forEach(d => d.classList.add("oculto"));
+});
+
+document.getElementById("btnAnterior").addEventListener("click", () => {
+  actual = (actual - 1 + GUIONES.length) % GUIONES.length;
+  renderTodo();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+
+document.getElementById("btnSiguiente").addEventListener("click", () => {
+  actual = (actual + 1) % GUIONES.length;
+  renderTodo();
+  window.scrollTo({top:0, behavior:"smooth"});
+});
+
+document.getElementById("btnImprimir").addEventListener("click", () => window.print());
+
+document.getElementById("btnReset").addEventListener("click", () => {
+  if (confirm("¿Reiniciar todo el progreso (guiones practicados y habilidades marcadas)?")){
+    estado = {};
+    skills = {};
+    guardar(); guardarSkills();
+    renderTodo();
+  }
+});
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+function renderTodo(){
+  renderMenu();
+  renderGuion();
+}
+
+renderTodo();
+renderSkills();
+</script>
+</body>
+</html>
